@@ -1,0 +1,14 @@
+{% extends 'admin/change_form.html' %}
+{% load static %}
+
+{% block head %}
+  {{ block.super }}
+  <script src="/static/js/jquery.2.1.4.min.js"></script>
+{% endblock %}
+
+{% block script %}
+  {{ block.super }}
+  $(function(){
+  console.log('ads')
+  });
+{% endblock %}

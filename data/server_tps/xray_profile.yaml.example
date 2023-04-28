@@ -1,0 +1,189 @@
+# -*- coding: utf-8 -*-
+# @author izhangxm
+# Copyright 2017 izhangxm@gmail.com. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+log:
+  access: /var/log/xray/access.log
+  error: /var/log/xray/error.log
+  loglevel: debug
+
+api:
+  tag: api
+  services:
+    - HandlerService
+    - LoggerService
+    - StatsService
+stats: {}
+policy:
+  levels:
+    "0":
+      statsUserUplink: true
+      statsUserDownlink: true
+  system:
+    statsInboundUplink: true
+    statsInboundDownlink: true
+    statsOutboundUplink: true
+    statsOutboundDownlink: true
+
+dns:
+  servers:
+    - 8.8.8.8
+
+outbounds:
+  - protocol: freedom
+    tag: direct
+  
+  - tag: blocked
+    protocol: blackhole
+  # you need to config cloudwarp firstly to make it work.
+  # - tag: unblockgpt
+  #   protocol: socks
+  #   settings:
+  #     servers:
+  #       - address: 127.0.0.1
+  #         port: 40000
+
+routing:
+  domainStrategy: IPIfNonMatch
+  rules:
+    - type: field
+      outboundTag: api
+      inboundTag:
+        - api
+    - type: field
+      outboundTag: direct
+      domain:
+        - gstatic.com
+        - cloudflare.com
+    - type: field
+      outboundTag: blocked
+      domain:
+        - geosite:cn
+        - geosite:geolocation-cn
+        - geosite:icloud@cn
+        - geosite:category-games@cn
+        - geosite:microsoft@cn
+    - type: field
+      outboundTag: blocked
+      ip:
+        - geoip:private
+        - geoip:cn
+    - type: field
+      outboundTag: blocked
+      protocol:
+        - bittorrent
+    # unblockgpt out
+    # - type: field
+    #   outboundTag: unblockgpt
+    #   domain:
+    #     - openai.com
+    #     - ipify.org
+    #     - ip138.com
+inbounds:
+  come-inbound:
+    - listen: 127.0.0.1
+      port: 8080
+      protocol: dokodemo-door
+      settings:
+        address: 127.0.0.1
+      tag: api
+    
+    # just a local test
+    - listen: 127.0.0.1
+      port: 9892
+      protocol: socks
+      sniffing:
+        enabled: true
+        destOverride:
+          - http
+          - tls
+      settings:
+        auth: "noauth"
+      tag: socksin
+
+  interfaces:
+    vless-reality-vision:
+      meta:
+        support_multiuser: true
+        enable: true
+        user_field_map:
+          id: uuid_str
+          email: email
+          flow: xtls-rprx-vision
+          level: level
+      content:
+        listen: "::"
+        port: 443
+        protocol: vless
+        sniffing:
+          enabled: true
+          destOverride:
+            - http
+            - tls
+        settings:
+          clients: []
+          decryption: none
+        allocate:
+          strategy: always
+          refresh: 5
+          concurrency: 3
+        streamSettings:
+          network: tcp
+          security: reality
+          realitySettings:
+            show: false
+            dest: m.media-amazon.com:443
+            xver: 0
+            serverNames:
+              - m.media-amazon.com
+            privateKey: xxxxxxx-iq7tW_0JlcfYuIpoEvuwwzeF32ML3ulAQmo
+            shortIds:
+              - ""
+              - 0123456789abcdef
+    ss-in:
+      meta:
+        support_multiuser: true
+        enable: true
+        user_field_map:
+          password: password
+          email: email
+          level: level
+          name: name
+      content:
+        listen: "::"
+        port: 31601
+        portfp:
+          linodeus:
+            # 上海电信---->AWS美国
+            - port: 21290
+              server_url: shdx.example.com
+            # 上海电信---->AWS美国
+            - port: 63702
+              server_url: shdx.example.com
+        protocol: shadowsocks
+        sniffing:
+          enabled: true
+          destOverride:
+            - http
+            - tls
+        network: "tcp,udp"
+        settings:
+          clients: []
+          method: "2022-blake3-aes-128-gcm"
+          password: "adenj9QNcGJ/5Rr3AHGw2A=="
+        allocate:
+          strategy: always
+          refresh: 5
+          concurrency: 3

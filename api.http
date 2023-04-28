@@ -1,0 +1,60 @@
+
+### 更新服务器
+# @baseUrl = http://127.0.0.1:8180
+# @rpckey= 123456
+# @service = xray
+# xray sing-box
+
+### 获取服务器日志
+GET {{baseUrl}}/serverlog/{{service}}
+content-type: application/json
+rpckey: {{rpckey}}
+
+
+### 获得服务器在用的配置
+GET {{baseUrl}}/serverconfig/{{service}}
+content-type: application/json
+rpckey: {{rpckey}}
+
+
+### 生成服务器配置
+GET {{baseUrl}}/generate_config/{{service}}
+content-type: application/json
+rpckey: {{rpckey}}
+
+### push服务器配置
+GET {{baseUrl}}/push_config
+content-type: application/json
+rpckey: {{rpckey}}
+
+
+### 重启所有节点服务
+GET {{baseUrl}}/push_service_op/restart
+content-type: application/json
+rpckey: {{rpckey}}
+
+### 停止服务器
+GET {{baseUrl}}/push_service_op/stop
+content-type: application/json
+rpckey: {{rpckey}}
+
+### 启动服务器
+GET {{baseUrl}}/push_service_op/start
+content-type: application/json
+rpckey: {{rpckey}}
+
+### 所有节点服务状态
+GET {{baseUrl}}/get_service_status
+content-type: application/json
+rpckey: {{rpckey}}
+
+### 获取订阅 
+# @uname=user1010
+# @password=234234
+# @client=clashmeta
+#shadowrocket, clash, clashmeta, singbox
+
+GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
+content-type: application/json
+
+

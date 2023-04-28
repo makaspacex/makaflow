@@ -1,0 +1,242 @@
+# -*- coding: utf-8 -*-
+# @author izhangxm
+# Copyright 2017 izhangxm@gmail.com. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+# 用来生成server配置文件的配置文件
+# ---------------
+# 写入目标config的路径
+# dst_server_cfg: ./runtime/config.json
+dst_server_cfg: /etc/sing-box/config.json
+
+# 订阅文件模板
+subscribe_clash_tp: ./data/clash_tp.yaml
+
+subscribe_clashmeta_tp: ./data/clashmeta_tp.yaml
+
+subscribe_singbox_tp: ./data/singbox_tp.yaml
+
+
+# 远程调用的rpc密钥
+rpc_key: "123456"
+
+# 国家和url地址
+contry: us
+server_url: banw01.duorenhezugia.top
+
+
+# 用户相关配置 这些是demo数据，真正的数据会从下方的文件中load
+users:
+  - name: xiaohei
+    nickname: 王小黑
+    auth: '123456'
+    password: IM1ulkYXo5jcajeB//RMkA==
+    uuid: df7f6f8f-1fa9-4dfc-a237-0d31f39690fd
+  - name: dabao
+    nickname: 李大宝
+    auth: '123456'
+    password: axYqixX6cJQH1RuPuhQrGQ==
+    uuid: fe339d4e-85b1-42b4-84f9-c88ebbffc289
+
+user_profile_path: runtime/users.yaml
+
+
+client_shadowtls_versions:
+  clash:
+  stash:
+  shadowrocket:
+    - 3
+  clashmeta:
+    - 3
+  singbox:
+    - 3
+
+# dns相关配置
+dns:
+  strategy: ipv4_only
+  disable_cache: false
+  disable_expire: false
+
+log:
+  disabled: false
+  level: debug
+  # output: /tmp/sing-box.log
+  timestamp: true
+
+outbounds:
+  - type: direct
+    tag: direct
+  - type: block
+    tag: block
+  - type: dns
+    tag: dns-out
+route:
+  rules:
+    - geosite: cn
+      outbound: block
+    - geoip: cn
+      outbound: block
+  final: direct
+  auto_detect_interface: true
+
+# 入站相关配置
+inbounds:
+  # 涉及到shadowtls的配置
+  shadowtls:
+    # 公共参数，其他版本upate这个配置
+    common:
+      type: shadowtls
+      handshake:
+        server: m.media-amazon.com
+        server_port: 443
+    # v2的特殊扩展
+    v2:
+      password: D4sq9uySspZ+bvMP+Ew0Ww==
+  
+  # tls的公共配置
+  tls:
+    enabled: true
+    alpn:
+      - h2
+      - http/1.1
+    min_version: "1.0"
+    max_version: "1.3"
+    cipher_suites: TLS_AES_128_GCM_SHA256
+    # acme:
+    #   domain: banw01.duorenhezugia.top
+    #   email: izhangxm@outlook.com
+    #   provider: letsencrypt
+    reality:
+      enabled: true
+      handshake:
+        server": m.media-amazon.com
+        server_port: 443
+      private_key: gLcEcR-8xi_UjGiYK2_AV6aBZ7UuF3wg1hTDJ1PjRX4
+      short_id:
+        - 0123456789abcdef
+      max_time_difference: 1m
+      
+  transport:
+    type: ws
+    path: /transport/ws
+    early_data_header_name: Sec-WebSocket-Protocol 
+
+
+  # 监听的公共配置，其他入站协议根据自己特点update
+  listen:
+    tcp_fast_open: true
+    listen: '0.0.0.0'
+  # 入站的协议，名字为tag
+  interfaces:
+    shadowsocks-in:
+      meta: # 
+        # only_tls:只生成通过stls的服务 only_me:仅生成自身的服务 all: 全部
+        shadowtls_mode: only_tls
+        tls_s_port: 12443 # 如果overshadowtls为true，这一项必填
+        support_multiuser: true # 是否支持多用户模式
+        server_s_port: 0 # 如果不支持，此项必填，需要为每个用户开一个服务端口，注意不能与其他地方冲突
+        use_tls: false
+        use_transport: false
+        user_field_map:
+          name: name
+          password: password
+        num: 8  #生成数量，起始点为监听端口
+        step: 10 # 端口前进幅度 最小是3，因为shadowtls 3个版本至少占用3个端口
+      content: # 基本模板
+        type: shadowsocks
+        listen_port: 20231
+        method: 2022-blake3-aes-128-gcm
+        password: eeHTjVJuVBjFbtx7tvIQIA==
+    
+    vless-in:
+      meta: # 
+        # only_tls:只生成通过stls的服务 only_me:仅生成自身的服务 all: 全部
+        shadowtls_mode: only_me
+        tls_s_port: 0 # 如果overshadowtls为true，这一项必填
+        support_multiuser: true # 是否支持多用户模式
+        server_s_port: 0 # 如果不支持，此项必填，需要为每个用户开一个服务端口，注意不能与其他地方冲突
+        use_tls: true
+        use_transport: false
+        num: 6  #生成数量，起始点为监听端口
+        step: 1 # 端口前进幅度 最小是3，因为shadowtls 3个版本至少占用3个端口
+        user_field_map:
+          name: name
+          uuid: uuid_str
+          flow: 'xtls-rprx-vision'
+      content: # 基本模板
+        type: vless
+        listen_port: 443
+        tls:
+          enabled: true
+          reality:
+            enabled: true
+            handshake:
+              server: m.media-amazon.com
+              server_port: 443
+            private_key: UuMBgl7MXTPx9inmQp2UC7Jcnwc6XYbwDNebonM-FCc
+            short_id:
+              - 0123456789abcdef
+            max_time_difference: 1m
+
+    # hysteria-in:
+    #   meta: # 
+    #     # only_tls:只生成通过stls的服务 only_me:仅生成自身的服务 all: 全部
+    #     shadowtls_mode: only_me
+    #     tls_s_port: 0 # 如果overshadowtls为true，这一项必填
+    #     support_multiuser: true # 是否支持多用户模式
+    #     server_s_port: 0 # 如果不支持，此项必填，需要为每个用户开一个服务端口，注意不能与其他地方冲突
+    #     use_tls: true
+    #     use_transport: false
+    #     user_field_map:
+    #       name: name
+    #       auth_str: password
+    #     num: 3  #生成数量，起始点为监听端口
+    #     step: 5 # 端口前进幅度 最小是3，因为shadowtls 3个版本至少占用3个端口
+    #   content: # 基本模板
+    #     type: hysteria
+    #     listen_port: 21231
+    #     up: "100 Mbps"
+    #     up_mbps: 100
+    #     down: "100 Mbps"
+    #     down_mbps: 100
+    #     obfs: PApuFYtauUu6UaFAlPUsZw==
+    #     disable_mtu_discovery: false
+
+
+# 这里singbox 每种协议出站的一些默认设定
+singbox_outbound_default:
+  multiplex:
+    enabled: true
+    protocol: smux
+    max_connections: 8
+    min_streams: 4
+
+  shadowsocks:
+    type: shadowsocks
+    network: tcp
+    udp_over_tcp: false # 打开后与multiplex冲突
+    multiplex:
+      enabled: true
+
+# clashmeta 每种协议出站的一些默认设定
+clashmeta_proxies_default:
+  ss:
+    type: ss
+    udp: true
+  hysteria:
+    type: hysteria
+    
+
+
