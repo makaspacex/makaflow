@@ -15,15 +15,36 @@ Including another URLconf
 """
 
 from django.apps import apps as dj_apps
-from django.conf.urls import url
+from django.urls import path
+from apps.makaflow import  api
 
-from apps.makaflow import controler, api
-
-home_need_auth = [
-    url(r'^$', controler.views.index_page),
-    url(r'^page/index/$', controler.views.index_page),
-    url(r'^page/index$', controler.views.index_page),
+namespace = 'api'
+app_name = 'makaflow'
+# slaver
+urlpatterns = [
+    path('serverop/<op>', api.slaver.api_service_op),
+    path('serverlog/<service>>', api.slaver.api_server_log),
+    path('serverconfig/<service>', api.slaver.api_server_config),
+    path('serverstate', api.slaver.api_user_state),
+    path('update_config', api.slaver.api_update_config),
 ]
+
+urlpatterns += [
+    path('subscrib', api.manager.api_subscrib),
+    path('generate_config/<service>', api.manager.api_generate_config),
+    path('push_config', api.manager.api_push_config),
+    path('push_service_op/<op>', api.manager.api_push_service_op),
+    path('get_service_status', api.manager.api_get_service_status),
+]
+
+def init():
+    from django.conf import settings
+    from django.urls import include
+    from apps.makaflow import urls as maka_urls
+    urls = __import__(settings.ROOT_URLCONF).urls
+    urls.urlpatterns.append(
+        path(r'{}/'.format(maka_urls.namespace), include('apps.makaflow.urls', namespace=maka_urls.namespace))
+    )
 
 if dj_apps.is_installed('apps.admin'):
     home_need_auth = []

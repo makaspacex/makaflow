@@ -1,7 +1,7 @@
 from copy import deepcopy
-from tools import common
+from apps.makaflow.tools import common
 import numpy as np
-import configs
+from apps.makaflow import configs
 import os
 import requests
 import json
@@ -250,6 +250,10 @@ def push_config():
         try:
             api_base = node_conf['api_base']
             rpc_key = node_conf['rpc_key']
+            enabled = node_conf['enable']
+            if not enabled:
+                continue
+            
             data = {"xray_config":"{}", "singbox_config":"{}"}
             
             xray_config_path = os.path.join(server_config_dir, f"{node_name}_xray.json")

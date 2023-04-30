@@ -23,7 +23,6 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_NAME = os.path.split(BASE_DIR)[-1]
 
-
 import os
 import glob
 
@@ -89,4 +88,3 @@ def load_sub_tps():
         print(f"loading {name} sub tp form  {tp_file_path}")
         sub_tps[name] = yaml.load(open(tp_file_path,'r'))
 load_sub_tps()
-

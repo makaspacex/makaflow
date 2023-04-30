@@ -2,12 +2,12 @@ from base64 import b64encode
 from secrets import token_bytes
 from copy import deepcopy
 import numpy as np
-import tools
+from apps.makaflow import tools
 from .common import ClientApp
-from tools.common import ProxyProtocol
-from tools.common import get_public_key_from_private_x25519
-import configs
-from tools import common
+from apps.makaflow.tools.common import ProxyProtocol
+from apps.makaflow.tools.common import get_public_key_from_private_x25519
+from apps.makaflow import configs
+from apps.makaflow.tools import common
 import requests
 from io import StringIO
 from datetime import datetime
@@ -17,18 +17,19 @@ import re
 import copy
 import urllib.parse
 import base64
-from tools.common import yaml
+from apps.makaflow.tools.common import yaml
 import os
 import json
-from tools.subscrib_common import get_inbound_index
-from tools.subscrib_common import get_inbound_by_tag
-from tools.subscrib_common import get_shadowtls_password
-from tools.subscrib_common import conv_yaml_obj_to_json
-from tools.subscrib_common import get_user_by_uname
-from tools.subscrib_common import get_updated_sharelink
-from tools.subscrib_common import get_ports
-from tools.subscrib_common import conve_v2
-from tools.common import b64en, urlen
+from apps.makaflow.tools.subscrib_common import get_inbound_index
+from apps.makaflow.tools.subscrib_common import get_inbound_by_tag
+from apps.makaflow.tools.subscrib_common import get_shadowtls_password
+from apps.makaflow.tools.subscrib_common import conv_yaml_obj_to_json
+from apps.makaflow.tools.subscrib_common import get_user_by_uname
+from apps.makaflow.tools.subscrib_common import get_updated_sharelink
+from apps.makaflow.tools.subscrib_common import get_ports
+from apps.makaflow.tools.subscrib_common import conve_v2
+from apps.makaflow.tools.common import b64en, urlen
+from apps.makaflow import tools
 
 
 # 处理xray多端口和转发

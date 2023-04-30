@@ -10,7 +10,7 @@ from io import StringIO
 import base64
 import x25519
 import os
-import configs
+from apps.makaflow import configs
 import urllib
 
 yaml = ruamel.yaml.YAML()

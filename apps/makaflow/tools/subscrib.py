@@ -2,9 +2,9 @@ from base64 import b64encode
 from secrets import token_bytes
 from copy import deepcopy
 import numpy as np
-import tools
-from tools.common import ClientApp
-from tools.common import ProxyProtocol
+from apps.makaflow import tools
+from apps.makaflow.tools.common import ClientApp
+from apps.makaflow.tools.common import ProxyProtocol
 
 
 def get_inbound_index(inbounds, tag):
