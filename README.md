@@ -20,10 +20,10 @@ cd
 
 ```bash
 apt install python3-pip tmux screen htop git wget multitail lnav socat nginx -y
-git clone https://github.com/izhangxm/singbox-server-manager.git
-cd singbox-server-manager
+git clone https://github.com/izhangxm/makaflow.git
+cd makaflow
 pip3 install -r requriements.txt
-cp xray_profile.yaml.example xray_profile.yaml
+cp data/server_tps/xray_profile.yaml.example runtime/xray_profile.yaml
 cp env.yaml.example env.yaml
 ```
 
@@ -37,95 +37,4 @@ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release
 # update geo data
 wget  https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202304062208/geoip.dat -O /usr/local/share/xray/geoip.dat
 wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202304062208/geosite.dat -O /usr/local/share/xray/geosite.dat 
-```
-
-## 安装acme并生成证书
-
-```bash
-curl https://get.acme.sh | sh -s email=my@example.com
-
-# 需要80端口空闲
-acme.sh --issue -d mydomain.com --webroot /var/www/html/
-```
-
-## 配置nginx
-```
-server {
-	listen 1443 ssl http2;
-	listen [::]:1443 ssl http2;
-
-	server_name gia01.passwall.vip;
-	root /var/www/html;
-
-	# SSL
-	ssl_certificate_key /var/www/acme/gia01.passwall.vip_ecc/gia01.passwall.vip.key;
-	ssl_certificate /var/www/acme/gia01.passwall.vip_ecc/gia01.passwall.vip.cer;
-
-	# security
-	# security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header Referrer-Policy "no-referrer-when-downgrade" always;
-    add_header Content-Security-Policy "default-src 'self' http: https: data: blob: 'unsafe-inline'" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-
-    # . files
-    location ~ /\.(?!well-known) {
-        deny all;
-    }
-
-	# index.html fallback
-	location / {
-		try_files $uri $uri/ /index.html;
-	}
-
-	# reverse proxy
-	location /api {
-		proxy_pass http://127.0.0.1:8180/;
-		proxy_http_version	1.1;
-        proxy_cache_bypass	$http_upgrade;
-
-        proxy_set_header Upgrade			$http_upgrade;
-        proxy_set_header Connection 		"upgrade";
-        proxy_set_header Host				$host;
-        proxy_set_header X-Real-IP			$remote_addr;
-        proxy_set_header X-Forwarded-For	$proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto	$scheme;
-        proxy_set_header X-Forwarded-Host	$host;
-        proxy_set_header X-Forwarded-Port	$server_port;
-	}
-
-	# additional config
-    # favicon.ico
-    location = /favicon.ico {
-        log_not_found off;
-        access_log off;
-    }
-    # robots.txt
-    location = /robots.txt {
-        log_not_found off;
-        access_log off;
-    }
-
-    # assets, media
-    location ~* \.(?:css(\.map)?|js(\.map)?|jpe?g|png|gif|ico|cur|heic|webp|tiff?|mp3|m4a|aac|ogg|midi?|wav|mp4|mov|webm|mpe?g|avi|ogv|flv|wmv)$ {
-        expires 7d;
-        access_log off;
-    }
-
-    # svg, fonts
-    location ~* \.(?:svgz?|ttf|ttc|otf|eot|woff2?)$ {
-        add_header Access-Control-Allow-Origin "*";
-        expires 7d;
-        access_log off;
-    }
-
-    # gzip
-    gzip on;
-    gzip_vary on;
-    gzip_proxied any;
-    gzip_comp_level 6;
-    gzip_types text/plain text/css text/xml application/json application/javascript application/rss+xml application/atom+xml image/svg+xml;
-}
 ```
