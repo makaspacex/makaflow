@@ -274,8 +274,8 @@ proxy-groups:
     disable-udp: false
     lazy: false
   - name: HK
-    type: url-test
-    filter: "HK|香港"
+    type: select
+    filter: "HK|香港|🇭🇰"
     proxies: []
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -283,8 +283,8 @@ proxy-groups:
     disable-udp: false
     lazy: false
   - name: JP
-    type: url-test
-    filter: "JP|日本"
+    type: select
+    filter: "JP|日本|🇯🇵"
     proxies: []
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -292,8 +292,8 @@ proxy-groups:
     disable-udp: false
     lazy: false
   - name: SG
-    type: url-test
-    filter: "SG|新加坡|狮城"
+    type: select
+    filter: "SG|新加坡|狮城|🇸🇬"
     proxies: []
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -301,8 +301,8 @@ proxy-groups:
     disable-udp: false
     lazy: false
   - name: TW
-    type: url-test
-    filter: "TW|台湾"
+    type: select
+    filter: "TW|台湾|民国"
     proxies: []
     url: http://cp.cloudflare.com/generate_204
     interval: 300
@@ -310,8 +310,8 @@ proxy-groups:
     disable-udp: false
     lazy: false
   - name: US
-    type: url-test
-    filter: "US|美国"
+    type: select
+    filter: "US|美国|🇺🇸"
     proxies: []
     url: http://cp.cloudflare.com/generate_204
     interval: 300

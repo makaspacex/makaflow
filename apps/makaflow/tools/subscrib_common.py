@@ -355,6 +355,8 @@ def update_subscribe_cache():
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
                 sub_url = node_conf["sub_url"]
                 resp = requests.get(sub_url, headers=headers)
+                if resp.status_code != 200:
+                    raise Exception(f"{nodename} 请求失败")
                 subscription_userinfo = resp.headers.get("subscription-userinfo", None)
                 sio = StringIO()
                 sio.write(resp.text)
@@ -366,7 +368,9 @@ def update_subscribe_cache():
                 # 订阅式的链接
                 headers = {"User-Agent": common.get_client_agent(ClientApp.browser)}
                 resp = requests.get(sub_url, headers=headers)
-
+                if resp.status_code != 200:
+                    raise Exception(f"{nodename} 请求失败")
+                
                 with open(config_path_sharelink, "w+") as f:
                     re_decode = base64.b64decode(resp.text).decode()
                     f.write(re_decode)
@@ -377,7 +381,6 @@ def update_subscribe_cache():
 
     if file_changed:
         configs.load_third_sub_profile()
-
 
 import threading
 
