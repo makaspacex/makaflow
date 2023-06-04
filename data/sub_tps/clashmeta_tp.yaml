@@ -65,7 +65,7 @@ hosts:
 
 # 缓存设置(文件位置./cache.db)
 profile: # 存储 select 选择记录
-  store-selected: false
+  store-selected: true
   # 持久化 fake-ip
   store-fake-ip: true
 
