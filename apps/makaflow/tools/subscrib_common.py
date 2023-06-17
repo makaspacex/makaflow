@@ -174,17 +174,6 @@ def get_updated_sharelink(line_str, nodename) -> list:
             r = re.search(r"^vmess://(.*)", line_str, re.I)
             content = r.group(1)
             proxy = json.loads(base64.b64decode(content).decode())
-            # {'v': '2',
-            # 'ps': 'SG-高密-稳-1|倍率:0.3',
-            # 'add': 'yx.timeswath.uk',
-            # 'port': '443',
-            # 'id': '820234c3-44a2-4de6-9e7a-793fe10576e9',
-            # 'aid': '0',
-            # 'net': 'ws',
-            # 'type': 'none',
-            # 'host': 'sa21.gfwcaonimanmsl.ml',
-            # 'path': '/vfsg',
-            # 'tls': 'tls'}
             # 处理过滤节点
             if exclude_node:
                 _r = re.search(exclude_node, proxy["ps"])

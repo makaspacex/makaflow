@@ -319,15 +319,23 @@ def render_tp(username, client_type=ClientApp.clash):
         elif client_type in ClientApp.sharelink_group:
             if not os.path.exists(config_path_sharelink):
                 continue
-            xxx = "🚀↑:6.19GB,↓:685.4GB,TOT:1000GB💡Expires:2023-05-16"
             with open(config_path_sharelink, 'r') as f:
                 _a = f.readlines()
                 lines = [ x.replace("\n", "") for x in _a]
-            
             for line in lines:
-                line = get_updated_sharelink(line, nodename)
-                if line:               
-                    outbounds_result += [line]
+                # line = get_updated_sharelink(line, nodename)
+                from apps.makaflow.convert.converter import convertsV2Ray
+                try:
+                    proxy = convertsV2Ray([line])[0]
+                except Exception as e:
+                    print(line)
+                    print(e)
+                # 处理过滤节点
+                if exclude_node:
+                    _r = re.search(exclude_node, proxy['name'])
+                    if _r:
+                        continue
+                outbounds_result += [line]
 
     # 2、找出singbox的节点服务
     for nodename, node_conf in nodes.items():
