@@ -30,7 +30,8 @@ from apps.makaflow.tools.subscrib_common import get_ports
 from apps.makaflow.tools.subscrib_common import conve_v2
 from apps.makaflow.tools.common import b64en, urlen
 from apps.makaflow import tools
-
+from apps.makaflow.convert.converter import convertsV2Ray
+from apps.makaflow.tools.convert_api import xj_convert
 
 # 处理xray多端口和转发
 def _generate_inbounds_for_xray(inbounds, server_url):
@@ -307,9 +308,14 @@ def render_tp(username, client_type=ClientApp.clash):
                     _r = re.search(exclude_node, proxy['name'])
                     if _r:
                         continue
-                
                 # 节点名字去空格，加上前缀
                 proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
+                
+                # 处理字符串替换
+                for ele in repl_names:
+                    _ori_str = ele['ori']
+                    _repl_str = ele['repl']
+                    proxy['name'] = proxy['name'].replace(_ori_str, _repl_str)
                 
                 # 替换mirror
                 if proxy['server'] in server_mirr_dict.keys():
@@ -320,21 +326,34 @@ def render_tp(username, client_type=ClientApp.clash):
             if not os.path.exists(config_path_sharelink):
                 continue
             with open(config_path_sharelink, 'r') as f:
-                _a = f.readlines()
-                lines = [ x.replace("\n", "") for x in _a]
+                lines = f.read().splitlines()
             for line in lines:
-                # line = get_updated_sharelink(line, nodename)
-                from apps.makaflow.convert.converter import convertsV2Ray
                 try:
-                    proxy = convertsV2Ray([line])[0]
+                    proxy = xj_convert(line, 'JSON')
+                    # 处理过滤节点
+                    if exclude_node:
+                        _r = re.search(exclude_node, proxy['name'])
+                        if _r:
+                            continue
+                    # 节点名字去空格，加上前缀
+                    proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
+                    
+                    # 处理字符串替换
+                    for ele in repl_names:
+                        _ori_str = ele['ori']
+                        _repl_str = ele['repl']
+                        proxy['name'] = proxy['name'].replace(_ori_str, _repl_str)
+                    
+                    # 替换mirror
+                    if proxy['server'] in server_mirr_dict.keys():
+                        proxy['server'] = server_mirr_dict.get(proxy['server'], proxy['server'])
+                    
+                    line = xj_convert(proxy, 'URI')
+                    
                 except Exception as e:
                     print(line)
                     print(e)
-                # 处理过滤节点
-                if exclude_node:
-                    _r = re.search(exclude_node, proxy['name'])
-                    if _r:
-                        continue
+            
                 outbounds_result += [line]
 
     # 2、找出singbox的节点服务

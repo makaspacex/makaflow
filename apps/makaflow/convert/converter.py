@@ -13,8 +13,10 @@ import base64
 import urllib.parse as urlparse
 import distutils
 
-def convertsV2Ray(uris:list):
-
+def convertsV2Ray(ori_uris:list):
+    uris = ori_uris
+    if not isinstance(ori_uris, list):
+        uris = [ori_uris]
     proxies = []
     names = {}
 
@@ -81,7 +83,7 @@ def convertsV2Ray(uris:list):
             if sni != "":
                 trojan["sni"] = sni
 
-            network = get(query.get("type").lower())
+            network = get(query.get("type","").lower())
             if network != "":
                 trojan["network"] = network
             
@@ -101,7 +103,7 @@ def convertsV2Ray(uris:list):
                 grpcOpts["serviceName"] = query.get("serviceName")
                 trojan["grpc-opts"] = grpcOpts
 
-            fingerprint = get(query.get("fp"))
+            fingerprint = get(query.get("fp",""))
             if fingerprint == "":
                 trojan["client-fingerprint"] = "chrome"
             else:
@@ -360,5 +362,8 @@ def convertsV2Ray(uris:list):
     if len(proxies) == 0:
         raise Exception("No valid proxies found")
 
+    if not isinstance(ori_uris, list):
+        proxies = proxies[0]
+    
     return proxies
 

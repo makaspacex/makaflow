@@ -120,7 +120,7 @@ USE_TZ = True
 
 
 LOG_DIR = BASE_DIR/"runtime"
-LOGGING = {
+_bak_LOGGING = {
     "version": 1,  # the dictConfig format version
     "disable_existing_loggers": False,  # retain the default loggers
     "formatters": {

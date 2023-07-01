@@ -1,6 +1,6 @@
 
 ### 更新服务器
-# @baseUrl = http://127.0.0.1:8180
+# @baseUrl = http://127.0.0.1:8000/api
 # @rpckey= 123456
 # @service = xray
 # xray sing-box
@@ -51,7 +51,7 @@ rpckey: {{rpckey}}
 ### 获取订阅 
 # @uname=user1010
 # @password=234234
-# @client=clashmeta
+# @client=shadowrocket
 #shadowrocket, clash, clashmeta, singbox
 
 GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
