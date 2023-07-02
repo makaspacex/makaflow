@@ -16,23 +16,66 @@ import urllib
 yaml = ruamel.yaml.YAML()
 
 class ClientApp():
-    clash = "clash" # clash 各个平台的clash，如安卓，widows和软路由, 包含premium版本, 后期有需要再细分
-    stash = "stash"
+    clash = "Clash" # clash 各个平台的clash，如安卓，widows和软路由, 包含premium版本, 后期有需要再细分
+    stash = "Stash"
+    
+    surge = "Surge"
+    qx = "QX"
     
     # 支持更高级的功能和语法，优先支持    
     clashmeta = "clashmeta" # clashmeta内核的一切软件
     
     # 它们只需要分享链接式的配置
-    loon = "loon"
+    loon = "Loon"
     shadowrocket = "shadowrocket"
     singbox = "singbox" # singbox 内核的一切软件
     xray = "xray" # xray 内核的一切软件
     browser = "browser"
     
-    
+    # sub_store_support = ["QX", "Surge", "Loon","Clash","URI","JSON","Stash"]
+    sub_store_support = [qx, surge, loon, stash]
+
     clash_group = [clash,stash]
     clashmeta_group = [clashmeta]
     sharelink_group = [loon, shadowrocket, singbox, xray, browser]
+import re
+import copy
+
+def proxy_process(node_name, node_conf, proxy:dict):
+    
+    proxy = copy.deepcopy(proxy)
+    
+    exclude_node = node_conf.get("exclude_node", None)
+    name_prefix_str = node_conf.get("prefix","")
+    repl_names = node_conf.get("repl_names", [])
+    server_mirr_dict = {ele['ori']:ele['mirr'] for ele in node_conf.get('server_mirr', [])}
+    
+    # 处理过滤节点
+    if exclude_node:
+        _r = re.search(exclude_node, proxy['name'])
+        if _r:
+            return None
+    
+    # 节点名字去空格
+    proxy['name'] = proxy['name'].replace(" ", "")
+    # 清除emoji
+    proxy['name']=re.sub('["\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F1E0-\U0001F1FF"]', '', proxy['name'])
+    
+    # 处理字符串替换
+    for ele in repl_names:
+        _ori_str = ele['ori']
+        _repl_str = ele['repl']
+        # proxy['name'] = proxy['name'].replace(_ori_str, _repl_str)
+        proxy['name'] = re.sub(_ori_str,_repl_str, proxy['name'] )
+
+    # 替换mirror
+    if proxy['server'] in server_mirr_dict.keys():
+        proxy['server'] = server_mirr_dict.get(proxy['server'], proxy['server'])
+    
+    # 节点名字加上前缀
+    proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
+    
+    return proxy
 
 
 def get_client_agent(client_typ=ClientApp.browser):

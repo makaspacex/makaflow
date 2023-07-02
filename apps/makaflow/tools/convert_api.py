@@ -1,25 +1,37 @@
 import requests
 import json
+import yaml
+
 
 def xj_convert(data, target):
+    p_data = data
     if isinstance(data, dict):
-        data = json.dumps(data)
+        p_data = json.dumps(data)
+    elif isinstance(data, list):
+        ele = data[0]
+        if isinstance(ele, dict):
+            p_data=yaml.dump({"proxies": data})
+        elif isinstance(ele, str):
+            p_data = "\n".join(data)
+    elif isinstance(data, str):
+        if '\n' in  data:
+            raise Exception("一个字符串包含多行时, 请使用list")
     
     api_url = "http://localhost:3000/api/parser"
     req_data = {
-        "data":data,
+        "data":p_data,
         "client": target
     }
-    resp = requests.get(api_url, params=req_data)
+    
+    resp = requests.post(api_url, json=req_data)
     res = resp.json()
     
     ret = res['data']['par_res']
-    if target.lower() == 'json':
-        ret= json.loads(ret)
-        if isinstance(ret, list) and len(ret) == 1:
-            ret = ret[0]
+    if (not isinstance(data, list)) and isinstance(ret, list):
+        ret = ret[0]
     
     return ret
+
     
 if __name__ == "__main__":
     
@@ -29,13 +41,18 @@ if __name__ == "__main__":
     
     demo_c = {"name":"Lv3 香港 01 [2.0]","type":"ss","server":"v3-hk.kunlun-sd.com","port":"6601","cipher":"aes-128-gcm","password":"e17e96b3-88a9-42c6-87c7-20e89854ac2f"}
     
+    demo_d = [demo_c, demo_c, demo_c]
+    demo_e = [demo_b, demo_b, demo_b]
+    
     import time
     s = time.time()
-    for i in range(20):
-        xj_convert(demo_a, "URI")
-        xj_convert(demo_b, "JSON")
-        xj_convert(demo_c, "URI")
-        xj_convert(demo_c, "Loon")
+    for i in range(2):
+        # xj_convert(demo_a, "URI")
+        print(xj_convert(demo_b, "JSON"))
+        print(xj_convert(demo_c, "URI"))
+        # xj_convert(demo_c, "Loon")
+        print(xj_convert(demo_d, "Loon"))
+        print(xj_convert(demo_e, "JSON"))
     
     cost = time.time() -s
     print( cost/10)

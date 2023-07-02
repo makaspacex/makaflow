@@ -32,6 +32,7 @@ from apps.makaflow.tools.common import b64en, urlen
 from apps.makaflow import tools
 from apps.makaflow.convert.converter import convertsV2Ray
 from apps.makaflow.tools.convert_api import xj_convert
+from apps.makaflow.tools.common import proxy_process
 
 # 处理xray多端口和转发
 def _generate_inbounds_for_xray(inbounds, server_url):
@@ -294,67 +295,38 @@ def render_tp(username, client_type=ClientApp.clash):
             res_info['expire'] = max(subinfo['expire'], res_info['expire'])
         
         # ---------------------------- 开始处理订阅的节点信息 ---------------------------
-        exclude_node = node_conf.get("exclude_node", None)
-        name_prefix_str = node_conf.get("prefix","")
-        repl_names = node_conf.get("repl_names", [])
-        server_mirr_dict = {ele['ori']:ele['mirr'] for ele in node_conf.get('server_mirr', [])}
-        
-        # 处理节点的名字，mirr名称和过滤节点
-        if client_type in ClientApp.clash_group or client_type in ClientApp.clashmeta_group:
-            proxies = server_config['proxies']
-            for proxy in proxies:
-                # 处理过滤节点
-                if exclude_node:
-                    _r = re.search(exclude_node, proxy['name'])
-                    if _r:
-                        continue
-                # 节点名字去空格，加上前缀
-                proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
-                
-                # 处理字符串替换
-                for ele in repl_names:
-                    _ori_str = ele['ori']
-                    _repl_str = ele['repl']
-                    proxy['name'] = proxy['name'].replace(_ori_str, _repl_str)
-                
-                # 替换mirror
-                if proxy['server'] in server_mirr_dict.keys():
-                    proxy['server'] = server_mirr_dict.get(proxy['server'], proxy['server'])
-                
-                outbounds_result += [conv_yaml_obj_to_json(proxy)]
-        elif client_type in ClientApp.sharelink_group:
-            if not os.path.exists(config_path_sharelink):
+        proxies = server_config['proxies']
+        for proxy in proxies:
+            # 处理节点的名字，mirr名称和过滤节点
+            proxy = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy)
+            if proxy is None:
                 continue
-            with open(config_path_sharelink, 'r') as f:
-                lines = f.read().splitlines()
-            for line in lines:
-                try:
-                    proxy = xj_convert(line, 'JSON')
-                    # 处理过滤节点
-                    if exclude_node:
-                        _r = re.search(exclude_node, proxy['name'])
-                        if _r:
-                            continue
-                    # 节点名字去空格，加上前缀
-                    proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
-                    
-                    # 处理字符串替换
-                    for ele in repl_names:
-                        _ori_str = ele['ori']
-                        _repl_str = ele['repl']
-                        proxy['name'] = proxy['name'].replace(_ori_str, _repl_str)
-                    
-                    # 替换mirror
-                    if proxy['server'] in server_mirr_dict.keys():
-                        proxy['server'] = server_mirr_dict.get(proxy['server'], proxy['server'])
-                    
-                    line = xj_convert(proxy, 'URI')
-                    
-                except Exception as e:
-                    print(line)
-                    print(e)
-            
-                outbounds_result += [line]
+            outbounds_result += [conv_yaml_obj_to_json(proxy)]
+        
+        # if client_type in ClientApp.clash_group or client_type in ClientApp.clashmeta_group:
+        #     proxies = server_config['proxies']
+        #     for proxy in proxies:
+        #         res = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy)
+        #         if res is None:
+        #             continue
+        #         outbounds_result += [conv_yaml_obj_to_json(proxy)]
+        
+        # elif client_type in ClientApp.sharelink_group:
+        #     if not os.path.exists(config_path_sharelink):
+        #         continue
+        #     with open(config_path_sharelink, 'r') as f:
+        #         lines = f.read().splitlines()
+        #     for line in lines:
+        #         try:
+        #             proxy = xj_convert(line, 'JSON')
+        #             res = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy)
+        #             if res is None:
+        #                 continue
+        #             line = xj_convert(proxy, 'URI')
+        #         except Exception as e:
+        #             print(line)
+        #             print(e)
+        #         outbounds_result += [line]
 
     # 2、找出singbox的节点服务
     for nodename, node_conf in nodes.items():
@@ -433,6 +405,11 @@ def render_tp(username, client_type=ClientApp.clash):
         resp_text = out_.read()
     
     elif client_type in ClientApp.sharelink_group:
+        target = "URI"
+        if client_type in ClientApp.sub_store_support:
+            target = client_type
+        outbounds_result = xj_convert(outbounds_result, target)
+        
         resp_text = ""
         for proxy in outbounds_result:
             resp_text += f"{proxy}\n"
