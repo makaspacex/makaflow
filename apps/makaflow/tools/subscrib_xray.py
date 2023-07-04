@@ -17,9 +17,10 @@ import re
 import copy
 import urllib.parse
 import base64
-from apps.makaflow.tools.common import yaml
 import os
 import json
+import ruamel
+
 from apps.makaflow.tools.subscrib_common import get_inbound_index
 from apps.makaflow.tools.subscrib_common import get_inbound_by_tag
 from apps.makaflow.tools.subscrib_common import get_shadowtls_password
@@ -376,7 +377,7 @@ def render_tp(username, client_type=ClientApp.clash):
         elif client_type == ClientApp.clashmeta:
             config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
         elif client_type == ClientApp.clash:
-            config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
+            config_tp = copy.deepcopy(configs.sub_tps['clash_tp'])
         
         # 最终的出口结果，模板中的也要继承
         if not isinstance(config_tp['proxies'], list):
@@ -405,6 +406,8 @@ def render_tp(username, client_type=ClientApp.clash):
         config_tp["proxy-groups"] = _new_groups
         
         out_ = StringIO()
+        yaml = ruamel.yaml.YAML()
+        yaml.indent(sequence=4, offset=2)
         yaml.dump(config_tp,out_)
         out_.seek(0)
         resp_text = out_.read()

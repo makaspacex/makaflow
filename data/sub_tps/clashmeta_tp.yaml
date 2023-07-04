@@ -1,14 +1,13 @@
-# 4
-port: 7891 # HTTP(S) 代理服务器端口
-socks-port: 7892 # SOCKS5 代理端口
+# port: 7891 # HTTP(S) 代理服务器端口
+# socks-port: 7892 # SOCKS5 代理端口
 mixed-port: 7890 # HTTP(S) 和 SOCKS 代理混合端口
-redir-port: 7893 # 透明代理端口，用于 Linux 和 MacOS
+# redir-port: 7893 # 透明代理端口，用于 Linux 和 MacOS
 
 # Transparent proxy server port for Linux (TProxy TCP and TProxy UDP)
 # tproxy-port: 7895
 
 allow-lan: true # 允许局域网连接
-bind-address: "*" # 绑定 IP 地址，仅作用于 allow-lan 为 true，'*'表示所有地址
+# bind-address: "*" # 绑定 IP 地址，仅作用于 allow-lan 为 true，'*'表示所有地址
 
 #  find-process-mode has 3 values:always, strict, off
 #  - always, 开启，强制匹配所有进程
@@ -28,7 +27,6 @@ log-level: debug # 日志等级 silent/error/warning/info/debug
 
 ipv6: true # 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS 请求 AAAA 记录
 
-
 # tls:
 #   certificate: string # 证书 PEM 格式，或者 证书的路径
 #   private-key: string # 证书对应的私钥 PEM 格式，或者私钥路径
@@ -39,7 +37,7 @@ ipv6: true # 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS
 #       -----END CERTIFICATE-----
 
 external-controller: 0.0.0.0:9090 # RESTful API 监听地址
-external-controller-tls: 0.0.0.0:9443 # RESTful API HTTPS 监听地址，需要配置 tls 部分配置文件
+# external-controller-tls: 0.0.0.0:9443 # RESTful API HTTPS 监听地址，需要配置 tls 部分配置文件
 secret: "123456" # `Authorization:Bearer ${secret}`
 
 # tcp-concurrent: true # TCP 并发连接所有 IP, 将使用最快握手的 TCP
@@ -84,9 +82,8 @@ geodata-loader: standard
 tcp-concurrent: true 
 
 
-# tun模式还需要在调整，目前工作不是很好
 tun:
-  enable: false
+  enable: true
   stack: system # system or gvisor
   dns-hijack:
     - 0.0.0.0:53 # 需要劫持的 DNS

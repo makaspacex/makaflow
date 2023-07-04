@@ -36,7 +36,8 @@ urlpatterns += [
     path('push_service_op/<op>', api.manager.api_push_service_op),
     path('get_service_status', api.manager.api_get_service_status),
     path('loadall', api.manager.api_loadall),
-    path('rule/geo/<client>/<code>.yaml', api.manager.api_rule_geo),
+    path('rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
+    path('conf/<conf>', api.manager.api_conf),
     re_path(r'rule/bm7/(?P<path>.*)', api.manager.api_rule_bm7),
 ]
 

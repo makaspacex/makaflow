@@ -61,9 +61,11 @@ content-type: application/json
 GET {{baseUrl}}/loadall
 
 ### geo规则
-@client=clash
-@code=microsoft@cn
-GET {{baseUrl}}/rule/geo/{{client}}/{{code}}.yaml
+GET {{baseUrl}}/rule/geo/clash/microsoft@cn.yaml
+
+### geo规则 loon
+GET {{baseUrl}}/rule/geo/loon/microsoft@cn.list
+
 
 ### bm7规则
 @path=Clash/Telegram/Telegram.yaml

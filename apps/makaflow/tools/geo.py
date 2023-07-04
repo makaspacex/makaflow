@@ -73,11 +73,7 @@ def get_domains_by_country_code(country_code:str, geosites:dict[str, list[common
 
 
 def clash_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[str]], country_code:str):
-    
-    
-    
     country_code = country_code.lower()
-    
     cidrs = geoips.get(country_code, [])
     domains = get_domains_by_country_code(country_code=country_code, geosites=geosites)
     
@@ -116,7 +112,43 @@ def clash_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[s
     f.close()
 
     return content
+
+
+def loon_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[str]], country_code:str):
+    country_code = country_code.lower()
+    cidrs = geoips.get(country_code, [])
+    domains = get_domains_by_country_code(country_code=country_code, geosites=geosites)
     
+    content = ""
+    content += f"# NAME: {country_code}\n"
+    content += f"# AUTHOR: makaflow\n"
+    content += f"# TOTAL: {len(domains)+ len(cidrs)}\n"
+    
+    hosts = []
+    for domain in domains:
+        if  domain.type == 2:
+            hosts.append(f"DOMAIN-SUFFIX,{domain.value}")
+        elif  domain.type == 3:
+            hosts.append(f"DOMAIN,{domain.value}")
+    
+    for cidr in cidrs:
+        if ":" in cidr:
+            hosts.append(f"IP-CIDR6,{cidr}")
+        else:
+            hosts.append(f"IP-CIDR,{cidr}")
+    
+    content += "\n".join(hosts)
+    
+    # write to file for debug
+    g_tmp_dir = configs.env['g_tmp_dir']
+    out_dir = os.path.join(g_tmp_dir, "loon")
+    os.makedirs(out_dir, exist_ok=True)
+    dest_f = os.path.join(out_dir, f"{country_code}.list")
+    f = open(dest_f, "w+")
+    f.write(content)
+    f.close()
+
+    return content
 
 # def loon_rules(geosite_list, geoip_list, dest_dir):
 #     pass

@@ -18,6 +18,7 @@ from django.http.request import HttpRequest
 from dataclasses import dataclass
 
 yaml = ruamel.yaml.YAML()
+yaml.indent(sequence=4, offset=2)
 
 @dataclass
 class ClientApp:
@@ -59,7 +60,7 @@ def get_request_client(request:HttpRequest):
         # 含有clash关键字，托底的clash
         elif "clash" in user_agent:
             client_type = ClientApp.clash
-        elif "loon".loer() in user_agent:
+        elif "loon".lower() in user_agent:
             client_type = ClientApp.loon
         else:
             client_type = ClientApp.browser

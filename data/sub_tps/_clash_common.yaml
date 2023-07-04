@@ -2,11 +2,11 @@
 proxies: []
 
 proxy-groups:
-  - name: Proxy
+  - name: 代理
     type: select
-    proxies: ["HK", "TW", "JP", "SG", "US", "Auto", "DIRECT",]
+    proxies: ["HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT",]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Proxy.png
-  - name: Auto
+  - name: Auto自动
     type: url-test
     proxies: []
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Auto.png
@@ -14,7 +14,7 @@ proxy-groups:
     lazy: true
     tolerance: 50
     url: http://cp.cloudflare.com/generate_204
-  - name: HK
+  - name: HK香港
     type: select
     filter: "港|🇭🇰|HK|Hong"
     proxies: []
@@ -23,7 +23,7 @@ proxy-groups:
     lazy: true
     tolerance: 50
     url: http://cp.cloudflare.com/generate_204
-  - name: TW
+  - name: TW台湾
     type: select
     proxies: []
     filter: "台|🇨🇳|🇹🇼|湾|TW|Taiwan"
@@ -33,7 +33,7 @@ proxy-groups:
     tolerance: 50
     url: http://cp.cloudflare.com/generate_204
     include-all: true
-  - name: SG
+  - name: SG新加坡
     type: select
     proxies: []
     filter: "新加坡|坡|狮城|🇸🇬|SG|Singapore"
@@ -43,7 +43,7 @@ proxy-groups:
     tolerance: 50
     url: http://cp.cloudflare.com/generate_204
     include-all: true
-  - name: JP
+  - name: JP日本
     type: select
     proxies: []
     filter: "日|🇯🇵|东京|JP|Japan"
@@ -53,7 +53,7 @@ proxy-groups:
     tolerance: 50
     url: http://cp.cloudflare.com/generate_204
     include-all: true
-  - name: US
+  - name: US美国
     type: select
     proxies: []
     filter: "美|🇺🇲|US|States|American"
@@ -65,53 +65,53 @@ proxy-groups:
     include-all: true
   - name: OpenAI
     type: select
-    proxies: ["US", "Proxy", "HK", "TW", "JP", "SG",  "Auto", "DIRECT"]
+    proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Bot.png
   - name: YouTube
     type: select
-    proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", "Auto", "DIRECT"]
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/YouTube.png
   - name: Netflix
     type: select
-    proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", "Auto", "DIRECT"]
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Netflix.png
   - name: Steam
     type: select
-    proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", "Auto", "DIRECT"]
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Game.png
   - name: Bing
     type: select
-    proxies: ["Proxy", "US", "HK", "TW", "JP", "SG",  "Auto", "DIRECT"]
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Pig.png
   - name: GitHub
     type: select
-    proxies: ["Proxy", "US", "HK", "TW", "JP", "SG",  "Auto", "DIRECT"]
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Lab.png
   - name: Apple国外
     type: select
-    proxies: ["Proxy", "HK", "TW", "JP", "SG", "US", "Auto", "DIRECT"]
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Apple.png
   - name: GoogleVoice
     type: select
-    proxies: ["US", "Proxy", "Auto", "DIRECT"]
+    proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Google.png
-  - name: Final
+  - name: 默认
     type: select
-    proxies: ["Proxy", "DIRECT", "HK", "TW", "JP", "SG", "US", "Auto"]
+    proxies: ["代理", "DIRECT", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动"]
     icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Final.png
 
 rule-providers:
+  Lan:
+    type: http
+    path: ./rule-set/Lan.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Lan/Lan.yaml
+    interval: 7200
   XJProxy:
     type: http
     path: ./rule-set/XJProxy.yaml
     behavior: classical
     url: https://izhangxm-surgio.oss-cn-beijing.aliyuncs.com/rule-provider/xj_proxy.yaml
-    interval: 7200
-  lan:
-    type: http
-    path: ./rule-set/lan.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Lan/Lan.yaml
     interval: 7200
   OpenAI:
     type: http
@@ -119,53 +119,47 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/OpenAI/OpenAI.yaml
     interval: 7200
-  AppleNews:
+  Netflix:
     type: http
-    path: ./rule-set/AppleNews.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleNews.yaml
-    interval: 7200
-  AppleTV:
-    type: http
-    path: ./rule-set/AppleTV.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleTV/AppleTV.yaml
-    interval: 7200
-  netflix:
-    type: http
-    path: ./rule-set/netflix.yaml
+    path: ./rule-set/Netflix.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/Netflix/Netflix.yaml
     interval: 7200
-  github:
+  GitHub:
     type: http
-    path: ./rule-set/github.yaml
+    path: ./rule-set/GitHub.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/GitHub/GitHub.yaml
     interval: 7200
-  youtube:
+  YouTube:
     type: http
-    path: ./rule-set/youtube.yaml
+    path: ./rule-set/YouTube.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/YouTube/YouTube.yaml
     interval: 7200
-  facebook:
+  Facebook:
     type: http
-    path: ./rule-set/facebook.yaml
+    path: ./rule-set/Facebook.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/Facebook/Facebook.yaml
     interval: 7200
-  telegram:
+  Telegram:
     type: http
-    path: ./rule-set/telegram.yaml
+    path: ./rule-set/Telegram.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/Telegram/Telegram.yaml
     interval: 7200
-  twitter:
+  Twitter:
     type: http
     path: ./rule-set/twitter.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/Twitter/Twitter.yaml
+    interval: 7200
+  GoogleVoice:
+    type: http
+    path: ./rule-set/GoogleVoice.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/GoogleVoice/GoogleVoice.yaml
     interval: 7200
   category-games@cn:
     type: http
@@ -173,17 +167,29 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/rule/geo/clash/category-games@cn.yaml
     interval: 7200
-  steam:
+  SteamCN:
     type: http
-    path: ./rule-set/steam.yaml
+    path: ./rule-set/SteamCN.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/SteamCN/SteamCN.yaml
+    interval: 7200
+  Steam:
+    type: http
+    path: ./rule-set/Steam.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/Steam/Steam.yaml
     interval: 7200
-  steamcn:
+  AppleTV:
     type: http
-    path: ./rule-set/steamcn.yaml
+    path: ./rule-set/AppleTV.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/SteamCN/SteamCN.yaml
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleTV/AppleTV.yaml
+    interval: 7200
+  AppleNews:
+    type: http
+    path: ./rule-set/AppleNews.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleNews.yaml
     interval: 7200
   google-cn:
     type: http
@@ -222,10 +228,10 @@ rule-providers:
 # 3、兜底出口走代理
 rules:
   # 跳过局域网
-  - RULE-SET,lan,DIRECT
+  - RULE-SET,Lan,DIRECT
   # 自定义的高优先级规则
-  - PROCESS-NAME,microsocks,Proxy
-  - RULE-SET,XJProxy,Proxy
+  - PROCESS-NAME,microsocks,代理
+  - RULE-SET,XJProxy,代理
   - DOMAIN-KEYWORD,bing,Bing
   # proxy utils
   - PROCESS-NAME,v2ray,DIRECT
@@ -252,19 +258,19 @@ rules:
   # OpenAI
   - RULE-SET,OpenAI,OpenAI
   # 国外应用
-  - RULE-SET,netflix,Netflix
-  - RULE-SET,github,GitHub
-  - RULE-SET,youtube,YouTube
-  - RULE-SET,facebook,Proxy
-  - RULE-SET,telegram,Proxy
-  - RULE-SET,twitter,Proxy
+  - RULE-SET,Netflix,Netflix
+  - RULE-SET,GitHub,GitHub
+  - RULE-SET,YouTube,YouTube
+  - RULE-SET,Facebook,代理
+  - RULE-SET,Telegram,代理
+  - RULE-SET,Twitter,代理
   # GoogleVoice
-  - DOMAIN,lens.l.google.com,GoogleVoice
+  - RULE-SET,GoogleVoice,GoogleVoice
   # steam游戏规则，注意国内流量必须在前面
   - RULE-SET,category-games@cn,DIRECT
-  - RULE-SET,steamcn,DIRECT
+  - RULE-SET,SteamCN,DIRECT
   - DOMAIN-KEYWORD,paradox,Steam
-  - RULE-SET,steam,Steam
+  - RULE-SET,Steam,Steam
   # AppleTV的规则
   - RULE-SET,AppleTV,Apple国外
   # AppleNews规则
@@ -277,6 +283,6 @@ rules:
   - RULE-SET,geolocation-cn,DIRECT
   - GEOIP,cn,DIRECT
   # 最终流量出口
-  - MATCH,Final
+  - MATCH,默认
 
   

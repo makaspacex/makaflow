@@ -137,12 +137,14 @@ def api_get_service_status(request:HttpRequest):
         resp_data["info"] = "Failed: " + str(e)
     return  JsonResponse(resp_data)
 
-def api_rule_geo(request:HttpRequest, client, code):
+def api_rule(request:HttpRequest, client, code, suffix):
     resp_data = tools.get_default_resp_data()
     try:
         content = ""
         if client == 'clash':
             content = geo.clash_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
+        elif client.lower() == 'loon':
+            content = geo.loon_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
         
         resp = HttpResponse(content)
         resp.headers["content-type"] = "text/yaml; charset=utf-8"
@@ -176,6 +178,28 @@ def api_rule_bm7(request:HttpRequest, path:str):
         resp_data["code"] = 0
         resp_data["info"] = "Failed: " + str(e)
     return  JsonResponse(resp_data)
+
+def api_conf(request:HttpRequest, conf):
+    resp_data = tools.get_default_resp_data()
+    try:
+        subscribe_tp_dir = configs.env['subscribe_tp_dir']
+        f_path = os.path.join(subscribe_tp_dir, conf)
+        resp = HttpResponse()
+        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        if not os.path.exists(f_path):
+            resp.status_code = 404
+            resp.content = f"404: {conf} not found"
+            return resp
+        with open(f_path, 'r') as f:
+            content = f.read()
+            resp.content = content
+        return resp
+
+    except Exception as e:
+        resp_data["code"] = 0
+        resp_data["info"] = "Failed: " + str(e)
+    return  JsonResponse(resp_data)
+
 
 from apps.makaflow.tasks import load_all
 def api_loadall(request:HttpRequest):
