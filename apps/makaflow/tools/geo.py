@@ -7,8 +7,7 @@ from io import StringIO
 import os
 from apps.makaflow import configs
 
-yaml = ruamel.yaml.YAML()
-yaml.indent(sequence=4, offset=2)
+
 
 def load_geosites(f_path) -> dict[str, list[common.Domain]]:
     with open(f_path, 'rb') as f:
@@ -100,6 +99,8 @@ def clash_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[s
         else:
             hosts.append(f"IP-CIDR,{cidr}")
     
+    yaml = ruamel.yaml.YAML()
+    yaml.indent(sequence=4, offset=2)
     str_io = StringIO()
     yaml.dump({"payload":hosts}, str_io)
     str_io.seek(0)
