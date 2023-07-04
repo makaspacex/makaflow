@@ -28,13 +28,16 @@ urlpatterns = [
     path('serverstate', api.slaver.api_user_state),
     path('update_config', api.slaver.api_update_config),
 ]
-
+from django.urls import re_path
 urlpatterns += [
     path('subscrib', api.manager.api_subscrib),
     path('generate_config/<service>', api.manager.api_generate_config),
     path('push_config', api.manager.api_push_config),
     path('push_service_op/<op>', api.manager.api_push_service_op),
     path('get_service_status', api.manager.api_get_service_status),
+    path('loadall', api.manager.api_loadall),
+    path('rule/geo', api.manager.api_rule_geo),
+    re_path(r'rule/bm7/(?P<path>.*)', api.manager.api_rule_bm7),
 ]
 
 def init():

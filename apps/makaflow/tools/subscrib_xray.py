@@ -369,10 +369,15 @@ def render_tp(username, client_type=ClientApp.clash):
     
     
     # 模板是clash系列的话
-    if client_type in ClientApp.clashmeta_group:
+    if client_type in (ClientApp.clashmeta_group + ClientApp.clash_group ):
         
-        config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
-
+        if client_type == ClientApp.stash:
+            config_tp = copy.deepcopy(configs.sub_tps['stash_tp'])
+        elif client_type == ClientApp.clashmeta:
+            config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
+        elif client_type == ClientApp.clash:
+            config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
+        
         # 最终的出口结果，模板中的也要继承
         if not isinstance(config_tp['proxies'], list):
             config_tp['proxies'] = []

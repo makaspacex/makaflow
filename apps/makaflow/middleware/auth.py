@@ -37,7 +37,14 @@ class AuthMiddleware(MiddlewareMixin):
         need_verify = False
         
         message = "need auth"
-        if not path in ["api/subscrib"]:
+        
+        need_auth = True
+        if path.startswith('api/rule'):
+            need_auth = False
+        if path in ["api/subscrib",'api/loadall']:
+            need_auth = False
+        
+        if need_auth:
             auth  = request.headers.get("rpckey", None)
             env = configs.env
             rpc = str(env["rpc_key"])

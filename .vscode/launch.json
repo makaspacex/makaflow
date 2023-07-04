@@ -5,7 +5,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Django",
+            "name": "Django-Dev",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
@@ -16,6 +16,20 @@
                 "PYTHONPATH":"${workspaceFolder}"
             },
         },
+        {
+            "name": "Django-Prod",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/manage.py",
+            "args": ["runserver", "0.0.0.0:8180", "--noreload"],
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env":{
+                "PYTHONPATH":"${workspaceFolder}"
+            },
+        },
+        
+
         {
             "name": "Python: 当前文件",
             "type": "python",

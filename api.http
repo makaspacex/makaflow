@@ -53,8 +53,18 @@ rpckey: {{rpckey}}
 # @password=234234
 # @client=shadowrocket
 #shadowrocket, clash, clashmeta, singbox
-
 GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
 content-type: application/json
 
+### loadlall
+# @client=clash
+GET {{baseUrl}}/loadall
 
+### geo规则
+# @client=clash
+@code=microsoft@cn
+GET {{baseUrl}}/rule/geo?client={{client}}&code={{code}}
+
+### bm7规则
+@path=Clash/Telegram/Telegram.yaml
+GET {{baseUrl}}/rule/bm7/{{path}}

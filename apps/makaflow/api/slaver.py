@@ -14,7 +14,6 @@ from apps.makaflow import configs
 from apps.makaflow import tools
 from apps.makaflow.tools import common, subscrib, subscrib_xray
 from apps.makaflow.tools.common import ClientApp, yaml
-from apps.makaflow.tools.subscrib_common import start_tasks
 from django.http.response import HttpResponse
 from django.http.request import HttpRequest
 from django.http import JsonResponse

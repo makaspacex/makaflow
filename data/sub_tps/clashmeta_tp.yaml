@@ -185,8 +185,10 @@ dns:
   # tls协议 即DoT，dns over tls，默认端口是853
   # DoH，DNS over http，默认端口是443
   default-nameserver:
-    - https://120.53.53.53/dns-query
-    - https://223.5.5.5/dns-query
+    - 120.53.53.53
+    - 223.5.5.5
+    # - https://120.53.53.53/dns-query
+    # - https://223.5.5.5/dns-query
   # 支持 UDP / TCP / DoT / DoH 协议的 DNS 服务，可以指明具体的连接端口号。
   # 所有 DNS 请求将会直接发送到服务器，不经过任何代理。
   # Stash 会使用最先获得的解析记录回复 DNS 请求
@@ -354,6 +356,114 @@ rule-providers:
     behavior: classical
     url: https://izhangxm-surgio.oss-cn-beijing.aliyuncs.com/rule-provider/xj_proxy.yaml
     interval: 7200
+  lan:
+    type: http
+    path: ./rule-set/lan.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Lan/Lan.yaml
+    interval: 7200
+  OpenAI:
+    type: http
+    path: ./rule-set/OpenAI.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/OpenAI/OpenAI.yaml
+    interval: 7200
+  AppleNews:
+    type: http
+    path: ./rule-set/AppleNews.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleNews.yaml
+    interval: 7200
+  AppleTV:
+    type: http
+    path: ./rule-set/AppleTV.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleTV.yaml
+    interval: 7200
+  netflix:
+    type: http
+    path: ./rule-set/netflix.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Netflix/Netflix.yaml
+    interval: 7200
+  github:
+    type: http
+    path: ./rule-set/github.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/GitHub/GitHub.yaml
+    interval: 7200
+  youtube:
+    type: http
+    path: ./rule-set/youtube.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/YouTube/YouTube.yaml
+    interval: 7200
+  facebook:
+    type: http
+    path: ./rule-set/facebook.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Facebook/Facebook.yaml
+    interval: 7200
+  telegram:
+    type: http
+    path: ./rule-set/telegram.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Telegram/Telegram.yaml
+    interval: 7200
+  twitter:
+    type: http
+    path: ./rule-set/twitter.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Twitter/Twitter.yaml
+    interval: 7200
+  category-games@cn:
+    type: http
+    path: ./rule-set/category-games@cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=category-games@cn
+    interval: 7200
+  steam:
+    type: http
+    path: ./rule-set/steam.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Steam/Steam.yaml
+    interval: 7200
+  steamcn:
+    type: http
+    path: ./rule-set/steamcn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/SteamCN/SteamCN.yaml
+    interval: 7200
+  google-cn:
+    type: http
+    path: ./rule-set/google-cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=google-cn
+    interval: 7200
+  apple@cn:
+    type: http
+    path: ./rule-set/apple@cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=apple@cn
+    interval: 7200
+  apple-cn:
+    type: http
+    path: ./rule-set/apple-cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=apple-cn
+    interval: 7200
+  microsoft@cn:
+    type: http
+    path: ./rule-set/microsoft@cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=microsoft@cn
+    interval: 7200
+  geolocation-cn:
+    type: http
+    path: ./rule-set/geolocation-cn.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=geolocation-cn
+    interval: 7200
 
 # 原则：
 # 1、以尽量少得触发dns查询为准则
@@ -361,66 +471,59 @@ rule-providers:
 # 3、兜底出口走代理
 rules:
   # 跳过局域网
-  - GEOIP,private,DIRECT,no-resolve
-  - IP-CIDR,10.0.0.0/8,DIRECT,no-resolve
-  - IP-CIDR,172.16.0.0/12,DIRECT,no-resolve
-  - IP-CIDR,192.168.0.0/16,DIRECT,no-resolve
+  - RULE-SET,lan,DIRECT
   # 自定义的高优先级规则
   - PROCESS-NAME,microsocks,Proxy
   - RULE-SET,XJProxy,Proxy
   - DOMAIN-KEYWORD,bing,Bing
-  #OpenAI
-  - DOMAIN-KEYWORD,openai,OpenAI
-  - DOMAIN,cdn.auth0.com,OpenAI
-  # - DOMAIN,challenges.cloudflare.com,OpenAI
-  - DOMAIN,openaiapi-site.azureedge.net,OpenAI
-  - DOMAIN-SUFFIX,ai.com,OpenAI
-  - DOMAIN-SUFFIX,identrust.com,OpenAI
-  - DOMAIN-SUFFIX,openai.com,OpenAI
-  - DOMAIN-KEYWORD,paradox,Steam
-  # 热门国外应用：netflix，github和youtube
-  - GEOSITE,netflix,Netflix
-  - GEOIP,netflix,Netflix,no-resolve
-  - GEOSITE,github,GitHub
-  - GEOSITE,youtube,YouTube
-  - GEOSITE,facebook,Proxy
-  - GEOIP,facebook,Proxy,no-resolve
-  - GEOSITE,telegram,Proxy
-  - GEOIP,telegram,Proxy,no-resolve
-  - GEOSITE,twitter,Proxy
-  - GEOIP,twitter,Proxy,no-resolve
+  # proxy utils
+  - PROCESS-NAME,v2ray,DIRECT
+  - PROCESS-NAME,Surge,DIRECT
+  - PROCESS-NAME,ss-local,DIRECT
+  - PROCESS-NAME,privoxy,DIRECT
+  - PROCESS-NAME,trojan,DIRECT
+  - PROCESS-NAME,trojan-go,DIRECT
+  - PROCESS-NAME,naive,DIRECT
+  - PROCESS-NAME,CloudflareWARP,DIRECT
+  - PROCESS-NAME,Cloudflare WARP,DIRECT
+  - IP-CIDR,162.159.193.0/24,DIRECT,no-resolve
+  - PROCESS-NAME,p4pclient,DIRECT
+  - PROCESS-NAME,Thunder,DIRECT
+  - PROCESS-NAME,DownloadService,DIRECT
+  - PROCESS-NAME,qbittorrent,DIRECT
+  - PROCESS-NAME,Transmission,DIRECT
+  - PROCESS-NAME,fdm,DIRECT
+  - PROCESS-NAME,aria2c,DIRECT
+  - PROCESS-NAME,Folx,DIRECT
+  - PROCESS-NAME,NetTransport,DIRECT
+  - PROCESS-NAME,uTorrent,DIRECT
+  - PROCESS-NAME,WebTorrent,DIRECT
+  # OpenAI
+  - RULE-SET,OpenAI,OpenAI
+  # 国外应用
+  - RULE-SET,netflix,Netflix
+  - RULE-SET,github,GitHub
+  - RULE-SET,youtube,YouTube
+  - RULE-SET,facebook,Proxy
+  - RULE-SET,telegram,Proxy
+  - RULE-SET,twitter,Proxy
+  # GoogleVoice
   - DOMAIN,lens.l.google.com,GoogleVoice
   # steam游戏规则，注意国内流量必须在前面
-  - GEOSITE,category-games@cn,DIRECT
-  - GEOSITE,Steam,Steam
+  - RULE-SET,category-games@cn,DIRECT
+  - RULE-SET,steamcn,DIRECT
+  - DOMAIN-KEYWORD,paradox,Steam
+  - RULE-SET,steam,Steam
   # AppleTV的规则
-  - DOMAIN,hls-amt.itunes.apple.com,Apple国外
-  - DOMAIN,hls.itunes.apple.com,Apple国外
-  - DOMAIN,np-edge.itunes.apple.com,Apple国外
-  - DOMAIN,play-edge.itunes.apple.com,Apple国外
-  - DOMAIN,tv.applemusic.com,Apple国外
-  - DOMAIN-SUFFIX,videos.apple.com,Apple国外
-  - DOMAIN,uts-api.itunes.apple.com,Apple国外
-  - DOMAIN-SUFFIX,tv.apple.com,Apple国外
-  - PROCESS-NAME,tv,Apple国外
+  - RULE-SET,AppleTV,Apple国外
   # AppleNews规则
-  - DOMAIN,apple.comscoreresearch.com,Apple国外
-  - DOMAIN,gateway.icloud.com,Apple国外
-  - DOMAIN,gspe1-ssl.ls.apple.com,Apple国外
-  - DOMAIN,news-assets.apple.com,Apple国外
-  - DOMAIN,news-client-search.apple.com,Apple国外
-  - DOMAIN,news-client.apple.com,Apple国外
-  - DOMAIN,news-edge.apple.com,Apple国外
-  - DOMAIN,news-events.apple.com,Apple国外
-  - DOMAIN-SUFFIX,apple.news,Apple国外
-  - PROCESS-NAME,news,Apple国外
+  - RULE-SET,AppleNews,Apple国外
   # 需要直连的流量
-  - GEOSITE,google-cn,DIRECT
-  - GEOSITE,icloud@cn,DIRECT
-  - GEOSITE,apple@cn,DIRECT
-  - GEOSITE,apple-cn,DIRECT
-  - GEOSITE,microsoft@cn,DIRECT
-  - GEOSITE,geolocation-cn,DIRECT
+  - RULE-SET,google-cn,DIRECT
+  - RULE-SET,apple@cn,DIRECT
+  - RULE-SET,apple-cn,DIRECT
+  - RULE-SET,microsoft@cn,DIRECT
+  - RULE-SET,geolocation-cn,DIRECT
   - GEOIP,cn,DIRECT
   # 最终流量出口
   - MATCH,Final

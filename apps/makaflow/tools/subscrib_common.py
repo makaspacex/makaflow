@@ -371,31 +371,6 @@ def update_subscribe_cache():
     if file_changed:
         configs.load_third_sub_profile()
 
-import threading
-
-
-class UpdateSubThread(threading.Thread):
-    def __init__(self):
-        threading.Thread.__init__(self)
-
-    def run(self):
-        while True:
-            try:
-                update_subscribe_cache()
-            except Exception:
-                pass
-
-            time.sleep(10)
-
-
-def start_tasks():
-    a = UpdateSubThread()
-    a.start()
-    print("subscribe task stated")
-
 if __name__ == "__main__":
-    start_tasks()
-
     update_subscribe_cache()
-
-    print("dd")
+    print("end")

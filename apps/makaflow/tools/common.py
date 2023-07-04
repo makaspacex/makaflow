@@ -12,34 +12,68 @@ import x25519
 import os
 from apps.makaflow import configs
 import urllib
+import re
+import copy
+from django.http.request import HttpRequest
+from dataclasses import dataclass
 
 yaml = ruamel.yaml.YAML()
 
-class ClientApp():
-    clash = "Clash" # clash 各个平台的clash，如安卓，widows和软路由, 包含premium版本, 后期有需要再细分
-    stash = "Stash"
+@dataclass
+class ClientApp:
+    clash:str = "Clash" # clash 各个平台的clash，如安卓，widows和软路由, 包含premium版本, 后期有需要再细分
+    stash:str = "Stash"
     
-    surge = "Surge"
-    qx = "QX"
+    surge:str = "Surge"
+    qx:str = "QX"
     
     # 支持更高级的功能和语法，优先支持    
-    clashmeta = "clashmeta" # clashmeta内核的一切软件
+    clashmeta:str = "clashmeta" # clashmeta内核的一切软件
     
     # 它们只需要分享链接式的配置
-    loon = "Loon"
-    shadowrocket = "shadowrocket"
-    singbox = "singbox" # singbox 内核的一切软件
-    xray = "xray" # xray 内核的一切软件
-    browser = "browser"
+    loon:str = "Loon"
+    shadowrocket:str = "Shadowrocket"
+    singbox:str = "singbox" # singbox 内核的一切软件
+    xray:str = "xray" # xray 内核的一切软件
+    browser:str = "browser"
     
     # sub_store_support = ["QX", "Surge", "Loon","Clash","URI","JSON","Stash"]
     sub_store_support = [qx, surge, loon, stash]
 
     clash_group = [clash,stash]
     clashmeta_group = [clashmeta]
-    sharelink_group = [loon, shadowrocket, singbox, xray, browser]
-import re
-import copy
+    sharelink_group= [loon, shadowrocket, singbox, xray, browser]
+
+def get_request_client(request:HttpRequest):
+    client_type = request.GET.get("client", None)
+    
+    if client_type is None:
+        user_agent = request.headers.get("User-Agent", "").lower()
+        if "shadowrocket" in user_agent:
+            client_type = ClientApp.shadowrocket
+        # clash meta内核
+        elif "clash-verge" in user_agent or "ClashX Meta" in user_agent:
+            client_type = ClientApp.clashmeta
+        elif "Stash".lower() in user_agent:
+            client_type = ClientApp.stash
+        # 含有clash关键字，托底的clash
+        elif "clash" in user_agent:
+            client_type = ClientApp.clash
+        elif "loon".loer() in user_agent:
+            client_type = ClientApp.loon
+        else:
+            client_type = ClientApp.browser
+    else:
+        attrs = ClientApp.__annotations__
+        for name, tp in attrs.items():
+            va = getattr(ClientApp, name)
+            if not isinstance(va, str):
+                continue
+            if client_type.lower() == va.lower():
+                client_type = va
+    
+    return client_type
+
 
 def proxy_process(node_name, node_conf, proxy:dict):
     
