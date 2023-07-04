@@ -38,6 +38,7 @@ urlpatterns += [
     path('loadall', api.manager.api_loadall),
     path('rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
     path('conf/<conf>', api.manager.api_conf),
+    re_path(r'icon/(?P<path>.*)', api.manager.api_icon),
     re_path(r'rule/bm7/(?P<path>.*)', api.manager.api_rule_bm7),
 ]
 

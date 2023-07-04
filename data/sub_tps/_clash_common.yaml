@@ -5,11 +5,11 @@ proxy-groups:
   - name: 代理
     type: select
     proxies: ["HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT",]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Proxy.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
   - name: Auto自动
     type: url-test
     proxies: []
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Auto.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Auto.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -18,7 +18,7 @@ proxy-groups:
     type: select
     filter: "港|🇭🇰|HK|Hong"
     proxies: []
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Hong_Kong.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Hong_Kong.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -27,7 +27,7 @@ proxy-groups:
     type: select
     proxies: []
     filter: "台|🇨🇳|🇹🇼|湾|TW|Taiwan"
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Taiwan.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Taiwan.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -37,7 +37,7 @@ proxy-groups:
     type: select
     proxies: []
     filter: "新加坡|坡|狮城|🇸🇬|SG|Singapore"
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Singapore.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Singapore.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -47,7 +47,7 @@ proxy-groups:
     type: select
     proxies: []
     filter: "日|🇯🇵|东京|JP|Japan"
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Japan.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Japan.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -57,7 +57,7 @@ proxy-groups:
     type: select
     proxies: []
     filter: "美|🇺🇲|US|States|American"
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/United_States.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/United_States.png
     interval: 120
     lazy: true
     tolerance: 50
@@ -66,39 +66,39 @@ proxy-groups:
   - name: OpenAI
     type: select
     proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Bot.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
   - name: YouTube
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/YouTube.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
   - name: Netflix
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Netflix.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Netflix.png
   - name: Steam
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Game.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
   - name: Bing
     type: select
     proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Pig.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Pig.png
   - name: GitHub
     type: select
     proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Lab.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
   - name: Apple国外
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Apple.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
   - name: GoogleVoice
     type: select
     proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Google.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
   - name: 默认
     type: select
     proxies: ["代理", "DIRECT", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动"]
-    icon: https://fastly.jsdelivr.net/gh/Koolson/Qure/IconSet/mini/Final.png
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Final.png
 
 rule-providers:
   Lan:

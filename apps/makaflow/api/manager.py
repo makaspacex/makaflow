@@ -4,11 +4,11 @@ from argparse import ArgumentParser, Namespace
 from copy import deepcopy
 from io import StringIO
 from pathlib import Path
-
+from django.http import StreamingHttpResponse
 import flask
 import numpy as np
 import requests
-
+from pathlib import Path
 from apps.makaflow import configs
 from apps.makaflow import tools
 from apps.makaflow.tools import common, subscrib, subscrib_xray, get_request_client
@@ -195,6 +195,41 @@ def api_conf(request:HttpRequest, conf):
             resp.content = content
         return resp
 
+    except Exception as e:
+        resp_data["code"] = 0
+        resp_data["info"] = "Failed: " + str(e)
+    return  JsonResponse(resp_data)
+
+def api_icon(request:HttpRequest, path):
+    def file_iterator(file_path, chunk_size=512):
+        with open(file_path, mode='rb') as f:
+            while True:
+                c = f.read(chunk_size)
+                if c:
+                    yield c
+                else:
+                    break
+    
+    resp_data = tools.get_default_resp_data()
+    try:
+        bdir = "./runtime"
+        f_path = os.path.join(bdir, path)
+        
+        if not os.path.exists(f_path):
+            resp = HttpResponse()
+            resp.status_code = 404
+            resp.headers["content-type"] = "text/yaml; charset=utf-8"
+            resp.content = f"404: {path} not found"
+            return resp
+        
+        
+        path = Path(path)
+        
+        response = StreamingHttpResponse(file_iterator(f_path))
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = f'attachment;filename="{path.name}"'
+        return response
+    
     except Exception as e:
         resp_data["code"] = 0
         resp_data["info"] = "Failed: " + str(e)

@@ -57,7 +57,6 @@ GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
 content-type: application/json
 
 ### loadlall
-# @client=clash
 GET {{baseUrl}}/loadall
 
 ### geo规则
