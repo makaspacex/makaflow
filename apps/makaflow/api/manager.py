@@ -137,14 +137,11 @@ def api_get_service_status(request:HttpRequest):
         resp_data["info"] = "Failed: " + str(e)
     return  JsonResponse(resp_data)
 
-def api_rule_geo(request:HttpRequest):
+def api_rule_geo(request:HttpRequest, client, code):
     resp_data = tools.get_default_resp_data()
     try:
-        code = request.GET.get("code", None)
-        client_type = get_request_client(request=request)
         content = ""
-        
-        if client_type in (ClientApp.clash_group + ClientApp.clashmeta_group ):
+        if client == 'clash':
             content = geo.clash_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
         
         resp = HttpResponse(content)
@@ -165,6 +162,7 @@ def api_rule_bm7(request:HttpRequest, path:str):
         
         f_path = os.path.join(blackmatrix7_rule_dir, path)
         resp = HttpResponse()
+        resp.headers["content-type"] = "text/yaml; charset=utf-8"
         if not os.path.exists(f_path):
             resp.status_code = 404
             resp.content = f"404: {path} not found"
@@ -172,7 +170,6 @@ def api_rule_bm7(request:HttpRequest, path:str):
         with open(f_path, 'r') as f:
             content = f.read()
             resp.content = content
-        
         return resp
 
     except Exception as e:

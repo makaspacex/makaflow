@@ -144,7 +144,7 @@ rule-providers:
     type: http
     path: ./rule-set/AppleTV.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleTV.yaml
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleTV/AppleTV.yaml
     interval: 7200
   netflix:
     type: http
@@ -186,7 +186,7 @@ rule-providers:
     type: http
     path: ./rule-set/category-games@cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=category-games@cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/category-games@cn.yaml
     interval: 7200
   steam:
     type: http
@@ -204,31 +204,31 @@ rule-providers:
     type: http
     path: ./rule-set/google-cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=google-cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/google-cn.yaml
     interval: 7200
   apple@cn:
     type: http
     path: ./rule-set/apple@cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=apple@cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/apple@cn.yaml
     interval: 7200
   apple-cn:
     type: http
     path: ./rule-set/apple-cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=apple-cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/apple-cn.yaml
     interval: 7200
   microsoft@cn:
     type: http
     path: ./rule-set/microsoft@cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=microsoft@cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/microsoft@cn.yaml
     interval: 7200
   geolocation-cn:
     type: http
     path: ./rule-set/geolocation-cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo?client=clash&code=geolocation-cn
+    url: https://cat.makaflow.com/api/rule/geo/clash/geolocation-cn.yaml
     interval: 7200
 
 # 原则：
