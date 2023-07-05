@@ -218,6 +218,14 @@ def api_rule_bm7(request:HttpRequest, path:str):
 def api_conf(request:HttpRequest, conf):
     resp_data = tools.get_default_resp_data()
     try:
+        token = request.GET.get("token", None)
+        if not token:
+            raise Exception("miss token")
+        users = configs.users
+        token_dict = {ele["token"]: ele for ele in users}
+        if token not in token_dict.keys():
+            raise Exception("invalid token")
+        
         subscribe_tp_dir = configs.env['subscribe_tp_dir']
         f_path = os.path.join(subscribe_tp_dir, conf)
         resp = HttpResponse()
@@ -228,6 +236,7 @@ def api_conf(request:HttpRequest, conf):
             return resp
         with open(f_path, 'r') as f:
             content = f.read()
+            content = content.replace("api/v1/client/subscribe?token=123456",f"api/v1/client/subscribe?token={token}")
             resp.content = content
         return resp
 
