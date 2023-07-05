@@ -275,6 +275,7 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         
         # 处理订阅信息头
         sub_header_str = server_config.get('subscription_userinfo', None)
+        subinfo = None
         if sub_header_str:
             subinfo = tools.get_sub_info(server_config['subscription_userinfo'])
             # 查看是否过期
@@ -293,9 +294,14 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         
         # ---------------------------- 开始处理订阅的节点信息 ---------------------------
         proxies = server_config['proxies']
+        suffix = ""
+        if subinfo:
+            remain_rate =  1 - ((subinfo['upload'] + subinfo['download'] ) / subinfo['total'])
+            suffix = f"|{int(remain_rate*100)}"
+        
         for proxy in proxies:
             # 处理节点的名字，mirr名称和过滤节点
-            proxy = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy)
+            proxy = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy, suffix=suffix)
             if proxy is None:
                 continue
             outbounds_result += [conv_yaml_obj_to_json(proxy)]

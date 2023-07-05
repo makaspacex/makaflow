@@ -76,7 +76,7 @@ def get_request_client(request:HttpRequest):
     return client_type
 
 
-def proxy_process(node_name, node_conf, proxy:dict):
+def proxy_process(node_name, node_conf, proxy:dict, suffix=None):
     
     proxy = copy.deepcopy(proxy)
     
@@ -107,8 +107,8 @@ def proxy_process(node_name, node_conf, proxy:dict):
     if proxy['server'] in server_mirr_dict.keys():
         proxy['server'] = server_mirr_dict.get(proxy['server'], proxy['server'])
     
-    # 节点名字加上前缀
-    proxy['name'] = name_prefix_str + proxy['name'].replace(" ", "")
+    # 节点名字加上前缀和后缀
+    proxy['name'] = name_prefix_str + proxy['name'] + suffix
     
     return proxy
 
