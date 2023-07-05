@@ -119,6 +119,12 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/OpenAI/OpenAI.yaml
     interval: 7200
+  Bing:
+    type: http
+    path: ./rule-set/Bing.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Bing/Bing.yaml
+    interval: 7200
   Netflix:
     type: http
     path: ./rule-set/Netflix.yaml
@@ -232,7 +238,7 @@ rules:
   # 自定义的高优先级规则
   - PROCESS-NAME,microsocks,代理
   - RULE-SET,XJProxy,代理
-  - DOMAIN-KEYWORD,bing,Bing
+  - RULE-SET,Bing,Bing
   # proxy utils
   - PROCESS-NAME,v2ray,DIRECT
   - PROCESS-NAME,Surge,DIRECT

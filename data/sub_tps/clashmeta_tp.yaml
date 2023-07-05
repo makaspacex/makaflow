@@ -170,7 +170,7 @@ sniffer:
 dns:
   enable: true #DNS服务器开关(false/true)
   listen: 0.0.0.0:53 #DNS服务器监听地址
-  ipv6: false #IP6解析开关；如果为false，将返回ip6结果为空
+  ipv6: true #IP6解析开关；如果为false，将返回ip6结果为空
 
   # DNS模式(redir-host/fake-ip), 
   # redir-host传递域名，可远程解析 【Meta专属】
