@@ -212,8 +212,10 @@ def api_icon(request:HttpRequest, path):
     
     resp_data = tools.get_default_resp_data()
     try:
-        bdir = "./runtime"
-        f_path = os.path.join(bdir, path)
+        
+        icon_repo_dir = configs.env['icon_repo_dir']
+        
+        f_path = os.path.join(icon_repo_dir, path)
         
         if not os.path.exists(f_path):
             resp = HttpResponse()
@@ -221,7 +223,6 @@ def api_icon(request:HttpRequest, path):
             resp.headers["content-type"] = "text/yaml; charset=utf-8"
             resp.content = f"404: {path} not found"
             return resp
-        
         
         path = Path(path)
         
