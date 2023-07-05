@@ -45,7 +45,9 @@ class AuthMiddleware(MiddlewareMixin):
             need_auth = False
         elif path.startswith('api/icon'):
             need_auth = False
-        elif path in ["api/subscrib",'api/loadall']:
+        elif path.startswith('api/resource'):
+            need_auth = False
+        elif path in ["api/subscrib","api/v1/client/subscribe",'api/loadall']:
             need_auth = False
         
         if need_auth:

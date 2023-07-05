@@ -19,7 +19,7 @@ from django.http import JsonResponse
 from apps.makaflow.tools import geo
 
 
-def api_subscrib(request:HttpRequest):
+def api_subscrib_old(request:HttpRequest):
     # 返回用户的的订阅，需要检查用户名和密码，和客户端，clash_verge 支持吃v2的tls
     resp_data = tools.get_default_resp_data()
     try:
@@ -39,9 +39,12 @@ def api_subscrib(request:HttpRequest):
 
         user_auth = users_dict[username]["auth"]
         assert user_auth == password, "password mismatch"
-
+        
+        # 用户详细信息
+        user = users_dict[username]
+        
         # clashmeta_config = subscrib_xray.render_tp(username, client_type=client_type)
-        resp_txt, resp_headers = subscrib_xray.render_tp( username, client_type=client_type)
+        resp_txt, resp_headers = subscrib_xray.render_tp( user, client_type=client_type)
         resp = HttpResponse(resp_txt)
         for hname, hvalue in resp_headers.items():
             resp.headers[hname] = hvalue
@@ -52,8 +55,41 @@ def api_subscrib(request:HttpRequest):
     except Exception as e:
         resp_data["code"] = 0
         resp_data["info"] = "Failed: " + str(e)
-        raise e
     return JsonResponse(resp_data)
+
+
+def api_subscrib_v1(request:HttpRequest):
+    # 返回用户的的订阅，需要检查用户名和密码，和客户端，clash_verge 支持吃v2的tls
+    resp_data = tools.get_default_resp_data()
+    try:
+        token = request.GET.get("token", None)
+        client_type = get_request_client(request=request)
+        
+        if not token:
+            raise Exception("miss token")
+
+        users = configs.users
+        token_dict = {ele["token"]: ele for ele in users}
+
+        if token not in token_dict.keys():
+            raise Exception("user not found")
+        
+        # 用户详细信息
+        user = token_dict[token]
+        # clashmeta_config = subscrib_xray.render_tp(username, client_type=client_type)
+        resp_txt, resp_headers = subscrib_xray.render_tp( user, client_type=client_type)
+        resp = HttpResponse(resp_txt)
+        for hname, hvalue in resp_headers.items():
+            resp.headers[hname] = hvalue
+        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        
+        return resp
+
+    except Exception as e:
+        resp_data["code"] = 0
+        resp_data["info"] = "Failed: " + str(e)
+    return JsonResponse(resp_data)
+
 
 def api_generate_config(request:HttpRequest, service):
     # 更新服务器参数
@@ -143,8 +179,8 @@ def api_rule(request:HttpRequest, client, code, suffix):
         content = ""
         if client == 'clash':
             content = geo.clash_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
-        elif client.lower() == 'loon':
-            content = geo.loon_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
+        elif client.lower() in ['loon','surge']:
+            content = geo.loon_surge_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
         
         resp = HttpResponse(content)
         resp.headers["content-type"] = "text/yaml; charset=utf-8"
@@ -200,36 +236,49 @@ def api_conf(request:HttpRequest, conf):
         resp_data["info"] = "Failed: " + str(e)
     return  JsonResponse(resp_data)
 
-def api_icon(request:HttpRequest, path):
-    def file_iterator(file_path, chunk_size=512):
-        with open(file_path, mode='rb') as f:
-            while True:
-                c = f.read(chunk_size)
-                if c:
-                    yield c
-                else:
-                    break
+def file_iterator(file_path, chunk_size=512):
+    with open(file_path, mode='rb') as f:
+        while True:
+            c = f.read(chunk_size)
+            if c:
+                yield c
+            else:
+                break
+
+def get_file_resp(f_path):
     
+    if not os.path.exists(f_path):
+        resp = HttpResponse()
+        resp.status_code = 404
+        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.content = f"404: not found"
+        return resp
+    b_name = os.path.basename(f_path)
+    response = StreamingHttpResponse(file_iterator(f_path))
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = f'attachment;filename="{b_name}"'
+    return response
+
+def api_resource_down(request:HttpRequest, path):
     resp_data = tools.get_default_resp_data()
     try:
-        
+        resource_dir = configs.env['resource_dir']
+        f_path = os.path.join(resource_dir, path)
+        resp = get_file_resp(f_path=f_path)
+        return resp
+    
+    except Exception as e:
+        resp_data["code"] = 0
+        resp_data["info"] = "Failed: " + str(e)
+    return  JsonResponse(resp_data)
+
+def api_icon(request:HttpRequest, path):
+    resp_data = tools.get_default_resp_data()
+    try:
         icon_repo_dir = configs.env['icon_repo_dir']
-        
         f_path = os.path.join(icon_repo_dir, path)
-        
-        if not os.path.exists(f_path):
-            resp = HttpResponse()
-            resp.status_code = 404
-            resp.headers["content-type"] = "text/yaml; charset=utf-8"
-            resp.content = f"404: {path} not found"
-            return resp
-        
-        path = Path(path)
-        
-        response = StreamingHttpResponse(file_iterator(f_path))
-        response['Content-Type'] = 'application/octet-stream'
-        response['Content-Disposition'] = f'attachment;filename="{path.name}"'
-        return response
+        resp = get_file_resp(f_path=f_path)
+        return resp
     
     except Exception as e:
         resp_data["code"] = 0

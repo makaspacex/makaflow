@@ -238,7 +238,7 @@ def get_outbonds_for_singbox(inbounds, client_type, user, nodename, node_conf, s
     
     return outbounds_result
 
-def render_tp(username, client_type=ClientApp.clash):
+def render_tp(user:dict, client_type=ClientApp.clash):
     
     env = configs.env
     third_subs_profile = configs.third_subs_profile
@@ -249,10 +249,6 @@ def render_tp(username, client_type=ClientApp.clash):
 
     nodes = env['slaver']['nodes']
     config_dir = env['server_config_dir']
-    
-    # 找到当前用户的详细信息
-    users = configs.users
-    user = get_user_by_uname(users, user_name=username)
     
     # 用于存贮最终的结果
     outbounds_result = []

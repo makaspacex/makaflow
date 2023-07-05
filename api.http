@@ -48,13 +48,17 @@ GET {{baseUrl}}/get_service_status
 content-type: application/json
 rpckey: {{rpckey}}
 
-### 获取订阅 
+### 获取订阅 旧接口
 # @uname=user1010
 # @password=234234
 # @client=shadowrocket
 #shadowrocket, clash, clashmeta, singbox
 GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
 content-type: application/json
+
+
+### 获取订阅 新接口 v1
+GET {{baseUrl}}/api/v1/client/subscribe?token=a262fb0c1fa16c0625da193b796613b8
 
 ### loadlall
 GET {{baseUrl}}/loadall

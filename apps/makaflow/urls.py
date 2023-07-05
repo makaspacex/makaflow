@@ -30,7 +30,8 @@ urlpatterns = [
 ]
 from django.urls import re_path
 urlpatterns += [
-    path('subscrib', api.manager.api_subscrib),
+    path('subscrib', api.manager.api_subscrib_old),
+    path('v1/client/subscribe', api.manager.api_subscrib_v1),
     path('generate_config/<service>', api.manager.api_generate_config),
     path('push_config', api.manager.api_push_config),
     path('push_service_op/<op>', api.manager.api_push_service_op),
@@ -38,6 +39,7 @@ urlpatterns += [
     path('loadall', api.manager.api_loadall),
     path('rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
     path('conf/<conf>', api.manager.api_conf),
+    re_path(r'resource/(?P<path>.*)', api.manager.api_resource_down),
     re_path(r'icon/(?P<path>.*)', api.manager.api_icon),
     re_path(r'rule/bm7/(?P<path>.*)', api.manager.api_rule_bm7),
 ]

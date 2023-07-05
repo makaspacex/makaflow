@@ -114,7 +114,7 @@ def clash_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[s
     return content
 
 
-def loon_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[str]], country_code:str):
+def loon_surge_rules(geosites:dict[str, list[common.Domain]], geoips:dict[str, list[str]], country_code:str):
     country_code = country_code.lower()
     cidrs = geoips.get(country_code, [])
     domains = get_domains_by_country_code(country_code=country_code, geosites=geosites)
