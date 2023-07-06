@@ -7,13 +7,50 @@ proxy-groups:
     proxies: ["HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
     url: 'https://www.gstatic.com/generate_204'
-  - name: Auto自动
-    type: url-test
-    proxies: []
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Auto.png
-    interval: 300
-    lazy: false
-    tolerance: 50
+  - name: OpenAI
+    type: select
+    proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: Telegram
+    type: select
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Telegram.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: YouTube
+    type: select
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: Netflix
+    type: select
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Netflix.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: Steam
+    type: select
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: Bing
+    type: select
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Pig.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: GitHub
+    type: select
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: Apple国外
+    type: select
+    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
+    url: 'https://www.gstatic.com/generate_204'
+  - name: GoogleVoice
+    type: select
+    proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
     url: 'https://www.gstatic.com/generate_204'
   - name: HK香港
     type: url-test
@@ -64,50 +101,13 @@ proxy-groups:
     tolerance: 50
     url: 'https://www.gstatic.com/generate_204'
     include-all: true
-  - name: OpenAI
-    type: select
-    proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: Telegram
-    type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Telegram.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: YouTube
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: Netflix
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Netflix.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: Steam
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: Bing
-    type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Pig.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: GitHub
-    type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: Apple国外
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
-    url: 'https://www.gstatic.com/generate_204'
-  - name: GoogleVoice
-    type: select
-    proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
+  - name: Auto自动
+    type: url-test
+    proxies: []
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Auto.png
+    interval: 300
+    lazy: false
+    tolerance: 50
     url: 'https://www.gstatic.com/generate_204'
   - name: 默认
     type: select

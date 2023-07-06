@@ -30,7 +30,6 @@ http:
     - ^http://g\.cn response-del DNT
     - ^http://g\.cn response-replace DNT 1
     - ^http://g\.cn response-replace-regex User-Agent Go-http-client curl
-  
   mitm:
     - g.cn
     - '*.google.cn'
