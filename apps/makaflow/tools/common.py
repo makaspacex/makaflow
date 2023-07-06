@@ -53,9 +53,9 @@ def get_request_client(request:HttpRequest):
         if "shadowrocket" in user_agent:
             client_type = ClientApp.shadowrocket
         # clash meta内核
-        elif "clash-verge" in user_agent or "ClashX Meta" in user_agent:
+        elif "clash-verge" in user_agent or "clashx meta" in user_agent:
             client_type = ClientApp.clashmeta
-        elif "Stash".lower() in user_agent:
+        elif "stash".lower() in user_agent:
             client_type = ClientApp.stash
         # 含有clash关键字，托底的clash
         elif "clash" in user_agent:
