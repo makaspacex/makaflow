@@ -67,6 +67,10 @@ proxy-groups:
     type: select
     proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
+  - name: Telegram
+    type: select
+    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Telegram.png
   - name: YouTube
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
@@ -268,7 +272,7 @@ rules:
   - RULE-SET,GitHub,GitHub
   - RULE-SET,YouTube,YouTube
   - RULE-SET,Facebook,代理
-  - RULE-SET,Telegram,代理
+  - RULE-SET,Telegram,Telegram
   - RULE-SET,Twitter,代理
   # GoogleVoice
   - RULE-SET,GoogleVoice,GoogleVoice
