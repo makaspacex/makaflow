@@ -5,6 +5,7 @@ import numpy as np
 from apps.makaflow import tools
 from .common import ClientApp
 from apps.makaflow.tools.common import ProxyProtocol
+from apps.makaflow.tools.common import human_traffic
 from apps.makaflow.tools.common import get_public_key_from_private_x25519
 from apps.makaflow import configs
 from apps.makaflow.tools import common
@@ -296,8 +297,15 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         proxies = server_config['proxies']
         suffix = ""
         if subinfo:
-            remain_rate =  1 - ((subinfo['upload'] + subinfo['download'] ) / subinfo['total'])
-            suffix = f"|{int(remain_rate*100)}"
+            # remain_rate =  1 - ((subinfo['upload'] + subinfo['download'] ) / subinfo['total'])
+            # suffix = f"|{int(remain_rate*100)}"
+            expire = datetime.fromtimestamp(subinfo['expire'])
+            diff = expire - datetime.now()
+            
+            _remain = subinfo['total'] - subinfo['download'] - subinfo['upload']
+            h_str = human_traffic(_remain)
+            suffix = f"|{diff.days}D|{h_str}"
+            
         
         for proxy in proxies:
             # 处理节点的名字，mirr名称和过滤节点

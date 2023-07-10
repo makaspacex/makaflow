@@ -75,6 +75,28 @@ def get_request_client(request:HttpRequest):
     
     return client_type
 
+class Traffic:
+    K:int = 1024
+    M:int = 1024 * K
+    G:int = 1024 * M
+    T:int = 1024 * G
+    P:int = 1024 * T
+    
+def human_traffic(trffic_bytes):
+    
+    h_str = f"{trffic_bytes}"
+    if trffic_bytes >= Traffic.T:
+        h_str = f"{trffic_bytes/Traffic.T:0.2f}T"
+    elif trffic_bytes >= Traffic.G:
+        h_str = f"{trffic_bytes/Traffic.G:0.0f}G"
+    elif trffic_bytes >= Traffic.M:
+        h_str = f"{trffic_bytes/Traffic.M:.0f}M"
+    elif trffic_bytes >= Traffic.K:
+        h_str = f"{trffic_bytes/Traffic.K:.0f}K"
+    else:
+        h_str = f"{trffic_bytes/Traffic.K:0.0f}K"
+    return h_str
+
 
 def proxy_process(node_name, node_conf, proxy:dict, suffix=None):
     

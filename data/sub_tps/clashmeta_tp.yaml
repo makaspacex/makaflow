@@ -25,7 +25,7 @@ geox-url:
 
 log-level: debug # 日志等级 silent/error/warning/info/debug
 
-ipv6: true # 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS 请求 AAAA 记录
+ipv6: false # 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS 请求 AAAA 记录
 
 # tls:
 #   certificate: string # 证书 PEM 格式，或者 证书的路径
@@ -174,7 +174,7 @@ sniffer:
 dns:
   enable: true #DNS服务器开关(false/true)
   listen: 0.0.0.0:53 #DNS服务器监听地址
-  ipv6: true #IP6解析开关；如果为false，将返回ip6结果为空
+  ipv6: false #IP6解析开关；如果为false，将返回ip6结果为空
 
   # DNS模式(redir-host/fake-ip), 
   # redir-host传递域名，可远程解析 【Meta专属】
