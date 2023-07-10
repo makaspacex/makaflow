@@ -20,7 +20,7 @@ mode: rule
 #自定义 geodata url
 geox-url:
   geoip: "https://cat.makaflow.com/api/resource/geodat/geoip.dat"
-  geosite: "https://cat.makaflow.com/api/resource/geodat//geosite.dat"
+  geosite: "https://cat.makaflow.com/api/resource/geodat/geosite.dat"
   mmdb: "https://cat.makaflow.com/api/resource/geodat/country.mmdb"
 
 log-level: debug # 日志等级 silent/error/warning/info/debug

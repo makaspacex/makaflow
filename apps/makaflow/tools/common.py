@@ -79,15 +79,17 @@ def get_request_client(request:HttpRequest):
 def proxy_process(node_name, node_conf, proxy:dict, suffix=None):
     
     proxy = copy.deepcopy(proxy)
+    common_excludes = configs.env.get('common_excludes', [])
+    exclude_node = node_conf.get("node_excludes", [])
+    exclude_reps = common_excludes + exclude_node
     
-    exclude_node = node_conf.get("exclude_node", None)
     name_prefix_str = node_conf.get("prefix","")
     repl_names = node_conf.get("repl_names", [])
     server_mirr_dict = {ele['ori']:ele['mirr'] for ele in node_conf.get('server_mirr', [])}
     
     # 处理过滤节点
-    if exclude_node:
-        _r = re.search(exclude_node, proxy['name'])
+    for reps in exclude_reps:
+        _r = re.search(reps, proxy['name'])
         if _r:
             return None
     
