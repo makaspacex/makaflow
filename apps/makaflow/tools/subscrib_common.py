@@ -20,7 +20,7 @@ import base64
 from apps.makaflow.tools.common import yaml
 import json
 from apps.makaflow.tools.common import urlen, b64en
-
+from apps.makaflow.tasks import load_file_init
 
 def get_inbound_index(inbounds, tag):
     for i, inbound in enumerate(inbounds):
@@ -304,7 +304,7 @@ def conv_yaml_obj_to_json(yaml_dict):
         result[key] = conv_yaml_obj_to_json(value)
     return result
 
-
+import traceback
 # 并行的处理订阅信息，加快响应速度
 # 每个订阅都有shadowrocket类型的请求和clash类型的请求
 # 固定任务 每个小时都应该主动更新订阅信息
@@ -312,7 +312,7 @@ def update_subscribe_cache():
     env = configs.env
     config_dir = env["server_config_dir"]
     third_subs = env["third_sub"]
-
+    proxies = env.get("proxies", {})
     file_changed = False
 
     for nodename, node_conf in third_subs.items():
@@ -343,7 +343,7 @@ def update_subscribe_cache():
             if need_update:
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
                 sub_url = node_conf["sub_url"]
-                resp = requests.get(sub_url, headers=headers)
+                resp = requests.get(sub_url, headers=headers, proxies=proxies)
                 if resp.status_code != 200:
                     raise Exception(f"{nodename} 请求失败")
                 subscription_userinfo = resp.headers.get("subscription-userinfo", None)
@@ -351,12 +351,13 @@ def update_subscribe_cache():
                 sio.write(resp.text)
                 sio.seek(0)
                 server_config = yaml.load(sio)
-                server_config["subscription_userinfo"] = subscription_userinfo
-                yaml.dump(server_config, open(config_path, "w+"))
+                if server_config is not None:
+                    server_config["subscription_userinfo"] = subscription_userinfo
+                    yaml.dump(server_config, open(config_path, "w+"))
 
                 # 订阅式的链接
                 headers = {"User-Agent": common.get_client_agent(ClientApp.browser)}
-                resp = requests.get(sub_url, headers=headers)
+                resp = requests.get(sub_url, headers=headers, proxies=proxies)
                 if resp.status_code != 200:
                     raise Exception(f"{nodename} 请求失败")
                 
@@ -365,11 +366,12 @@ def update_subscribe_cache():
                     f.write(re_decode)
                 file_changed = True
         except Exception as e:
-            print(e)
+            print(nodename, e)
+            print(traceback.format_exc())
             continue
 
     if file_changed:
-        configs.load_third_sub_profile()
+        load_file_init.load_third_sub_profile()
 
 if __name__ == "__main__":
     update_subscribe_cache()
