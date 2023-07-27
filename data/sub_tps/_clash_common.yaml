@@ -270,6 +270,8 @@ rules:
   # 自定义的高优先级规则
   - PROCESS-NAME,microsocks,代理
   - DOMAIN,ip.istatmenus.app,DIRECT
+  - DOMAIN,local.adguard.org,DIRECT
+  - DOMAIN,injections.adguard.org,DIRECT
   - DOMAIN-SUFFIX,makaflow.com,DIRECT
   - DOMAIN-SUFFIX,passwall.vip,DIRECT
   - RULE-SET,XJProxy,代理

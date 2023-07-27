@@ -319,16 +319,19 @@ def update_subscribe_cache():
         sub_enable = node_conf["sub_enable"]
         if not sub_enable:
             continue
-
+        
+        # 判断是否是本地文件
+        sub_url = node_conf["sub_url"]
+        if not sub_url.startswith("http"):
+            continue
+        
         config_path = os.path.join(config_dir, f"{nodename}.yaml")
-        config_path_sharelink = os.path.join(config_dir, f"{nodename}.txt")
+        # config_path_sharelink = os.path.join(config_dir, f"{nodename}.txt")
 
         server_config = None
         need_update = False
-
-        if (not os.path.exists(config_path)) or (
-            not os.path.exists(config_path_sharelink)
-        ):
+        
+        if not os.path.exists(config_path):
             need_update = True
         else:
             config_st_time = os.stat(config_path).st_mtime
@@ -338,7 +341,7 @@ def update_subscribe_cache():
             td_hours, _ = divmod(diff_t.seconds, 3600)
             if td_hours >= 1:
                 need_update = True
-
+        
         try:
             if need_update:
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
@@ -355,15 +358,15 @@ def update_subscribe_cache():
                     server_config["subscription_userinfo"] = subscription_userinfo
                     yaml.dump(server_config, open(config_path, "w+"))
 
-                # 订阅式的链接
-                headers = {"User-Agent": common.get_client_agent(ClientApp.browser)}
-                resp = requests.get(sub_url, headers=headers, proxies=proxies)
-                if resp.status_code != 200:
-                    raise Exception(f"{nodename} 请求失败")
+                # # 订阅式的链接
+                # headers = {"User-Agent": common.get_client_agent(ClientApp.browser)}
+                # resp = requests.get(sub_url, headers=headers, proxies=proxies)
+                # if resp.status_code != 200:
+                #     raise Exception(f"{nodename} 请求失败")
                 
-                with open(config_path_sharelink, "w+") as f:
-                    re_decode = base64.b64decode(resp.text).decode()
-                    f.write(re_decode)
+                # with open(config_path_sharelink, "w+") as f:
+                #     re_decode = base64.b64decode(resp.text).decode()
+                #     f.write(re_decode)
                 file_changed = True
         except Exception as e:
             print(nodename, e)

@@ -28,8 +28,10 @@ def load_third_sub_profile():
         sub_enable = node_conf['sub_enable']
         if not sub_enable:
             continue
+        
         config_path = os.path.join(config_dir, f"{nodename}.yaml")
-        # config_path_sharelink = os.path.join(config_dir, f"{nodename}.txt")
+        if not node_conf["sub_url"].startswith("http"):
+            config_path = node_conf["sub_url"]
         
         server_config = None
         

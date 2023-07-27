@@ -261,18 +261,13 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         sub_enable = node_conf['sub_enable']
         if not sub_enable:
             continue
-        config_path = os.path.join(config_dir, f"{nodename}.yaml")
-        config_path_sharelink = os.path.join(config_dir, f"{nodename}.txt")
         
         server_config = None
         
-        if not os.path.exists(config_path):
-            continue
-        
         # yaml数据订阅
         server_config = third_subs_profile.get(nodename, None)
-        if not server_config:
-            server_config = yaml.load(open(config_path,'r'))
+        if server_config is None:
+            continue
         
         # 处理订阅信息头
         sub_header_str = server_config.get('subscription_userinfo', None)
