@@ -102,12 +102,24 @@ def proxy_process(node_name, node_conf, proxy:dict, suffix=None):
     
     proxy = copy.deepcopy(proxy)
     common_excludes = configs.env.get('common_excludes', [])
+    include_node = node_conf.get("node_includes", None)
     exclude_node = node_conf.get("node_excludes", [])
     exclude_reps = common_excludes + exclude_node
     
     name_prefix_str = node_conf.get("prefix","")
     repl_names = node_conf.get("repl_names", [])
     server_mirr_dict = {ele['ori']:ele['mirr'] for ele in node_conf.get('server_mirr', [])}
+    
+    # 处理包含节点
+    include_pass=True
+    if include_node:
+        include_pass=False
+        for reps in include_node:
+            _r = re.search(reps, proxy['name'])
+            if _r:
+                include_pass = True
+    if not include_pass:
+        return None
     
     # 处理过滤节点
     for reps in exclude_reps:
