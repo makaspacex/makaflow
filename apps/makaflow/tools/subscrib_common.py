@@ -326,10 +326,10 @@ def update_subscribe_cache():
             continue
         
         config_path = os.path.join(config_dir, f"{nodename}.yaml")
-        # config_path_sharelink = os.path.join(config_dir, f"{nodename}.txt")
 
         server_config = None
         need_update = False
+        td_hours = 0
         
         if not os.path.exists(config_path):
             need_update = True
@@ -339,42 +339,43 @@ def update_subscribe_cache():
             now_date = datetime.now()
             diff_t = now_date - config_st_time
             td_hours, _ = divmod(diff_t.seconds, 3600)
-            if td_hours >= 1:
-                need_update = True
+        
+        if td_hours >= 1:
+            need_update = True
         
         try:
             if need_update:
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
                 sub_url = node_conf["sub_url"]
+                
+                print(f"正在请求{nodename} {sub_url}")
                 resp = requests.get(sub_url, headers=headers, proxies=proxies)
+                
                 if resp.status_code != 200:
                     raise Exception(f"{nodename} 请求失败")
+                
+                # 请求成功 修改文件更新时间
+                if os.path.exists(config_path):
+                    _now = datetime.now().timestamp()
+                    os.utime(config_path, (_now, _now))
+                
                 subscription_userinfo = resp.headers.get("subscription-userinfo", None)
                 sio = StringIO()
                 sio.write(resp.text)
                 sio.seek(0)
                 server_config = yaml.load(sio)
+                
                 if server_config is not None:
                     server_config["subscription_userinfo"] = subscription_userinfo
                     yaml.dump(server_config, open(config_path, "w+"))
-
-                # # 订阅式的链接
-                # headers = {"User-Agent": common.get_client_agent(ClientApp.browser)}
-                # resp = requests.get(sub_url, headers=headers, proxies=proxies)
-                # if resp.status_code != 200:
-                #     raise Exception(f"{nodename} 请求失败")
+                else:
+                    raise Exception(f"{nodename} 无内容")
                 
-                # with open(config_path_sharelink, "w+") as f:
-                #     re_decode = base64.b64decode(resp.text).decode()
-                #     f.write(re_decode)
                 file_changed = True
         except Exception as e:
             print(nodename, e)
             print(traceback.format_exc())
             continue
-        finally:
-            _now = datetime.now().timestamp()
-            os.utime(config_path, (_now, _now))
 
     if file_changed:
         load_file_init.load_third_sub_profile()
