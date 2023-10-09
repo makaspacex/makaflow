@@ -372,6 +372,9 @@ def update_subscribe_cache():
             print(nodename, e)
             print(traceback.format_exc())
             continue
+        finally:
+            _now = datetime.now().timestamp()
+            os.utime(config_path, (_now, _now))
 
     if file_changed:
         load_file_init.load_third_sub_profile()

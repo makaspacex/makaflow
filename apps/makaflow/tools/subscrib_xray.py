@@ -427,5 +427,11 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         for proxy in outbounds_result:
             resp_text += f"{proxy}\n"
         resp_text = base64.b64encode(resp_text.encode()).decode()
+    elif client_type == ClientApp.surge:
+        target = "sruge"
+        if client_type in ClientApp.sub_store_support:
+            target = client_type
+        outbounds_result = xj_convert(outbounds_result, target)
+        
     
     return resp_text, resp_headers

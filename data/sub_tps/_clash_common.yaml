@@ -273,6 +273,7 @@ rules:
   - DOMAIN,local.adguard.org,DIRECT
   - DOMAIN,injections.adguard.org,DIRECT
   - DOMAIN-SUFFIX,makaflow.com,DIRECT
+  - DOMAIN-SUFFIX,pc528.net,DIRECT
   - DOMAIN-SUFFIX,passwall.vip,DIRECT
   - RULE-SET,XJProxy,代理
   - RULE-SET,Bing,Bing
