@@ -312,11 +312,14 @@ def update_subscribe_cache():
     env = configs.env
     config_dir = env["server_config_dir"]
     third_subs = env["third_sub"]
-    proxies = env.get("proxies", {})
+    default_proxies = env.get("proxies", None)
     file_changed = False
 
     for nodename, node_conf in third_subs.items():
         sub_enable = node_conf["sub_enable"]
+        
+        use_proxy = node_conf.get("use_proxy", True)
+        
         if not sub_enable:
             continue
         
@@ -349,6 +352,10 @@ def update_subscribe_cache():
                 sub_url = node_conf["sub_url"]
                 
                 print(f"正在请求{nodename} {sub_url}")
+                proxies = default_proxies
+                if not use_proxy:
+                    proxies = None
+                
                 resp = requests.get(sub_url, headers=headers, proxies=proxies)
                 
                 if resp.status_code != 200:

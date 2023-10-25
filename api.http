@@ -52,12 +52,14 @@ rpckey: {{rpckey}}
 # @uname=user1010
 # @password=234234
 # @client=shadowrocket
-#shadowrocket, clash, clashmeta, singbox
+#shadowrocket, clash, clashmeta, singbox,loon
 GET {{baseUrl}}/subscrib?uname={{uname}}&password={{password}}&client={{client}}
 content-type: application/json
 
 
 ### 获取订阅 新接口 v1
+@client=loon
+#shadowrocket, clash, clashmeta, singbox,loon
 GET {{baseUrl}}/v1/client/subscribe?token=a262fb0c1fa16c0625da193b796613b8&client={{client}}
 
 ### loadlall

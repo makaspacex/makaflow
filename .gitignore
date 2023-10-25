@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 simplepro.lic
 .vscode/settings.json
+node_modules/
 env.yaml
 profile.yaml
 xray_profile.yaml

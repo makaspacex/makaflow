@@ -158,6 +158,12 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/YouTube/YouTube.yaml
     interval: 7200
+  Microsoft:
+    type: http
+    path: ./rule-set/Microsoft.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Microsoft/Microsoft.yaml
+    interval: 7200
   Facebook:
     type: http
     path: ./rule-set/Facebook.yaml
@@ -211,6 +217,12 @@ rule-providers:
     path: ./rule-set/AppleNews.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleNews.yaml
+    interval: 7200
+  Apple:
+    type: http
+    path: ./rule-set/Apple_Classical.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/rule/bm7/Clash/Apple/Apple_Classical.yaml
     interval: 7200
   google-cn:
     type: http
@@ -270,6 +282,7 @@ rules:
   # 自定义的高优先级规则
   - PROCESS-NAME,microsocks,代理
   - DOMAIN,ip.istatmenus.app,DIRECT
+  - DOMAIN,slll.in,DIRECT
   - DOMAIN,local.adguard.org,DIRECT
   - DOMAIN,injections.adguard.org,DIRECT
   - DOMAIN-SUFFIX,makaflow.com,DIRECT
@@ -299,6 +312,8 @@ rules:
   - PROCESS-NAME,NetTransport,DIRECT
   - PROCESS-NAME,uTorrent,DIRECT
   - PROCESS-NAME,WebTorrent,DIRECT
+  # 微软应用：ondrive，MicrosoftEdge,Teams,Outlook等，不包含github
+  - RULE-SET,Microsoft,DIRECT
   # OpenAI
   - RULE-SET,OpenAI,OpenAI
   # 国外应用
@@ -319,6 +334,8 @@ rules:
   - RULE-SET,AppleTV,Apple国外
   # AppleNews规则
   - RULE-SET,AppleNews,Apple国外
+  # 其他Apple规则
+  - RULE-SET,Apple,DIRECT
   # 需要直连的流量
   - RULE-SET,google-cn,DIRECT
   - RULE-SET,apple@cn,DIRECT
