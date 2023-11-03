@@ -6,52 +6,52 @@ proxy-groups:
     type: select
     proxies: ["HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: OpenAI
     type: select
     proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: Telegram
     type: select
     proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Telegram.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: YouTube
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: Netflix
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Netflix.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: Steam
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: Bing
     type: select
     proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Pig.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: GitHub
     type: select
     proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: Apple国外
     type: select
     proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: GoogleVoice
     type: select
     proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: HK香港
     type: url-test
     filter: "港|🇭🇰|HK|Hong"
@@ -60,7 +60,7 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: TW台湾
     type: url-test
     proxies: ["DIRECT"]
@@ -69,7 +69,7 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
     include-all: true
   - name: SG新加坡
     type: url-test
@@ -79,7 +79,7 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
     include-all: true
   - name: JP日本
     type: url-test
@@ -89,7 +89,7 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
     include-all: true
   - name: US美国
     type: url-test
@@ -99,7 +99,7 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
     include-all: true
   - name: Auto自动
     type: url-test
@@ -108,12 +108,12 @@ proxy-groups:
     interval: 300
     lazy: false
     tolerance: 50
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
   - name: 默认
     type: select
     proxies: ["代理", "DIRECT", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Final.png
-    url: 'https://www.gstatic.com/generate_204'
+    url: 'http://cp.cloudflare.com/generate_204'
 
 rule-providers:
   Lan:
@@ -282,7 +282,7 @@ rules:
   # 自定义的高优先级规则
   - PROCESS-NAME,microsocks,代理
   - DOMAIN,ip.istatmenus.app,DIRECT
-  - DOMAIN,slll.in,DIRECT
+  - DOMAIN-SUFFIX,slll.in,DIRECT
   - DOMAIN,local.adguard.org,DIRECT
   - DOMAIN,injections.adguard.org,DIRECT
   - DOMAIN-SUFFIX,makaflow.com,DIRECT

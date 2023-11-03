@@ -351,11 +351,14 @@ def update_subscribe_cache():
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
                 sub_url = node_conf["sub_url"]
                 
-                print(f"正在请求{nodename} {sub_url}")
+                
                 proxies = default_proxies
+                p_tip = f"正在使用代理{proxies}"
                 if not use_proxy:
                     proxies = None
+                    p_tip = f"正在不使用代理"
                 
+                print(f"{p_tip}请求{nodename} {sub_url}")
                 resp = requests.get(sub_url, headers=headers, proxies=proxies)
                 
                 if resp.status_code != 200:
@@ -373,8 +376,11 @@ def update_subscribe_cache():
                 server_config = yaml.load(sio)
                 
                 if server_config is not None:
-                    server_config["subscription_userinfo"] = subscription_userinfo
-                    yaml.dump(server_config, open(config_path, "w+"))
+                    res_server_config = {}
+                    res_server_config['proxies'] = server_config.get("proxies",[])
+                    res_server_config["subscription_userinfo"] = subscription_userinfo
+                    
+                    yaml.dump(res_server_config, open(config_path, "w+"))
                 else:
                     raise Exception(f"{nodename} 无内容")
                 

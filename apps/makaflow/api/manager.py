@@ -76,6 +76,10 @@ def api_subscrib_v1(request:HttpRequest):
         
         # 用户详细信息
         user = token_dict[token]
+        
+        if user['level'] < 0:
+            raise Exception(f"id:{user['name']} nickname:{user['nickname']} is disabled")
+        
         # clashmeta_config = subscrib_xray.render_tp(username, client_type=client_type)
         resp_txt, resp_headers = subscrib_xray.render_tp( user, client_type=client_type)
         resp = HttpResponse(resp_txt)
