@@ -38,6 +38,17 @@ class ClientApp:
     xray:str = "xray" # xray 内核的一切软件
     browser:str = "browser"
     
+    # QX: QX_Producer(),
+    # Surge: Surge_Producer(),
+    # SurgeMac: SurgeMac_Producer(),
+    # Loon: Loon_Producer(),
+    # Clash: Clash_Producer(),
+    # ClashMeta: ClashMeta_Producer(),
+    # URI: URI_Producer(),
+    # V2Ray: V2Ray_Producer(),
+    # JSON: JSON_Producer(),
+    # Stash: Stash_Producer(),
+    # ShadowRocket: ShadowRocket_Producer(),
     # sub_store_support = ["QX", "Surge", "Loon","Clash","URI","JSON","Stash"]
     sub_store_support = [qx, surge, loon, stash]
 
@@ -62,6 +73,8 @@ def get_request_client(request:HttpRequest):
             client_type = ClientApp.clash
         elif "loon".lower() in user_agent:
             client_type = ClientApp.loon
+        elif "surge".lower() in user_agent:
+            client_type = ClientApp.surge
         else:
             client_type = ClientApp.browser
     else:

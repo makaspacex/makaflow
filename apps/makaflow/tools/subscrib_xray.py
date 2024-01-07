@@ -384,6 +384,20 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         elif client_type == ClientApp.clash:
             config_tp = copy.deepcopy(configs.sub_tps['clash_tp'])
         
+        # QX: QX_Producer(),
+        # Surge: Surge_Producer(),
+        # SurgeMac: SurgeMac_Producer(),
+        # Loon: Loon_Producer(),
+        # Clash: Clash_Producer(),
+        # ClashMeta: ClashMeta_Producer(),
+        # URI: URI_Producer(),
+        # V2Ray: V2Ray_Producer(),
+        # JSON: JSON_Producer(),
+        # Stash: Stash_Producer(),
+        # ShadowRocket: ShadowRocket_Producer(),
+        
+        
+        
         # 最终的出口结果，模板中的也要继承
         if not isinstance(config_tp['proxies'], list):
             config_tp['proxies'] = []
@@ -406,6 +420,11 @@ def render_tp(user:dict, client_type=ClientApp.clash):
                     continue
                 out_tags += [proxy_name]
             proxy_g['proxies'] += out_tags
+            
+            # 代理组下无节点就跳过
+            if len(proxy_g['proxies']) == 0:
+                continue
+            
             _new_groups += [proxy_g]
         
         config_tp["proxy-groups"] = _new_groups
@@ -431,7 +450,34 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         target = "sruge"
         if client_type in ClientApp.sub_store_support:
             target = client_type
+        names = [x['name'] for x in outbounds_result]
         outbounds_result = xj_convert(outbounds_result, target)
+        surge_tp:str = configs.sub_tps['surge_tp']
+        proxys = ""
+        for ele in outbounds_result:
+            proxys += f"{ele}\n"
         
-    
+        # 替换托管token
+        surge_tp = surge_tp.replace('token="123456"',f'token="{user["token"]}"')
+        
+        # 替换代理列表
+        surge_tp = surge_tp.replace("#{PROXYLIST}#", proxys)
+        
+        # 替换策略组列表
+        re_p = re.compile(r'#\{filter: *"(.*?)"\}#',re.I)
+        while True:
+            re_obj = re.search(re_p, surge_tp)
+            if re_obj is None:
+                break
+            _filter_re  = re_obj.group(1)
+            _out_tags = ""
+            for proxy_name in names:
+                if not re.search(_filter_re, proxy_name, re.I):
+                    continue
+                _out_tags += f"{proxy_name},"
+            
+            if len(_out_tags) > 0:
+                surge_tp = surge_tp.replace(re_obj.group(0),_out_tags[:-1])
+        resp_text = surge_tp
+        
     return resp_text, resp_headers

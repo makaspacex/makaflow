@@ -43,21 +43,27 @@ def load_third_sub_profile():
     
 def load_sub_tps():
     tps_dir =  configs.env['subscribe_tp_dir']
-    tp_file_list = glob.glob(os.path.join(tps_dir, "*_tp.yaml"))
+    tp_file_list = glob.glob(os.path.join(tps_dir, "*_tp.*"))
     clash_c = open(os.path.join(tps_dir, "_clash_common.yaml"),'r').read()
     
     for tp_file_path in tp_file_list:
-        name = os.path.basename(tp_file_path).split(".")[0]
+        name, suffix = os.path.basename(tp_file_path).split(".")
+        
         print(f"loading {name} sub tp form  {tp_file_path}")
         from io import StringIO
         buffer = StringIO()
         content = open(tp_file_path,'r').read()
         buffer.write(content)
+        
         if name in ["clash_tp", "clashmeta_tp", "stash_tp"]:
             buffer.write(clash_c)
         
         buffer.seek(0)
-        configs.sub_tps[name] = yaml.load(buffer)
+        if suffix == 'yaml':
+            configs.sub_tps[name] = yaml.load(buffer)
+        elif suffix == 'conf':
+            configs.sub_tps[name] = buffer.read()
+        
 
 def load_geo():
     geosite_file =  configs.env['geosite_file']
