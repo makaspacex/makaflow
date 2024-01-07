@@ -458,7 +458,7 @@ def render_tp(user:dict, client_type=ClientApp.clash):
             proxys += f"{ele}\n"
         
         # 替换托管token
-        surge_tp = surge_tp.replace('token="123456"',f'token="{user["token"]}"')
+        surge_tp = surge_tp.replace('token=123456',f'token={user["token"]}')
         
         # 替换代理列表
         surge_tp = surge_tp.replace("#{PROXYLIST}#", proxys)
