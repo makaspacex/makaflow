@@ -24,6 +24,8 @@ from django.shortcuts import redirect
 from django.utils.deprecation import MiddlewareMixin
 from django.http import HttpRequest
 from apps.makaflow import configs
+from apps.makaflow import urls as app_urls
+
 
 def is_ajax(request):
     a = request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
@@ -33,39 +35,24 @@ class AuthMiddleware(MiddlewareMixin):
     def process_request(self, request: HttpRequest):
         path = request.path
         path = path[1:] if path.startswith("/") else path
-
-        need_verify = False
         
-        message = "need auth"
-        
-        need_auth = True
-        if path.startswith('api/rule'):
-            need_auth = False
-        elif path.startswith('api/conf'):
-            need_auth = False
-        elif path.startswith('api/icon'):
-            need_auth = False
-        elif path.startswith('api/resource'):
-            need_auth = False
-        elif path in ["api/subscrib","api/v1/client/subscribe",'api/loadall']:
-            need_auth = False
-        
-        if need_auth:
+        for urlp in app_urls.need_rpckey:
+            match = urlp.pattern.match(path)
+            if not match:
+                continue
+            message = None
             auth  = request.headers.get("rpckey", None)
             env = configs.env
             rpc = str(env["rpc_key"])
-            # print(auth, rpc)
             if auth is None:
                 message = "rpckey header is none"
-                need_verify  = True
             elif rpc != auth:
                 message =  "rpc key error"
-                need_verify  = True
+            
+            if message is not None:
+                return JsonResponse({"status": 0, "info": f"{message}"})
         
-        if not need_verify:
-            return None
-        
-        return JsonResponse({"status": 0, "info": f"{message}"})
+        return None
 
     def process_response(self, request: WSGIRequest, response: HttpResponse):
         if "page" in request.path.split("/"):

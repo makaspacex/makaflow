@@ -83,8 +83,25 @@ class BaseModel(models.Model):
 
 
 class XJUser(AbstractUser, BaseModel):
-    phone_num = models.CharField(max_length=20, blank=True, verbose_name='手机')
-    company = models.CharField(max_length=200, blank=True, verbose_name='单位')
+    class Meta:
+        db_table = 'xjuser'
+        verbose_name = '用户'
+        verbose_name_plural = verbose_name
+
+    token = sfields.CharField(max_length=256, blank=False, verbose_name="Token")
+    nickname = sfields.CharField(max_length=256, blank=True, verbose_name="昵称")
+    uuid = sfields.CharField(max_length=256, blank=False, verbose_name="uuid")
+    level = sfields.InputNumberField(blank=False, verbose_name="等级")
+    
+    # name: user1010
+    # nickname: Shuzhen
+    # password: L9+rmFRJHZZ12VrGYyFyyw==
+    # uuid_str: f5648c0f-959c-40ce-9336-e455ef3a563f
+    # auth: '976952'
+    # email: user1010@gmail.com
+    # level: 0
+    # token: c819c48dc4993881bfe31eb189cc6ad3
+    
     groups = sfields.TransferField(
         Group,
         verbose_name='角色',
@@ -108,11 +125,6 @@ class XJUser(AbstractUser, BaseModel):
         related_query_name="user",
         titles=['待选', '已选']
     )
-
-    class Meta:
-        db_table = 'xjuser'
-        verbose_name = '用户'
-        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.username

@@ -79,24 +79,21 @@ class BaseAdmin(AjaxAdmin, ImportExportActionModelAdmin):
 
 @admin.register(XJUser)
 class XJUserAdmin(BaseAdmin, UserAdmin):
-    list_display = ['username', 'phone_num', 'company',  'is_staff', 'is_active', 'user_group_display',
+    list_display = ['username','nickname', 'level', 'email', 'is_staff', 'is_active', 'user_group_display',
                     'is_superuser']
-    # list_display = ['username', 'phone_num','company','download_times', 'is_staff', 'is_active','is_superuser']
-    # fields = ['username', 'phone_num', 'company',  'password', 'is_staff', 'is_active', 'is_superuser', 'email']
-
     readonly_fields = ['date_joined', 'last_login']
+    
     no_auto_fields = True
-
+    
+    _add_and_edit_fields = ['nickname', 'level', 'email', 'token','uuid', 'is_active', 'is_staff',
+                             'is_superuser']
+    
     add_fieldsets = [
-        (None, {'fields': ('username', 'password1', 'password2')}),
-        ('个人信息', {'fields': ['first_name', 'last_name', 'email', 'phone_num', 'company', 'is_active', 'is_staff',
-                             'is_superuser'] + BaseAdmin.auto_time_fields}),
+        ("个人信息", {'fields': ['username', 'password1', 'password2'] +  _add_and_edit_fields + BaseAdmin.auto_time_fields}),
     ]
 
     fieldsets = [
-        (None, {'fields': ('username', 'password')}),
-        ('个人信息', {'fields': ['first_name', 'last_name', 'email', 'phone_num', 'company', 'is_active', 'is_staff',
-                             'is_superuser'] + BaseAdmin.auto_time_fields}),
+        ("个人信息", {'fields': ['username', 'password'] + _add_and_edit_fields + BaseAdmin.auto_time_fields}),
     ]
 
     def get_fieldsets(self, request, obj=None):
