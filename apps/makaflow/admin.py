@@ -20,3 +20,20 @@
 
 from django.contrib import admin
 from django.apps import apps as dj_apps
+
+from .models import *
+
+from common.admin import BaseAdmin
+
+
+@admin.register(Subscribe)
+class SubscribeAdmin(BaseAdmin):
+    list_display = ['id', 'name', 'sub_enable', 'prefix', 'sub_url' ]
+    fields = ['name', 'sub_enable', 'prefix', 'sub_url', 'node_excludes', 'repl_names', 'content','server_mirr']
+    
+    
+@admin.register(Rule)
+class RuleAdmin(BaseAdmin):
+    list_display = ['id', 'name', 'rule']
+    fields = ['name', 'rule', ]
+

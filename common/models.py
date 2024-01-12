@@ -6,24 +6,14 @@ from django.contrib.auth.models import Group, Permission
 from django.db import models
 from django.db.models import Count
 from django.utils import timezone
-from simplepro.components import fields as sfields
 from django.apps import apps as dj_apps
+from django.db import models
+
 
 class BaseModel(models.Model):
-    created_at = sfields.DateTimeField(auto_now_add=True, verbose_name='创建时间', editable=True)
-    updated_at = sfields.DateTimeField(auto_now=True, verbose_name='更新时间', editable=True)
-    status = sfields.RadioField(choices=[(-1, '已删除'), (0, '禁用'), (1, '正常')], default=1, verbose_name='状态')
-
-    # --------------------------------------------------------------------------
-    def age_f(self):
-        if hasattr(self, 'age'):
-            if self.age < 0 or self.age is None:
-                return '-'
-            return self.age
-        return 'error!'
-
-    age_f.short_description = '年龄'
-    age_f.admin_order_field = 'age'
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='创建时间', editable=True)
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='更新时间', editable=True)
+    status = models.IntegerField(choices=[(-1, '已删除'), (0, '禁用'), (1, '正常')], default=1, verbose_name='状态')
 
     class Meta:
         abstract = True
@@ -88,10 +78,12 @@ class XJUser(AbstractUser, BaseModel):
         verbose_name = '用户'
         verbose_name_plural = verbose_name
 
-    token = sfields.CharField(max_length=256, blank=False, verbose_name="Token")
-    nickname = sfields.CharField(max_length=256, blank=True, verbose_name="昵称")
-    uuid = sfields.CharField(max_length=256, blank=False, verbose_name="uuid")
-    level = sfields.InputNumberField(blank=False, verbose_name="等级")
+    token = models.CharField(max_length=256, blank=False, verbose_name="Token")
+    nickname = models.CharField(max_length=256, blank=True, verbose_name="昵称")
+    uuid = models.CharField(max_length=256, blank=False, verbose_name="uuid")
+    level = models.IntegerField(blank=False, verbose_name="等级")
+    
+    note = models.CharField(blank=True,null=True, max_length=128, verbose_name="备注")
     
     # name: user1010
     # nickname: Shuzhen
@@ -102,28 +94,26 @@ class XJUser(AbstractUser, BaseModel):
     # level: 0
     # token: c819c48dc4993881bfe31eb189cc6ad3
     
-    groups = sfields.TransferField(
+    groups = models.ManyToManyField(
         Group,
         verbose_name='角色',
         blank=True,
         related_name="user_set",
         related_query_name="user",
-        help_text='可以继承这个角色[/组]的所有权限',
-        titles=['待选', '已选']
+        help_text='可以继承这个角色[/组]的所有权限'
     )
     is_staff = models.BooleanField(
         '可登录后台',
         default=False,
         help_text='指明用户是否可以登录到这个管理站点。',
     )
-    user_permissions = sfields.TransferField(
+    user_permissions = models.ManyToManyField(
         Permission,
         verbose_name='权限',
         blank=True,
         help_text='这个用户的特定权限。 按住 Control 键或 Mac 上的 Command 键来选择多项。',
         related_name="user_set",
         related_query_name="user",
-        titles=['待选', '已选']
     )
 
     def __str__(self):

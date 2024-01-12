@@ -29,12 +29,8 @@ ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
-
 INSTALLED_APPS = [
-    "simplepro",
-    "simpleui",
     "import_export",
-    "makasuipatch",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -49,12 +45,10 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    # "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "simplepro.middlewares.SimpleMiddleware",
-    "apps.makaflow.middleware.auth.AuthMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
 ROOT_URLCONF = "Makaflow.urls"
@@ -62,7 +56,7 @@ ROOT_URLCONF = "Makaflow.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR/"template"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -155,7 +149,17 @@ _bak_LOGGING = {
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+import os
+
+STATIC_URL = "/static/"
+
+# 设置开发时静态资源目录
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'runtime/static_dev')
+]
+
+# 设置收集静态资源的路径(部署时使用)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

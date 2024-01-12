@@ -25,7 +25,6 @@ from . import get_local_installed_app_names
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('sp/', include('simplepro.urls')),
 ]
 
 # 将本地app的url加入到项目中

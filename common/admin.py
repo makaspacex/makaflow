@@ -29,8 +29,8 @@ from simpleui.admin import AjaxAdmin
 from .models import *
 
 # 修改网页title和站点header。
-admin.site.site_title = "后台管理"
-admin.site.site_header = "后台管理"
+admin.site.site_title = "管理系统"
+admin.site.site_header = "玛卡订阅管理系统"
 LIST_PER_PAGE_DEFAULT = 20
 
 
@@ -79,13 +79,13 @@ class BaseAdmin(AjaxAdmin, ImportExportActionModelAdmin):
 
 @admin.register(XJUser)
 class XJUserAdmin(BaseAdmin, UserAdmin):
-    list_display = ['username','nickname', 'level', 'email', 'is_staff', 'is_active', 'user_group_display',
+    list_display = ['username','nickname','note', 'level', 'email', 'is_staff', 'is_active', 'user_group_display',
                     'is_superuser']
     readonly_fields = ['date_joined', 'last_login']
     
     no_auto_fields = True
     
-    _add_and_edit_fields = ['nickname', 'level', 'email', 'token','uuid', 'is_active', 'is_staff',
+    _add_and_edit_fields = ['nickname', 'level', 'email', 'token','uuid','note',  'is_active', 'is_staff',
                              'is_superuser']
     
     add_fieldsets = [
