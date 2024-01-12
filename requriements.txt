@@ -1,8 +1,8 @@
-flask
 ruamel.yaml
 numpy
 x25519
-simplepro
-django==4.2
+requests
+django-import-export
+django~=5.0
 protobuf
 python-dateutil

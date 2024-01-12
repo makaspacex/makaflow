@@ -24,7 +24,7 @@ class Subscribe(BaseModel):
     content = models.TextField('订阅内容',blank=True, null=True)
     server_mirr = models.JSONField('镜像地址替换',blank=True, null=True)
     
-    node_excludes = models.ManyToManyField("Rule", blank=True, null=True, verbose_name="排除规则")
+    node_excludes = models.ManyToManyField("Rule", blank=True, verbose_name="排除规则")
     
     class Meta:
         verbose_name = '订阅'

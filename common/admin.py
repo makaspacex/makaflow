@@ -24,7 +24,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin  # 从django继承过来后进行定制
 from django.contrib.auth.models import Permission
 from import_export.admin import ImportExportActionModelAdmin
-from simpleui.admin import AjaxAdmin
 
 from .models import *
 
@@ -34,7 +33,7 @@ admin.site.site_header = "玛卡订阅管理系统"
 LIST_PER_PAGE_DEFAULT = 20
 
 
-class BaseAdmin(AjaxAdmin, ImportExportActionModelAdmin):
+class BaseAdmin(ImportExportActionModelAdmin):
     list_per_page = LIST_PER_PAGE_DEFAULT
     auto_time_fields = ['created_at', 'updated_at']
     status_fields = ['status']

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,7 +83,6 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "common.XJUser"
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -112,44 +112,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-LOG_DIR = BASE_DIR/"runtime"
-_bak_LOGGING = {
-    "version": 1,  # the dictConfig format version
-    "disable_existing_loggers": False,  # retain the default loggers
-    "formatters": {
-        "verbose": {
-            "format": "{name} {levelname} {asctime} {module} {process:d} {thread:d} {message}",
-            "style": "{",
-        },
-        "simple": {
-            "format": "{levelname} {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "file": {
-            "class": "logging.FileHandler",
-            "filename": LOG_DIR/"general.log",
-            "level": "DEBUG",
-            "formatter": "verbose",
-        },
-        "console": {
-            "class": "logging.StreamHandler",
-        },
-    },
-    "loggers": {
-        "": {
-            "level": "DEBUG",
-            "handlers": ["file", "console"],
-        },
-    },
-}
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-import os
 
 STATIC_URL = "/static/"
 
@@ -166,6 +130,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-SIMPLEUI_STATIC_OFFLINE = True
 
-SIMPLEUI_CONFIG = {}
+AUTH_USER_MODEL = "common.XJUser"

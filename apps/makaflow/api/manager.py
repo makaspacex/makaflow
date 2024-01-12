@@ -5,7 +5,6 @@ from copy import deepcopy
 from io import StringIO
 from pathlib import Path
 from django.http import StreamingHttpResponse
-import flask
 import numpy as np
 import requests
 from pathlib import Path

@@ -5,10 +5,7 @@ from copy import deepcopy
 from io import StringIO
 from pathlib import Path
 
-import flask
 import numpy as np
-import requests
-from flask import Flask, request
 
 from apps.makaflow import configs
 from apps.makaflow import tools
