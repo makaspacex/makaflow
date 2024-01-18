@@ -2,54 +2,39 @@
 proxies: []
 
 proxy-groups:
-  - name: 代理
+  - name: 默认代理
     type: select
-    proxies: ["HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
     url: 'http://cp.cloudflare.com/generate_204'
-  - name: OpenAI
+  - name: AI服务
     type: select
-    proxies: ["US美国", "代理", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    proxies: ["JP日本","US美国", "默认代理", "HK香港", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
     url: 'http://cp.cloudflare.com/generate_204'
-  - name: Telegram
+  - name: 国外流媒体
     type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Telegram.png
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: YouTube
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
     url: 'http://cp.cloudflare.com/generate_204'
-  - name: Netflix
+  - name: 游戏加速
     type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Netflix.png
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: Steam
-    type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: Bing
-    type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Pig.png
     url: 'http://cp.cloudflare.com/generate_204'
   - name: GitHub
     type: select
-    proxies: ["代理", "US美国", "HK香港", "TW台湾", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "US美国", "HK香港", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
     url: 'http://cp.cloudflare.com/generate_204'
   - name: Apple国外
     type: select
-    proxies: ["代理", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
     url: 'http://cp.cloudflare.com/generate_204'
   - name: GoogleVoice
     type: select
-    proxies: ["US美国", "代理", "Auto自动", "DIRECT"]
+    proxies: ["US美国", "默认代理", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
     url: 'http://cp.cloudflare.com/generate_204'
   - name: HK香港
@@ -61,16 +46,6 @@ proxy-groups:
     lazy: false
     tolerance: 50
     url: 'http://cp.cloudflare.com/generate_204'
-  - name: TW台湾
-    type: url-test
-    proxies: ["DIRECT"]
-    filter: "台|🇨🇳|🇹🇼|湾|TW|Taiwan"
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Taiwan.png
-    interval: 300
-    lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-    include-all: true
   - name: SG新加坡
     type: url-test
     proxies: []
@@ -111,7 +86,7 @@ proxy-groups:
     url: 'http://cp.cloudflare.com/generate_204'
   - name: 默认
     type: select
-    proxies: ["代理", "DIRECT", "HK香港", "TW台湾", "JP日本", "SG新加坡", "US美国", "Auto自动"]
+    proxies: ["默认代理", "DIRECT", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Final.png
     url: 'http://cp.cloudflare.com/generate_204'
 
@@ -280,7 +255,7 @@ rules:
   - IP-CIDR6,fe80::/10,DIRECT
   - RULE-SET,Lan,DIRECT,DIRECT
   # 自定义的高优先级规则
-  - PROCESS-NAME,microsocks,代理
+  - PROCESS-NAME,microsocks,默认代理
   - DOMAIN,ip.istatmenus.app,DIRECT
   - DOMAIN-SUFFIX,slll.in,DIRECT
   - DOMAIN,local.adguard.org,DIRECT
@@ -289,8 +264,16 @@ rules:
   - DOMAIN-SUFFIX,pc528.net,DIRECT
   - DOMAIN-SUFFIX,passwall.vip,DIRECT
   - DOMAIN-SUFFIX,sciencedirect.com,DIRECT
-  - RULE-SET,XJProxy,代理
-  - RULE-SET,Bing,Bing
+  - RULE-SET,XJProxy,默认代理
+  # Goole Gemini
+  - DOMAIN-SUFFIX,googleapis.com,AI服务
+  - DOMAIN,makersuite.google.com,AI服务
+  - DOMAIN,developers.google.com,AI服务
+  - DOMAIN-KEYWORD,alkali,AI服务 
+  - DOMAIN,apis.google.com,AI服务
+  - DOMAIN-KEYWORD,ai.google,AI服务
+  # New Bing
+  - RULE-SET,Bing,AI服务
   # proxy utils
   - PROCESS-NAME,v2ray,DIRECT
   - PROCESS-NAME,Surge,DIRECT
@@ -316,21 +299,21 @@ rules:
   # 微软应用：ondrive，MicrosoftEdge,Teams,Outlook等，不包含github
   - RULE-SET,Microsoft,DIRECT
   # OpenAI
-  - RULE-SET,OpenAI,OpenAI
+  - RULE-SET,OpenAI,AI服务
   # 国外应用
-  - RULE-SET,Netflix,Netflix
+  - RULE-SET,Netflix,国外流媒体
   - RULE-SET,GitHub,GitHub
-  - RULE-SET,YouTube,YouTube
-  - RULE-SET,Facebook,代理
-  - RULE-SET,Telegram,Telegram
-  - RULE-SET,Twitter,代理
+  - RULE-SET,YouTube,国外流媒体
+  - RULE-SET,Facebook,默认代理
+  - RULE-SET,Telegram,默认代理
+  - RULE-SET,Twitter,默认代理
   # GoogleVoice
   - RULE-SET,GoogleVoice,GoogleVoice
   # steam游戏规则，注意国内流量必须在前面
   - RULE-SET,category-games@cn,DIRECT
   - RULE-SET,SteamCN,DIRECT
-  - DOMAIN-KEYWORD,paradox,Steam
-  - RULE-SET,Steam,Steam
+  - DOMAIN-KEYWORD,paradox,游戏加速
+  - RULE-SET,Steam,游戏加速
   # AppleTV的规则
   - RULE-SET,AppleTV,Apple国外
   # AppleNews规则
@@ -342,7 +325,6 @@ rules:
   - RULE-SET,apple@cn,DIRECT
   - RULE-SET,apple-cn,DIRECT
   - RULE-SET,microsoft@cn,DIRECT
-  - RULE-SET,geolocation-cn,DIRECT
   - GEOIP,cn,DIRECT
   # 最终流量出口
   - MATCH,默认

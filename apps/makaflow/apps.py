@@ -10,7 +10,7 @@ class MakaflowConfig(AppConfig):
         super().ready()
         try:
             pass
-            # load_all()
-            # start_tasks()
+            load_all()
+            start_tasks()
         except Exception as e:
             print(e)

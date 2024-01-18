@@ -17,7 +17,7 @@ def xj_convert(data, target):
         if '\n' in  data:
             raise Exception("一个字符串包含多行时, 请使用list")
     
-    api_url = "http://localhost:3000/api/parser"
+    api_url = "http://localhost:3000/api/proxy/parse"
     req_data = {
         "data":p_data,
         "client": target
