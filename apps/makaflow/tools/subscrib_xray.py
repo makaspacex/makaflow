@@ -383,7 +383,8 @@ def render_tp(user:dict, client_type=ClientApp.clash):
             config_tp = copy.deepcopy(configs.sub_tps['clashmeta_tp'])
         elif client_type == ClientApp.clash:
             config_tp = copy.deepcopy(configs.sub_tps['clash_tp'])
-        
+        else:
+            raise Exception(f"未知的客户端类型{client_type}")
         # QX: QX_Producer(),
         # Surge: Surge_Producer(),
         # SurgeMac: SurgeMac_Producer(),
@@ -395,7 +396,6 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         # JSON: JSON_Producer(),
         # Stash: Stash_Producer(),
         # ShadowRocket: ShadowRocket_Producer(),
-        
         
         
         # 最终的出口结果，模板中的也要继承
@@ -442,9 +442,8 @@ def render_tp(user:dict, client_type=ClientApp.clash):
             target = client_type
         outbounds_result = xj_convert(outbounds_result, target)
         
-        resp_text = ""
-        for proxy in outbounds_result:
-            resp_text += f"{proxy}\n"
+        resp_text = str(outbounds_result)
+        
         resp_text = base64.b64encode(resp_text.encode()).decode()
     elif client_type == ClientApp.surge:
         target = "sruge"
@@ -453,9 +452,7 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         names = [x['name'] for x in outbounds_result]
         outbounds_result = xj_convert(outbounds_result, target)
         surge_tp:str = configs.sub_tps['surge_tp']
-        proxys = ""
-        for ele in outbounds_result:
-            proxys += f"{ele}\n"
+        proxys = str(outbounds_result)
         
         # 替换托管token
         surge_tp = surge_tp.replace('token=123456',f'token={user["token"]}')

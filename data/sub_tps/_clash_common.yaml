@@ -265,6 +265,8 @@ rules:
   - DOMAIN-SUFFIX,passwall.vip,DIRECT
   - DOMAIN-SUFFIX,sciencedirect.com,DIRECT
   - RULE-SET,XJProxy,默认代理
+  # Goole bard
+  - DOMAIN-SUFFIX,bard.google.com,AI服务
   # Goole Gemini
   - DOMAIN-SUFFIX,googleapis.com,AI服务
   - DOMAIN,makersuite.google.com,AI服务
