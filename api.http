@@ -58,7 +58,7 @@ content-type: application/json
 
 
 ### 获取订阅 新接口 v1
-@client=clash
+@client=surge
 #shadowrocket, clash, clashmeta, singbox,loon
 GET {{baseUrl}}/v1/client/subscribe?token=a262fb0c1fa16c0625da193b796613b8&client={{client}}
 

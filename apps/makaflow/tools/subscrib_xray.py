@@ -262,6 +262,13 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         if not sub_enable:
             continue
         
+        u_groups = set(user.get("groups", [])) | set([0])  # 用户默认包括0号分组
+        sub_groups = set(node_conf.get('groups', [0])) # 默认分组为0
+
+        if len(u_groups & sub_groups) == 0:
+            # 该订阅对用户组有要求，但是当前用户不在该订阅的组里面
+            continue
+        
         server_config = None
         
         # yaml数据订阅
@@ -369,11 +376,18 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         
         outbounds_result += outbounds
     
-    
     resp_text, resp_headers = "error", {}
     resp_headers['subscription-userinfo'] = "; ".join([ f"{k}={v}" for k,v in res_info.items()])
     
+    # 处理vmess ws-opts为空列表时的报错问题
+    _new_outbounds_result = []
+    for outproxy in outbounds_result:
+        if outproxy.get('type', None) == "vmess" and outproxy.get("ws-opts",None) == []:
+            outproxy.pop("ws-opts")
+        _new_outbounds_result.append(outproxy)
+    outbounds_result = _new_outbounds_result
     
+    # ---------------------------------------- 开始处理模板渲染 --------------------------------------
     # 模板是clash系列的话
     if client_type in (ClientApp.clashmeta_group + ClientApp.clash_group ):
         
@@ -449,8 +463,13 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         target = "sruge"
         if client_type in ClientApp.sub_store_support:
             target = client_type
-        names = [x['name'] for x in outbounds_result]
-        outbounds_result = xj_convert(outbounds_result, target)
+        # names = [x['name'] for x in outbounds_result]
+        outbounds_result= xj_convert(outbounds_result, target)
+        names = []
+        for line in outbounds_result.split("\n"):
+            _n = line.split("=")[0]
+            names.append(_n)
+        
         surge_tp:str = configs.sub_tps['surge_tp']
         proxys = str(outbounds_result)
         
