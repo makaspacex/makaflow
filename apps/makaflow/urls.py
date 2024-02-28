@@ -46,6 +46,7 @@ public += [
     path('api/v1/client/subscribe', api.manager.api_subscrib_v1),
     path('api/loadall', api.manager.api_loadall),
     path('api/rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
+    re_path(r'api/mixrule/(?P<path>.*)', api.manager.api_mixrule),
     path('api/conf/<conf>', api.manager.api_conf),
     re_path(r'api/resource/(?P<path>.*)', api.manager.api_resource_down),
     re_path(r'api/icon/(?P<path>.*)', api.manager.api_icon),

@@ -15,7 +15,7 @@ class UpdateBm7RepoThread(BaseTask):
         env = configs.env
         rule_repo_dir = env['rule_repo_dir']
         cmd_clone = "git clone --depth=1 https://github.com/blackmatrix7/ios_rule_script.git"
-        cmd_pull = "git pull"
+        cmd_pull = "git pull --allow-unrelated-histories"
         
         repo_dir = f"{rule_repo_dir}/ios_rule_script"
         
@@ -37,7 +37,7 @@ class UpdateBm7RepoThread(BaseTask):
                 self.error(e)
 
             # time.sleep(5)
-            time.sleep(60 * 60 *12)
+            time.sleep(60 * 60 *24)
 
 
 class UpdateQureRepoThread(BaseTask):
@@ -70,7 +70,7 @@ class UpdateQureRepoThread(BaseTask):
         env = configs.env
         icon_repo_dir = env['icon_repo_dir']
         cmd_clone = "git clone --depth=1 https://github.com/Koolson/Qure.git"
-        cmd_pull = "git pull"
+        cmd_pull = "git pull --allow-unrelated-histories"
         
         repo_dir = f"{icon_repo_dir}/Qure"
         icon_json_path= env['icon_json']
@@ -99,4 +99,4 @@ class UpdateQureRepoThread(BaseTask):
                 self.error(f"{e}")
 
             # time.sleep(5)
-            time.sleep(60 * 60 *12)
+            time.sleep(60 * 60 *24)

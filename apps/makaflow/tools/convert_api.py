@@ -4,7 +4,7 @@ import yaml
 from typing import Tuple,Optional,Union
 from apps.makaflow.configs import env
 
-def xj_convert(data, target) -> Union[dict, str]:
+def xj_proxy_convert(data, target) -> Union[dict, str]:
     # 确保是字符串，每行一个代理信息
     p_data = data
     if isinstance(data, dict):
@@ -21,7 +21,7 @@ def xj_convert(data, target) -> Union[dict, str]:
     else:
         p_data = data
     
-    api_url = env['convert_api']
+    api_url = env['proxy_convert_api']
     
     req_data = {
         "data":p_data,
@@ -42,6 +42,19 @@ def xj_convert(data, target) -> Union[dict, str]:
     
     return ret
 
+def xj_rule_convert(content, target) -> str:
+    res_content = content
+    api_url = env['rule_convert_api']
+    req_data = {
+        "data":content,
+        "client": target
+    }
+    resp = requests.post(api_url, json=req_data)
+    res = resp.json()
+    if res['status'] == "failed":
+        raise Exception(res['error']['message'])
+    res_content = res['data']['par_res']
+    return res_content
     
 if __name__ == "__main__":
     
@@ -58,16 +71,16 @@ if __name__ == "__main__":
     import time
     s = time.time()
     for i in range(1):
-        print(xj_convert(demo_a, "URI"))
-        print(xj_convert(demo_b, "JSON"))
-        print(xj_convert(demo_c, "URI"))
-        print(xj_convert(demo_d, "Loon"))
-        print(xj_convert(demo_e, "JSON"))
+        print(xj_proxy_convert(demo_a, "URI"))
+        print(xj_proxy_convert(demo_b, "JSON"))
+        print(xj_proxy_convert(demo_c, "URI"))
+        print(xj_proxy_convert(demo_d, "Loon"))
+        print(xj_proxy_convert(demo_e, "JSON"))
         print("\n")
-        print(xj_convert(demo_f, "JSON"),"\n")
-        print(xj_convert(demo_f, "Loon"),"\n")
-        print(xj_convert(demo_f, "Clash"),"\n")
-        print(xj_convert(demo_f, "Surge"),"\n")
+        print(xj_proxy_convert(demo_f, "JSON"),"\n")
+        print(xj_proxy_convert(demo_f, "Loon"),"\n")
+        print(xj_proxy_convert(demo_f, "Clash"),"\n")
+        print(xj_proxy_convert(demo_f, "Surge"),"\n")
     
     cost = time.time() -s
     print( cost/10)

@@ -16,6 +16,7 @@ from django.http.response import HttpResponse
 from django.http.request import HttpRequest
 from django.http import JsonResponse
 from apps.makaflow.tools import geo
+from apps.makaflow.tools.convert_api import xj_rule_convert
 
 
 def api_subscrib_old(request:HttpRequest):
@@ -194,16 +195,65 @@ def api_rule(request:HttpRequest, client, code, suffix):
         resp_data["info"] = "Failed: " + str(e)
     return  JsonResponse(resp_data)
 
+from pathlib import Path
+def api_mixrule(request:HttpRequest, path):
+    resp_data = tools.get_default_resp_data()
+    try:
+        client_type = get_request_client(request=request)
+        path = Path(path)
+        
+        rule_repo_dir = Path(configs.env['rule_repo_dir']) 
+        finale_file_path = rule_repo_dir / path
+        if not finale_file_path.exists():
+            # 不存在则寻找同名文件
+            from glob import glob
+            flist = glob( str(finale_file_path.parent / finale_file_path.stem) + '.*' )
+            if len(flist) == 0:
+                raise Exception(f"Not Found {path}")
+            finale_file_path = flist[0]
+        
+        with open(finale_file_path, 'r') as f:
+            f_content = f.read()
+        
+        content = ""
+        # # 后缀名判断
+        # if path.suffix == '.yaml':
+        #     client_type = ClientApp.clash
+        # if path.suffix == '.list':
+        #     client_type = ClientApp.surge
+        
+        # clienttype 强制覆盖
+        if client_type == ClientApp.surfboard:
+            client_type = ClientApp.surge
+        if client_type in ClientApp.clashmeta_group + ClientApp.clash_group:
+            client_type = ClientApp.clash
+        
+        if client_type in [ClientApp.browser]:
+            content = f_content
+        elif client_type in ClientApp.sub_store_support:
+            content = xj_rule_convert(f_content, client_type)
+        else:
+            raise Exception("未知的客户端类型")
+        
+        resp = HttpResponse(content)
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
+        return resp
+    
+    except Exception as e:
+        resp_data["code"] = 0
+        resp_data["info"] = "Failed: " + str(e)
+    return  JsonResponse(resp_data)
+
 
 def api_rule_bm7(request:HttpRequest, path:str):
     resp_data = tools.get_default_resp_data()
     try:
         
-        blackmatrix7_rule_dir = configs.env['blackmatrix7_rule_dir']
+        blackmatrix7_rule_dir = os.path.join(configs.env['rule_repo_dir'], "ios_rule_script/rule")
         
         f_path = os.path.join(blackmatrix7_rule_dir, path)
         resp = HttpResponse()
-        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
         if not os.path.exists(f_path):
             resp.status_code = 404
             resp.content = f"404: {path} not found"

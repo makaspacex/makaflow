@@ -33,7 +33,7 @@ from apps.makaflow.tools.subscrib_common import conve_v2
 from apps.makaflow.tools.common import b64en, urlen
 from apps.makaflow import tools
 from apps.makaflow.convert.converter import convertsV2Ray
-from apps.makaflow.tools.convert_api import xj_convert
+from apps.makaflow.tools.convert_api import xj_proxy_convert
 from apps.makaflow.tools.common import proxy_process
 
 # 处理xray多端口和转发
@@ -454,17 +454,17 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         target = "URI"
         if client_type in ClientApp.sub_store_support:
             target = client_type
-        outbounds_result = xj_convert(outbounds_result, target)
+        outbounds_result = xj_proxy_convert(outbounds_result, target)
         
         resp_text = str(outbounds_result)
         
         resp_text = base64.b64encode(resp_text.encode()).decode()
-    elif client_type == ClientApp.surge:
+    elif client_type in [ClientApp.surge, ClientApp.surfboard]:
         target = "sruge"
         if client_type in ClientApp.sub_store_support:
             target = client_type
         # names = [x['name'] for x in outbounds_result]
-        outbounds_result= xj_convert(outbounds_result, target)
+        outbounds_result= xj_proxy_convert(outbounds_result, target)
         names = []
         for line in outbounds_result.split("\n"):
             _n = line.split("=")[0]

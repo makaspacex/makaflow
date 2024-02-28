@@ -4,39 +4,39 @@ proxies: []
 proxy-groups:
   - name: 默认代理
     type: select
-    proxies: ["HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
   - name: AI服务
     type: select
-    proxies: ["JP日本","US美国", "默认代理", "HK香港", "SG新加坡",  "Auto自动", "DIRECT"]
+    proxies: ["JP日本","US美国", "默认代理", "HK香港",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
   - name: 国外流媒体
     type: select
-    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
+  - name: Google
+    type: select
+    proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
+    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
+    url: http://cp.cloudflare.com/generate_204
   - name: 游戏加速
     type: select
-    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
   - name: GitHub
     type: select
-    proxies: ["默认代理", "US美国", "HK香港", "JP日本", "SG新加坡",  "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "US美国", "HK香港", "JP日本",  "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
   - name: Apple国外
     type: select
-    proxies: ["默认代理", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动", "DIRECT"]
+    proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: GoogleVoice
-    type: select
-    proxies: ["US美国", "默认代理", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
   - name: HK香港
     type: url-test
     filter: "港|🇭🇰|HK|Hong"
@@ -44,18 +44,8 @@ proxy-groups:
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Hong_Kong.png
     interval: 300
     lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: SG新加坡
-    type: url-test
-    proxies: []
-    filter: "新加坡|坡|狮城|🇸🇬|SG|Singapore"
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Singapore.png
-    interval: 300
-    lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-    include-all: true
+    tolerance: 30
+    url: http://cp.cloudflare.com/generate_204
   - name: JP日本
     type: url-test
     proxies: []
@@ -63,9 +53,8 @@ proxy-groups:
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Japan.png
     interval: 300
     lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-    include-all: true
+    tolerance: 30
+    url: http://cp.cloudflare.com/generate_204
   - name: US美国
     type: url-test
     proxies: []
@@ -73,131 +62,142 @@ proxy-groups:
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/United_States.png
     interval: 300
     lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-    include-all: true
+    tolerance: 30
+    url: http://cp.cloudflare.com/generate_204
   - name: Auto自动
     type: url-test
     proxies: []
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Auto.png
     interval: 300
     lazy: false
-    tolerance: 50
-    url: 'http://cp.cloudflare.com/generate_204'
-  - name: 默认
+    tolerance: 30
+    url: http://cp.cloudflare.com/generate_204
+  - name: 兜底
     type: select
-    proxies: ["默认代理", "DIRECT", "HK香港", "JP日本", "SG新加坡", "US美国", "Auto自动"]
+    proxies: ["默认代理", "DIRECT", "HK香港", "JP日本", "US美国", "Auto自动"]
     icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Final.png
-    url: 'http://cp.cloudflare.com/generate_204'
+    url: http://cp.cloudflare.com/generate_204
 
 rule-providers:
-  Lan:
-    type: http
-    path: ./rule-set/Lan.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Lan/Lan.yaml
-    interval: 7200
   XJProxy:
     type: http
     path: ./rule-set/XJProxy.yaml
     behavior: classical
-    url: https://izhangxm-surgio.oss-cn-beijing.aliyuncs.com/rule-provider/xj_proxy.yaml
+    url: https://cat.makaflow.com/api/mixrule/makaflyrule/XJProxy.yaml
     interval: 7200
-  OpenAI:
+  XJDirect:
     type: http
-    path: ./rule-set/OpenAI.yaml
+    path: ./rule-set/XJDirect.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/OpenAI/OpenAI.yaml
+    url: https://cat.makaflow.com/api/mixrule/makaflyrule/XJDirect.yaml
     interval: 7200
-  Bing:
+  AIService:
     type: http
-    path: ./rule-set/Bing.yaml
+    path: ./rule-set/AIService.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Bing/Bing.yaml
+    url: https://cat.makaflow.com/api/mixrule/makaflyrule/AIService.yaml
+    interval: 7200
+  Game:
+    type: http
+    path: ./rule-set/Game.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/makaflyrule/Game.yaml
+    interval: 7200
+  GooglePlay:
+    type: http
+    path: ./rule-set/GooglePlay.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/makaflyrule/GooglePlay.yaml
+    interval: 7200
+  Google:
+    type: http
+    path: ./rule-set/Google.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Google/Google.yaml
     interval: 7200
   Netflix:
     type: http
     path: ./rule-set/Netflix.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Netflix/Netflix.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Netflix/Netflix.yaml
     interval: 7200
   GitHub:
     type: http
     path: ./rule-set/GitHub.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/GitHub/GitHub.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/GitHub/GitHub.yaml
     interval: 7200
   YouTube:
     type: http
     path: ./rule-set/YouTube.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/YouTube/YouTube.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/YouTube/YouTube.yaml
+    interval: 7200
+  ProxyMedia:
+    type: http
+    path: ./rule-set/ProxyMedia.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/ProxyTools/rules/ProxyMedia.yaml
     interval: 7200
   Microsoft:
     type: http
     path: ./rule-set/Microsoft.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Microsoft/Microsoft.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Microsoft/Microsoft.yaml
     interval: 7200
   Facebook:
     type: http
     path: ./rule-set/Facebook.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Facebook/Facebook.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Facebook/Facebook.yaml
     interval: 7200
   Telegram:
     type: http
     path: ./rule-set/Telegram.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Telegram/Telegram.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Telegram/Telegram.yaml
     interval: 7200
   Twitter:
     type: http
     path: ./rule-set/twitter.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Twitter/Twitter.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Twitter/Twitter.yaml
     interval: 7200
   GoogleVoice:
     type: http
     path: ./rule-set/GoogleVoice.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/GoogleVoice/GoogleVoice.yaml
-    interval: 7200
-  category-games@cn:
-    type: http
-    path: ./rule-set/category-games@cn.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/category-games@cn.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/GoogleVoice/GoogleVoice.yaml
     interval: 7200
   SteamCN:
     type: http
     path: ./rule-set/SteamCN.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/SteamCN/SteamCN.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/SteamCN/SteamCN.yaml
     interval: 7200
   Steam:
     type: http
     path: ./rule-set/Steam.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Steam/Steam.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Steam/Steam.yaml
     interval: 7200
-  AppleTV:
+  AppleProxy:
     type: http
-    path: ./rule-set/AppleTV.yaml
+    path: ./rule-set/AppleProxy.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleTV/AppleTV.yaml
-    interval: 7200
-  AppleNews:
-    type: http
-    path: ./rule-set/AppleNews.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/AppleNews/AppleNews.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/AppleProxy/AppleProxy.yaml
     interval: 7200
   Apple:
     type: http
-    path: ./rule-set/Apple_Classical.yaml
+    path: ./rule-set/Apple.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/bm7/Clash/Apple/Apple_Classical.yaml
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Apple/Apple.yaml
+    interval: 7200
+  Jetbrains:
+    type: http
+    path: ./rule-set/Jetbrains.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Jetbrains/Jetbrains.yaml
     interval: 7200
   google-cn:
     type: http
@@ -205,29 +205,11 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/rule/geo/clash/google-cn.yaml
     interval: 7200
-  apple@cn:
-    type: http
-    path: ./rule-set/apple@cn.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/apple@cn.yaml
-    interval: 7200
   apple-cn:
     type: http
     path: ./rule-set/apple-cn.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/rule/geo/clash/apple-cn.yaml
-    interval: 7200
-  microsoft@cn:
-    type: http
-    path: ./rule-set/microsoft@cn.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/microsoft@cn.yaml
-    interval: 7200
-  geolocation-cn:
-    type: http
-    path: ./rule-set/geolocation-cn.yaml
-    behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/geolocation-cn.yaml
     interval: 7200
 
 # 原则：
@@ -235,100 +217,39 @@ rule-providers:
 # 2、优先域名分流，优先热门分流
 # 3、兜底出口走代理
 rules:
-  # 跳过局域网
-  - IP-CIDR,0.0.0.0/8,DIRECT
-  - IP-CIDR,10.0.0.0/8,DIRECT
-  - IP-CIDR,100.64.0.0/10,DIRECT
-  - IP-CIDR,127.0.0.0/8,DIRECT
-  - IP-CIDR,169.254.0.0/16,DIRECT
-  - IP-CIDR,172.16.0.0/12,DIRECT
-  - IP-CIDR,192.0.0.0/24,DIRECT
-  - IP-CIDR,192.0.2.0/24,DIRECT
-  - IP-CIDR,192.168.0.0/16,DIRECT
-  - IP-CIDR,192.88.99.0/24,DIRECT
-  - IP-CIDR,198.18.0.0/15,DIRECT
-  - IP-CIDR,198.51.100.0/24,DIRECT
-  - IP-CIDR,203.0.113.0/24,DIRECT
-  - IP-CIDR,224.0.0.0/3,DIRECT
-  - IP-CIDR6,::1/128,DIRECT
-  - IP-CIDR6,fc00::/7,DIRECT
-  - IP-CIDR6,fe80::/10,DIRECT
-  - RULE-SET,Lan,DIRECT,DIRECT
   # 自定义的高优先级规则
-  - PROCESS-NAME,microsocks,默认代理
-  - DOMAIN,ip.istatmenus.app,DIRECT
-  - DOMAIN-SUFFIX,slll.in,DIRECT
-  - DOMAIN,local.adguard.org,DIRECT
-  - DOMAIN,injections.adguard.org,DIRECT
   - DOMAIN-SUFFIX,makaflow.com,DIRECT
-  - DOMAIN-SUFFIX,pc528.net,DIRECT
-  - DOMAIN-SUFFIX,passwall.vip,DIRECT
-  - DOMAIN-SUFFIX,sciencedirect.com,DIRECT
+  - DOMAIN-SUFFIX,makafly.com,DIRECT
+  - RULE-SET,XJDirect,DIRECT
   - RULE-SET,XJProxy,默认代理
-  # Goole bard
-  - DOMAIN-SUFFIX,bard.google.com,AI服务
-  # Goole Gemini
-  - DOMAIN-SUFFIX,googleapis.com,AI服务
-  - DOMAIN,makersuite.google.com,AI服务
-  - DOMAIN,developers.google.com,AI服务
-  - DOMAIN-KEYWORD,alkali,AI服务 
-  - DOMAIN,apis.google.com,AI服务
-  - DOMAIN-KEYWORD,ai.google,AI服务
-  # New Bing
-  - RULE-SET,Bing,AI服务
-  # proxy utils
-  - PROCESS-NAME,v2ray,DIRECT
-  - PROCESS-NAME,Surge,DIRECT
-  - PROCESS-NAME,ss-local,DIRECT
-  - PROCESS-NAME,privoxy,DIRECT
-  - PROCESS-NAME,trojan,DIRECT
-  - PROCESS-NAME,trojan-go,DIRECT
-  - PROCESS-NAME,naive,DIRECT
-  - PROCESS-NAME,CloudflareWARP,DIRECT
-  - PROCESS-NAME,Cloudflare WARP,DIRECT
-  - IP-CIDR,162.159.193.0/24,DIRECT,no-resolve
-  - PROCESS-NAME,p4pclient,DIRECT
-  - PROCESS-NAME,Thunder,DIRECT
-  - PROCESS-NAME,DownloadService,DIRECT
-  - PROCESS-NAME,qbittorrent,DIRECT
-  - PROCESS-NAME,Transmission,DIRECT
-  - PROCESS-NAME,fdm,DIRECT
-  - PROCESS-NAME,aria2c,DIRECT
-  - PROCESS-NAME,Folx,DIRECT
-  - PROCESS-NAME,NetTransport,DIRECT
-  - PROCESS-NAME,uTorrent,DIRECT
-  - PROCESS-NAME,WebTorrent,DIRECT
-  # 微软应用：ondrive，MicrosoftEdge,Teams,Outlook等，不包含github
+  - RULE-SET,Jetbrains,DIRECT
+  # AI服务,包括Bard, Gemini, New Bing, OpenAI
+  - RULE-SET,AIService,AI服务
+  # 大厂服务
+  - RULE-SET,AppleProxy,Apple国外
+  - RULE-SET,Apple,DIRECT
+  - RULE-SET,apple-cn,DIRECT
+  - RULE-SET,GoogleVoice,Google
+  - RULE-SET,GooglePlay,Google
+  - RULE-SET,google-cn,DIRECT
+  - RULE-SET,Google,Google
   - RULE-SET,Microsoft,DIRECT
-  # OpenAI
-  - RULE-SET,OpenAI,AI服务
-  # 国外应用
+  # 国际流媒体及主流应用
   - RULE-SET,Netflix,国外流媒体
-  - RULE-SET,GitHub,GitHub
   - RULE-SET,YouTube,国外流媒体
+  - RULE-SET,ProxyMedia,国外流媒体
+  - RULE-SET,GitHub,GitHub
   - RULE-SET,Facebook,默认代理
   - RULE-SET,Telegram,默认代理
   - RULE-SET,Twitter,默认代理
-  # GoogleVoice
-  - RULE-SET,GoogleVoice,GoogleVoice
-  # steam游戏规则，注意国内流量必须在前面
-  - RULE-SET,category-games@cn,DIRECT
+  # 游戏规则
   - RULE-SET,SteamCN,DIRECT
-  - DOMAIN-KEYWORD,paradox,游戏加速
+  - RULE-SET,Game,游戏加速
   - RULE-SET,Steam,游戏加速
-  # AppleTV的规则
-  - RULE-SET,AppleTV,Apple国外
-  # AppleNews规则
-  - RULE-SET,AppleNews,Apple国外
-  # 其他Apple规则
-  - RULE-SET,Apple,DIRECT
   # 需要直连的流量
-  - RULE-SET,google-cn,DIRECT
-  - RULE-SET,apple@cn,DIRECT
-  - RULE-SET,apple-cn,DIRECT
-  - RULE-SET,microsoft@cn,DIRECT
+  - DOMAIN-SUFFIX,cn,DIRECT
   - GEOIP,cn,DIRECT
   # 最终流量出口
-  - MATCH,默认
+  - MATCH,兜底
 
   

@@ -6,10 +6,10 @@
     "configurations": [
         {
             "name": "Django-Dev",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
-            "args": ["runserver", "0.0.0.0:8000", "--noreload"],
+            "args": ["runserver", "0.0.0.0:8000"],
             "console": "integratedTerminal",
             "justMyCode": false,
             "env":{
@@ -18,7 +18,7 @@
         },
         {
             "name": "Django-Prod",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
             "args": ["runserver", "0.0.0.0:8180", "--noreload"],

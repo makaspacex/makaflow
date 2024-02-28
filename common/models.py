@@ -93,6 +93,7 @@ class XJUser(AbstractUser, BaseModel):
     # email: user1010@gmail.com
     # level: 0
     # token: c819c48dc4993881bfe31eb189cc6ad3
+    sub_groups = models.ManyToManyField("makaflow.SubGroup", verbose_name="订阅组")
     
     groups = models.ManyToManyField(
         Group,
@@ -127,3 +128,18 @@ class XJUser(AbstractUser, BaseModel):
             return ','.join([gp.name for gp in gps])
 
     user_group_display.short_description = '用户组'
+
+
+class Config(BaseModel):
+    id = models.AutoField(primary_key=True)
+    key = models.CharField('键名', max_length=256,unique=True)
+    value = models.CharField('值', max_length=256)
+    name = models.CharField('名称', max_length=256)
+    
+    class Meta:
+        verbose_name = '配置'
+        verbose_name_plural = '配置管理'
+    
+    def __str__(self):
+        return self.name
+

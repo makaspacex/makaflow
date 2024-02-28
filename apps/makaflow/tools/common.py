@@ -27,9 +27,10 @@ class ClientApp:
     
     surge:str = "Surge"
     qx:str = "QX"
+    surfboard:str = "Surfboard"
     
     # 支持更高级的功能和语法，优先支持    
-    clashmeta:str = "clashmeta" # clashmeta内核的一切软件
+    clashmeta:str = "ClashMeta" # clashmeta内核的一切软件
     
     # 它们只需要分享链接式的配置
     loon:str = "Loon"
@@ -50,7 +51,7 @@ class ClientApp:
     # Stash: Stash_Producer(),
     # ShadowRocket: ShadowRocket_Producer(),
     # sub_store_support = ["QX", "Surge", "Loon","Clash","URI","JSON","Stash"]
-    sub_store_support = [qx, surge, loon, stash]
+    sub_store_support = [qx, surge, loon,clash, clashmeta, stash]
 
     clash_group = [clash,stash]
     clashmeta_group = [clashmeta]
@@ -64,17 +65,19 @@ def get_request_client(request:HttpRequest):
         if "shadowrocket" in user_agent:
             client_type = ClientApp.shadowrocket
         # clash meta内核
-        elif "clash-verge" in user_agent or "clashx meta" in user_agent:
+        elif "verge" in user_agent or "meta" in user_agent:
             client_type = ClientApp.clashmeta
-        elif "stash".lower() in user_agent:
+        elif "stash" in user_agent:
             client_type = ClientApp.stash
         # 含有clash关键字，托底的clash
         elif "clash" in user_agent:
             client_type = ClientApp.clash
-        elif "loon".lower() in user_agent:
+        elif "loon"in user_agent:
             client_type = ClientApp.loon
-        elif "surge".lower() in user_agent:
+        elif "surge" in user_agent:
             client_type = ClientApp.surge
+        elif "surf" in user_agent:
+            client_type = ClientApp.surfboard
         else:
             client_type = ClientApp.browser
     else:
@@ -85,7 +88,6 @@ def get_request_client(request:HttpRequest):
                 continue
             if client_type.lower() == va.lower():
                 client_type = va
-    
     return client_type
 
 class Traffic:

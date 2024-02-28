@@ -29,11 +29,9 @@ from common.admin import BaseAdmin
 @admin.register(Subscribe)
 class SubscribeAdmin(BaseAdmin):
     list_display = ['id', 'name', 'sub_enable', 'prefix', 'sub_url' ]
-    fields = ['name', 'sub_enable', 'prefix', 'sub_url', 'node_excludes', 'repl_names', 'content','server_mirr']
-    
-    
-@admin.register(Rule)
-class RuleAdmin(BaseAdmin):
-    list_display = ['id', 'name', 'rule']
-    fields = ['name', 'rule', ]
+    fields = ['name', 'sub_enable', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names', 'content','server_mirr']
 
+@admin.register(SubGroup)
+class SubGroupAdmin(BaseAdmin):
+    list_display = ['id', 'name']
+    fields = ['name']

@@ -84,7 +84,7 @@ class XJUserAdmin(BaseAdmin, UserAdmin):
     
     no_auto_fields = True
     
-    _add_and_edit_fields = ['nickname', 'level', 'email', 'token','uuid','note',  'is_active', 'is_staff',
+    _add_and_edit_fields = ['nickname', 'level', 'email', 'token','uuid','note','sub_groups',  'is_active', 'is_staff',
                              'is_superuser']
     
     add_fieldsets = [
@@ -112,3 +112,7 @@ class XJUserAdmin(BaseAdmin, UserAdmin):
 class PermissionAdmin(admin.ModelAdmin):
     list_display = ['id', 'name', 'content_type', 'codename']
     list_per_page = LIST_PER_PAGE_DEFAULT
+
+@admin.register(Config)
+class ConfigAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'key', 'value']
