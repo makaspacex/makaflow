@@ -460,10 +460,9 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         
         resp_text = base64.b64encode(resp_text.encode()).decode()
     elif client_type in [ClientApp.surge, ClientApp.surfboard]:
-        target = "sruge"
+        target = ClientApp.surge
         if client_type in ClientApp.sub_store_support:
             target = client_type
-        # names = [x['name'] for x in outbounds_result]
         outbounds_result= xj_proxy_convert(outbounds_result, target)
         names = []
         for line in outbounds_result.split("\n"):

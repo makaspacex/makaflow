@@ -79,12 +79,19 @@ proxy-groups:
     url: http://cp.cloudflare.com/generate_204
 
 rule-providers:
+  Lan:
+    type: http
+    path: ./rule-set/Lan.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Lan/Lan.yaml
+    interval: 7200
   XJProxy:
     type: http
     path: ./rule-set/XJProxy.yaml
     behavior: classical
     url: https://cat.makaflow.com/api/mixrule/makaflyrule/XJProxy.yaml
     interval: 7200
+    
   XJDirect:
     type: http
     path: ./rule-set/XJDirect.yaml
