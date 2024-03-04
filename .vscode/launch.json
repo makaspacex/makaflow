@@ -9,7 +9,7 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/manage.py",
-            "args": ["runserver", "0.0.0.0:8000"],
+            "args": ["runserver", "0.0.0.0:8000", "--noreload"],
             "console": "integratedTerminal",
             "justMyCode": false,
             "env":{
@@ -28,11 +28,9 @@
                 "PYTHONPATH":"${workspaceFolder}"
             },
         },
-        
-
         {
             "name": "Python: 当前文件",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",

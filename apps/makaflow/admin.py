@@ -28,10 +28,5 @@ from common.admin import BaseAdmin
 
 @admin.register(Subscribe)
 class SubscribeAdmin(BaseAdmin):
-    list_display = ['id', 'name', 'sub_enable', 'prefix', 'sub_url' ]
-    fields = ['name', 'sub_enable', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names', 'content','server_mirr']
-
-@admin.register(SubGroup)
-class SubGroupAdmin(BaseAdmin):
-    list_display = ['id', 'name']
-    fields = ['name']
+    list_display = ['id', 'name','sub_groups', 'sub_enable', 'prefix', 'sub_url' ]
+    fields = ['name', 'sub_enable', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names','server_mirr', 'content']

@@ -41,3 +41,20 @@ def timestamp2Formate_time(ts, fmt):
 def formatetime2timestamp(fmt, fmt_str):
     f_time = datetime.strptime(fmt, fmt_str)
     return int(f_time.timestamp())
+
+_DJANGO_SET_UP = False
+def init_django_env(settings:str):
+    '''
+    此代码初始化django的ORM环境，可以第三方调用django的ORM模型
+    使用时直接引入本文件即可，无需额外操作
+    settings:str =  'Makaflow.settings'
+    '''
+    import os
+    import django
+    global _DJANGO_SET_UP
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', settings)
+    os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+    
+    if not _DJANGO_SET_UP:
+        django.setup()
+        _DJANGO_SET_UP = True

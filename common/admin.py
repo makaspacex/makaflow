@@ -78,7 +78,7 @@ class BaseAdmin(ImportExportActionModelAdmin):
 
 @admin.register(XJUser)
 class XJUserAdmin(BaseAdmin, UserAdmin):
-    list_display = ['username','nickname','note', 'level', 'email', 'is_staff', 'is_active', 'user_group_display',
+    list_display = ['id','username','nickname','sub_groups','note', 'level', 'email', 'is_staff', 'is_active', 'user_group_display',
                     'is_superuser']
     readonly_fields = ['date_joined', 'last_login']
     

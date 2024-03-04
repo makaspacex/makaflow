@@ -13,6 +13,6 @@ class MakaflowConfig(AppConfig):
         try:
             pass
             load_all()
-            start_tasks()
+            # start_tasks()
         except Exception as e:
             print(e)

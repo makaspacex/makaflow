@@ -11,7 +11,7 @@ def get_inbound_index(inbounds, tag):
     for i, inbound in enumerate(inbounds):
         if 'tag' in inbound.keys() and tag == inbound['tag']:
             return i
-    return -1            
+    return -1
 
 def get_inbound_by_tag(inbounds, tag):
     

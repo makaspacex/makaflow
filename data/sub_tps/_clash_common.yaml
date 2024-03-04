@@ -140,6 +140,12 @@ rule-providers:
     behavior: classical
     url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/YouTube/YouTube.yaml
     interval: 7200
+  Xiaomi:
+    type: http
+    path: ./rule-set/XiaoMi.yaml
+    behavior: classical
+    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/XiaoMi/XiaoMi.yaml
+    interval: 7200
   ProxyMedia:
     type: http
     path: ./rule-set/ProxyMedia.yaml
@@ -235,6 +241,7 @@ rules:
   # 大厂服务
   - RULE-SET,AppleProxy,Apple国外
   - RULE-SET,Apple,DIRECT
+  - RULE-SET,Xiaomi,DIRECT
   - RULE-SET,apple-cn,DIRECT
   - RULE-SET,GoogleVoice,Google
   - RULE-SET,GooglePlay,Google

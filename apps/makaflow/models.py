@@ -20,15 +20,14 @@ class Subscribe(BaseModel):
     sub_url = models.CharField('订阅地址', max_length=256)
     subscription_userinfo = models.CharField('订阅信息', max_length=512,blank=True)
     
-    repl_names = models.JSONField('名称替换',blank=True)
+    repl_names = models.CharField('名称替换', max_length=256,blank=True)
+    server_mirr = models.CharField('镜像地址替换', max_length=256,blank=True)
     content = models.TextField('订阅内容',blank=True)
-    server_mirr = models.JSONField('镜像地址替换',blank=True)
+    sub_groups = models.CharField("订阅组", max_length=512 , blank=True)
     
     class Meta:
         verbose_name = '订阅'
         verbose_name_plural = '订阅管理'
-    
-    sub_groups = models.ManyToManyField("SubGroup", verbose_name="订阅组", blank=True)
     
     def __str__(self):
         return self.name
@@ -44,16 +43,3 @@ class SystemConfig(BaseModel):
     
     def __str__(self):
         return self.name
-
-
-class SubGroup(BaseModel):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField('名称', max_length=256)
-    
-    class Meta:
-        verbose_name = '订阅组'
-        verbose_name_plural = '订阅组管理'
-    
-    def __str__(self):
-        return self.name
-

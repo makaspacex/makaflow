@@ -3,6 +3,7 @@ numpy
 x25519
 requests
 django-import-export
-django~=5.0
+django~=4.2.10
 protobuf
+pytz
 python-dateutil

@@ -82,8 +82,7 @@ class XJUser(AbstractUser, BaseModel):
     nickname = models.CharField(max_length=256, blank=True, verbose_name="昵称")
     uuid = models.CharField(max_length=256, blank=False, verbose_name="uuid")
     level = models.IntegerField(blank=False, verbose_name="等级")
-    
-    note = models.CharField(blank=True,null=True, max_length=128, verbose_name="备注")
+    note = models.CharField(blank=True, null=True, max_length=128, verbose_name="备注")
     
     # name: user1010
     # nickname: Shuzhen
@@ -93,7 +92,7 @@ class XJUser(AbstractUser, BaseModel):
     # email: user1010@gmail.com
     # level: 0
     # token: c819c48dc4993881bfe31eb189cc6ad3
-    sub_groups = models.ManyToManyField("makaflow.SubGroup", verbose_name="订阅组")
+    sub_groups = models.CharField("订阅组", max_length=128, blank=True)
     
     groups = models.ManyToManyField(
         Group,
@@ -134,7 +133,7 @@ class Config(BaseModel):
     id = models.AutoField(primary_key=True)
     key = models.CharField('键名', max_length=256,unique=True)
     value = models.CharField('值', max_length=256)
-    name = models.CharField('名称', max_length=256)
+    name = models.CharField('名称', max_length=256, blank=True)
     
     class Meta:
         verbose_name = '配置'

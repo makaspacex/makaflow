@@ -187,7 +187,7 @@ def api_rule(request:HttpRequest, client, code, suffix):
             content = geo.loon_surge_rules(geosites=configs.geosites, geoips=configs.geoips, country_code=code)
         
         resp = HttpResponse(content)
-        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
         return resp
 
     except Exception as e:
