@@ -81,7 +81,7 @@ class XJUser(AbstractUser, BaseModel):
     token = models.CharField(max_length=256, blank=False, verbose_name="Token")
     nickname = models.CharField(max_length=256, blank=True, verbose_name="昵称")
     uuid = models.CharField(max_length=256, blank=False, verbose_name="uuid")
-    level = models.IntegerField(blank=False, verbose_name="等级")
+    level = models.IntegerField(blank=False, verbose_name="等级",default=0)
     note = models.CharField(blank=True, null=True, max_length=128, verbose_name="备注")
     
     # name: user1010

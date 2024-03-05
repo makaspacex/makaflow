@@ -12,10 +12,13 @@ from pathlib import Path
 import json
 
 class BaseTask(threading.Thread):
-    def __init__(self, group: None = None, target: Callable[..., object] | None = None, name: str | None = None, args: Iterable[Any] = ..., kwargs: Mapping[str, Any] | None = None, *, daemon: bool | None = None) -> None:
-        super().__init__(group, target, name, args, kwargs, daemon=daemon)
+    def __init__(self, name=None) -> None:
+        threading.Thread.__init__(self)
+        self._kill = threading.Event()
         self.task_name = f"{self.__class__.__name__}"
-        self.info("created")
+        if name:
+            self.task_name = name
+        self.info(f"created")
     
     def info(self, str_content):
         self.display(str_content=str_content, tag="INFO")
@@ -25,8 +28,15 @@ class BaseTask(threading.Thread):
     
     def display(self, str_content, tag='INFO'):
         print(f"{tag} {self.task_name} {str_content}")
-        
-        
+    
+    def kill(self):
+        self._kill.set()
+    
+    def sleep(self,seconds) -> bool:
+        is_killed = self._kill.wait(seconds)
+        if is_killed:
+            return True
+        return False
         
         
     

@@ -9,7 +9,7 @@ from django.utils.html import format_html
 
 from common.models import BaseModel
 from common.util.storage import UUIDFileName
-
+from apps.makaflow import configs
 
 class Subscribe(BaseModel):
     id = models.AutoField(primary_key=True)
@@ -43,3 +43,27 @@ class SystemConfig(BaseModel):
     
     def __str__(self):
         return self.name
+    
+
+class Repo(BaseModel):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField('名称', max_length=256)
+    url = models.CharField('仓库地址', max_length=256)
+    path = models.CharField('本地路径', max_length=256)
+    interval = models.IntegerField('更新间隔')
+    version = models.CharField('当前版本', max_length=256, blank=True,null=True)
+    
+    def up_thred_status(self):
+        if self.id in configs._threadings:
+            return True
+        return False
+    
+    up_thred_status.short_description = '更新线程状态'
+    
+    class Meta:
+        verbose_name = '仓库'
+        verbose_name_plural = '仓库管理'
+    
+    def __str__(self):
+        return self.name
+  

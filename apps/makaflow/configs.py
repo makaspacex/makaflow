@@ -20,14 +20,16 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-PROJECT_NAME = os.path.split(BASE_DIR)[-1]
-
 import os
 import glob
 
 import ruamel.yaml
 yaml = ruamel.yaml.YAML()
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+PROJECT_NAME = os.path.split(BASE_DIR)[-1]
+
+_threadings={}
 
 class AppMode:
     manager = "manager"

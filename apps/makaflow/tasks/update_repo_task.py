@@ -1,45 +1,43 @@
-import threading
 import time
 from apps.makaflow import configs
 import os
 import subprocess
-import sys
 import glob
 from pathlib import Path
 import json
-from .base import BaseTask
+from apps.makaflow.tasks.base import BaseTask
+from apps.makaflow.models import Repo
+from pathlib import Path
 
-class UpdateBm7RepoThread(BaseTask):
+class UpdateRepoThread(BaseTask):
+    
+    def __init__(self, repo:Repo) -> None:
+        super().__init__(name=repo.name)
+        self.repo = repo
     
     def run(self):
-        env = configs.env
-        rule_repo_dir = env['rule_repo_dir']
-        cmd_clone = "git clone --depth=1 https://github.com/blackmatrix7/ios_rule_script.git"
-        cmd_pull = "git pull --allow-unrelated-histories"
-        
-        repo_dir = f"{rule_repo_dir}/ios_rule_script"
-        
-        while True:
+
+        while not self._kill.is_set():
             try:
-                cmd = cmd_pull
-                cwd = repo_dir
+                path = Path(self.repo.path)
+                cmd = "git pull --allow-unrelated-histories"
+                cwd = self.repo.path
                 
-                if not os.path.exists(repo_dir):
-                    cmd = cmd_clone
-                    cwd = rule_repo_dir
+                if not path.exists():
+                    # 克隆到目标文件夹
+                    cmd = f"git clone --depth=1 {self.repo.url} {self.repo.path}"
+                    cwd = "./"
                 
-                # p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=sys.stdout, stderr=sys.stdout)
                 p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 p.wait()
                 self.info(p.communicate()[0].decode('utf8'))
                 
             except Exception as e:
                 self.error(e)
-
-            # time.sleep(5)
-            time.sleep(60 * 60 *24)
-
-
+            self.sleep(self.repo.interval)
+        
+        self.info("stoped")
+        
 class UpdateQureRepoThread(BaseTask):
    
     def update_json(self, repo_dir, out_path):
