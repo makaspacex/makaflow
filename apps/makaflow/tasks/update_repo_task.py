@@ -20,6 +20,10 @@ class UpdateRepoThread(BaseTask):
         self.init_update = init_update
     
     def get_repo_version(self):
+        path = Path(self.repo.path)
+        if not path.exists():
+            return -127,"错误：文件夹不存在", None
+        
         # 获取提交的版本号
         cmd = "git log | grep commit | head -n 2"
         p = subprocess.Popen(cmd, shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -37,8 +41,8 @@ class UpdateRepoThread(BaseTask):
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break
-                path = Path(self.repo.path)
                 self.info(f"repourl:{self.repo.url}")
+                path = Path(self.repo.path)
                 
                 # 计算等待时间，防止频繁更新
                 waittime = self.repo.interval
