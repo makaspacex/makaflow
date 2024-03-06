@@ -19,6 +19,17 @@ class UpdateRepoThread(BaseTask):
         self.repo = repo
         self.init_update = init_update
     
+    def get_repo_version(self):
+        # 获取提交的版本号
+        cmd = "git log | grep commit | head -n 2"
+        p = subprocess.Popen(cmd, shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.wait()
+        console_out = p.communicate()[0].decode('utf8')
+        version = None
+        if p.returncode == 0:
+            version = console_out.split("\n")[0].split(" ")[-1][:8]
+        return p.returncode,console_out,version
+        
     def run(self):
         self.info("已启动")
         while not self._kill.is_set():
@@ -26,19 +37,24 @@ class UpdateRepoThread(BaseTask):
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break
-                
+                path = Path(self.repo.path)
                 self.info(f"repourl:{self.repo.url}")
                 
                 # 计算等待时间，防止频繁更新
                 waittime = self.repo.interval
+                force_update = False
+                
+                returncode,console_out,version = self.get_repo_version()
+                if not path.exists() or returncode!=0 or self.repo.version != version:
+                    force_update = True
+                
                 last_update = self.repo.updated_at
                 now = datetime.now(timezone.utc)
                 diff_seconds = (now - last_update).seconds
-                if diff_seconds<self.repo.interval:
+                if not force_update and diff_seconds<self.repo.interval:
                     waittime = self.repo.interval - diff_seconds
                     raise Exception(f"间隔时间过短，等待{waittime}后更新")
                 
-                path = Path(self.repo.path)
                 cmd = "git pull --allow-unrelated-histories"
                 cwd = self.repo.path
                 
@@ -56,13 +72,10 @@ class UpdateRepoThread(BaseTask):
                     raise Exception(f"命令执行发生错误{cmd}")
                 
                 # 获取提交的版本号
-                p = subprocess.Popen("git log | grep commit | head -n 2", shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                p.wait()
-                console_out = p.communicate()[0].decode('utf8')
+                returncode,console_out,version = self.get_repo_version()
                 self.info(console_out)
                 if p.returncode != 0:
                     raise Exception(f"命令执行发生错误{cmd}")
-                version = console_out.split("\n")[0].split(" ")[-1][:8]
                 if self.repo.version != version:
                     self.repo.version = version
                     self.info(f"已更新到最新版 当前最新版本是{version}")

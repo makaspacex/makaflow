@@ -33,11 +33,14 @@ class UpdateSubscribeThread(BaseTask):
                     break
                 
                 waittime = self.sub.interval
+                force_update = False
+                if (not self.sub.content) or len(self.sub.content)<10:
+                    force_update = True
                 
                 last_update = self.sub.updated_at
                 now = datetime.now(timezone.utc)
                 diff_seconds = (now - last_update).seconds
-                if diff_seconds<self.sub.interval:
+                if not force_update and diff_seconds<self.sub.interval:
                     waittime = self.sub.interval - diff_seconds
                     raise Exception(f"间隔时间过短，等待{waittime}后更新")
 
