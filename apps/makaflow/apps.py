@@ -11,7 +11,7 @@ class MakaflowConfig(AppConfig):
             from apps.makaflow.tasks import start_all_tasks
             from apps.makaflow.tasks import load_all
             load_all()
-            # start_all_tasks()
+            start_all_tasks()
             
         except Exception as e:
             print(e)
