@@ -49,7 +49,7 @@ def load_all():
     # 加载订阅模板文件
     load_sub_tps()
     # 加载geo文件
-    # load_geo()
+    load_geo()
     
     
 
