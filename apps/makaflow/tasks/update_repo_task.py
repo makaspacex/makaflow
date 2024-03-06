@@ -60,6 +60,7 @@ class UpdateRepoThread(BaseTask):
                 
                 if not path.exists():
                     # 克隆到目标文件夹
+                    os.makedirs(path.parent, exist_ok=True)
                     cmd = f"git clone --depth=1 {self.repo.url} {self.repo.path}"
                     cwd = "./"
                 
