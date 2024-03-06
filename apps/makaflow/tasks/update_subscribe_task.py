@@ -8,6 +8,8 @@ import requests
 from common.models import Config
 from io import StringIO
 from apps.makaflow.tools.common import yaml
+from datetime import datetime,timezone
+
 
 class UpdateSubscribeThread(BaseTask):
     def __init__(self, sub:Subscribe):
@@ -23,12 +25,21 @@ class UpdateSubscribeThread(BaseTask):
                     break
                 
                 sub_url = self.sub.sub_url
-                self.info(sub_url)
+                self.info(f"suburl:{sub_url}")
                 # 判断是否是合法的订阅地址
                 if not sub_url or not sub_url.startswith("http"):
                     self.info("订阅地址不是在线资源，即将退出")
                     break
                 
+                waittime = self.sub.interval
+                
+                last_update = self.sub.updated_at
+                now = datetime.now(timezone.utc)
+                diff_seconds = (now - last_update).seconds
+                if diff_seconds<self.sub.interval:
+                    waittime = self.sub.interval - diff_seconds
+                    raise Exception(f"间隔时间过短，等待{waittime}后更新")
+
                 headers = {"User-Agent": common.get_client_agent(ClientApp.clash)}
                 conf = Config.objects.filter(key="proxies").first()
                 proxies = None
@@ -45,10 +56,10 @@ class UpdateSubscribeThread(BaseTask):
                     proxies = None
                     p_tip = f"正在不使用代理"
                 
-                self.info(f"{p_tip}请求{self.name} {sub_url}")
-                resp = requests.get(self.sub.sub_url, headers=headers, proxies=proxies)
+                self.info(f"{p_tip}请求{sub_url}")
+                resp = requests.get(sub_url, headers=headers, proxies=proxies)
                 if resp.status_code != 200:
-                    raise Exception(f"{self.sub.name} 请求失败")
+                    raise Exception(f"请求失败")
                 
                 self.sub.subscription_userinfo = resp.headers.get("subscription-userinfo", None)
                 sio = StringIO()
@@ -74,8 +85,7 @@ class UpdateSubscribeThread(BaseTask):
                 
             except Exception as e:
                 self.error(e)
-                break
-                
-            self.sleep(self.sub.interval)
+            
+            self.sleep(waittime)
         
         self.info("已停止")

@@ -8,6 +8,9 @@ import json
 from apps.makaflow.tasks.base import BaseTask
 from apps.makaflow.models import Repo
 from pathlib import Path
+from datetime import datetime,timezone
+
+
 
 class UpdateRepoThread(BaseTask):
     
@@ -22,6 +25,18 @@ class UpdateRepoThread(BaseTask):
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break
+                
+                self.info(f"repourl:{self.repo.url}")
+                
+                # 计算等待时间，防止频繁更新
+                waittime = self.repo.interval
+                last_update = self.repo.updated_at
+                now = datetime.now(timezone.utc)
+                diff_seconds = (now - last_update).seconds
+                if diff_seconds<self.repo.interval:
+                    waittime = self.repo.interval - diff_seconds
+                    raise Exception(f"间隔时间过短，等待{waittime}后更新")
+                
                 path = Path(self.repo.path)
                 cmd = "git pull --allow-unrelated-histories"
                 cwd = self.repo.path
@@ -44,14 +59,15 @@ class UpdateRepoThread(BaseTask):
                 version = console_out.split("\n")[0].split(" ")[-1][:8]
                 if self.repo.version != version:
                     self.repo.version = version
-                    self.repo.save()
+                    
                     self.info(f"已更新到最新版 当前最新版本是{version}")
                 else:
                     self.info(f"无更新 当前最新版本是{version}")
-                
+                self.repo.save()
             except Exception as e:
                 self.error(e)
-            self.sleep(self.repo.interval)
+            
+            self.sleep(waittime)
         
         self.info("已停止")
 

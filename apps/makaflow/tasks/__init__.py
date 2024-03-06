@@ -21,7 +21,7 @@ def start_sub_task():
         configs._sub_thrd[sub.id] = _thre
 
 def start_all_tasks():
-    # start_update_repo_task()
+    start_update_repo_task()
     start_sub_task()
     
     # UpdateQureRepoThread().start()
