@@ -134,7 +134,6 @@ def update_singbox(server_profile, node_info):
 
 def update_xray(server_profile, node_info):
     env = configs.env
-    mode = configs.AppMode
     node_name, node_conf = node_info
     
     if not node_conf['enable']:

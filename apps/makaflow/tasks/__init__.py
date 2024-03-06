@@ -1,25 +1,27 @@
 
-from .update_subscribe_task import UpdateSubThread
+from .update_subscribe_task import UpdateSubscribeThread
 from .update_repo_task import UpdateRepoThread
-from .update_repo_task import UpdateQureRepoThread
-from ..third.substore_server import ProxyConverServer
 from apps.makaflow.models import Repo
+from apps.makaflow.models import Subscribe
 from .load_file_init import load_all
 from apps.makaflow import configs
 
 def start_update_repo_task():
-    global _threadings
     repos = Repo.objects.all()
     for repo in repos:
         _thre = UpdateRepoThread(repo)
         _thre.start()
-        configs._threadings[repo.id] = _thre
+        configs._repo_thrds[repo.id] = _thre
 
 def start_sub_task():
-    UpdateSubThread().start()
+    subs = Subscribe.objects.all()
+    for sub in subs:
+        _thre = UpdateSubscribeThread(sub)
+        _thre.start()
+        configs._sub_thrd[sub.id] = _thre
 
 def start_all_tasks():
-    start_update_repo_task()
+    # start_update_repo_task()
     start_sub_task()
     
     # UpdateQureRepoThread().start()

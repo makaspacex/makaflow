@@ -239,10 +239,10 @@ rules:
   # AI服务,包括Bard, Gemini, New Bing, OpenAI
   - RULE-SET,AIService,AI服务
   # 大厂服务
+  - RULE-SET,apple-cn,DIRECT
   - RULE-SET,AppleProxy,Apple国外
   - RULE-SET,Apple,DIRECT
   - RULE-SET,Xiaomi,DIRECT
-  - RULE-SET,apple-cn,DIRECT
   - RULE-SET,GoogleVoice,Google
   - RULE-SET,GooglePlay,Google
   - RULE-SET,google-cn,DIRECT

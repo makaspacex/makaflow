@@ -18,7 +18,7 @@ class BaseTask(threading.Thread):
         self.task_name = f"{self.__class__.__name__}"
         if name:
             self.task_name = name
-        self.info(f"created")
+        self.info(f"已创建")
     
     def info(self, str_content):
         self.display(str_content=str_content, tag="INFO")

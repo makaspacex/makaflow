@@ -16,9 +16,12 @@ class UpdateRepoThread(BaseTask):
         self.repo = repo
     
     def run(self):
-
+        self.info("已启动")
         while not self._kill.is_set():
             try:
+                if not self.repo.autoupdate:
+                    self.info("读取到设置为禁止自动更新，即将退出")
+                    break
                 path = Path(self.repo.path)
                 cmd = "git pull --allow-unrelated-histories"
                 cwd = self.repo.path
@@ -30,14 +33,28 @@ class UpdateRepoThread(BaseTask):
                 
                 p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 p.wait()
-                self.info(p.communicate()[0].decode('utf8'))
+                console_out = p.communicate()[0].decode('utf8')
+                
+                self.info(f"控制台输出:\n{console_out}")
+                
+                # 获取提交的版本号
+                p = subprocess.Popen("git log | grep commit", shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                p.wait()
+                console_out = p.communicate()[0].decode('utf8')
+                version = console_out.split("\n")[0].split(" ")[-1][:8]
+                if self.repo.version != version:
+                    self.repo.version = version
+                    self.repo.save()
+                    self.info(f"已更新到最新版 当前最新版本是{version}")
+                else:
+                    self.info(f"无更新 当前最新版本是{version}")
                 
             except Exception as e:
                 self.error(e)
             self.sleep(self.repo.interval)
         
-        self.info("stoped")
-        
+        self.info("已停止")
+
 class UpdateQureRepoThread(BaseTask):
    
     def update_json(self, repo_dir, out_path):

@@ -29,11 +29,11 @@ yaml = ruamel.yaml.YAML()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_NAME = os.path.split(BASE_DIR)[-1]
 
-_threadings={}
+# github仓库更新线程
+_repo_thrds={}
 
-class AppMode:
-    manager = "manager"
-    node = "node"
+# 订阅更新线程
+_sub_thrd = {}
 
 # env file
 env={}
