@@ -33,7 +33,7 @@ from django.contrib import messages
 @admin.register(Subscribe)
 class SubscribeAdmin(BaseAdmin):
     list_display = ['id', 'name', 'order', 'sub_groups', 'sub_enable','use_proxy', 'prefix', 'sub_url','up_thred_status','autoupdate',"interval"]
-    fields = ['name','autoupdate',"interval", 'sub_enable','use_proxy','order', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names',"node_excludes",'server_mirr', 'content']
+    fields = ['name','autoupdate',"interval", 'sub_enable','use_proxy','order', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names', 'node_includes',"node_excludes",'server_mirr', 'content']
     ordering = ('order',)
     
     def start_update(self, request, queryset):

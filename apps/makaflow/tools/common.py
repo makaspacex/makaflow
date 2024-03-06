@@ -112,19 +112,29 @@ def human_traffic(trffic_bytes):
         h_str = f"{trffic_bytes/Traffic.K:0.0f}K"
     return h_str
 
+from apps.makaflow.models import Subscribe
+from common.models import Config
 
-def proxy_process(node_name, node_conf, proxy:dict, suffix=None):
+
+def proxy_process(node_conf:Subscribe, proxy:dict, suffix=None):
     
     proxy = copy.deepcopy(proxy)
-    common_excludes = configs.env.get('common_excludes', [])
-    include_node = node_conf.get("node_includes", None)
-    exclude_node = node_conf.get("node_excludes", [])
+    common_excludes = Config.objects.filter(key="common_excludes").first()
+    if common_excludes:
+        common_excludes = json.loads( common_excludes.value)
+    else:
+        common_excludes = []
+    
+    include_node = json.loads(node_conf.node_includes) if node_conf.node_includes else []
+    exclude_node = json.loads(node_conf.node_excludes) if node_conf.node_excludes else []
     exclude_reps = common_excludes + exclude_node
-    
-    name_prefix_str = node_conf.get("prefix","")
-    repl_names = node_conf.get("repl_names", [])
-    server_mirr_dict = {ele['ori']:ele['mirr'] for ele in node_conf.get('server_mirr', [])}
-    
+
+    name_prefix_str = node_conf.prefix
+    repl_names = json.loads(node_conf.repl_names) if node_conf.repl_names else []
+
+    server_mirrs =  json.loads(node_conf.server_mirr)  if node_conf.server_mirr else []
+    server_mirr_dict = {ele['ori']:ele['mirr'] for ele in server_mirrs}
+
     # 处理包含节点
     include_pass=True
     if include_node:
@@ -198,8 +208,9 @@ class ServiceState():
     notfound = "notfound"
 
 
-def get_sub_info(sub_str_head):
-    _eles = [ele for ele in sub_str_head.split("; ")]
+def get_sub_info(sub_str_head:str):
+    sub_str_head = sub_str_head.replace(" ","")
+    _eles = [ele for ele in sub_str_head.split(";")]
     _eles2 = [ele.split("=") for ele in _eles]
     sub_info = { ele[0]: int(ele[1]) for ele in _eles2 }
     return sub_info

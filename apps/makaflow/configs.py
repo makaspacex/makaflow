@@ -38,10 +38,6 @@ _sub_thrd = {}
 # env file
 env={}
 
-# 加载用户表
-users = []
-# 第三方订阅文件，因为很慢，所以需要提前加载到内存
-third_subs_profile = {}
 # 加载订阅模板文件
 sub_tps = {}
 

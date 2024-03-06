@@ -9,6 +9,7 @@ from common.models import Config
 from io import StringIO
 from apps.makaflow.tools.common import yaml
 from datetime import datetime,timezone
+import json
 
 
 class UpdateSubscribeThread(BaseTask):
@@ -44,12 +45,7 @@ class UpdateSubscribeThread(BaseTask):
                 conf = Config.objects.filter(key="proxies").first()
                 proxies = None
                 if conf:
-                    proxies_raw = conf.value.replace(" ","")
-                    proxies={}
-                    for ll in proxies_raw.split(","):
-                        n = ll.index(":")
-                        key,value = ll[:n],ll[n+1:]
-                        proxies[key]=value
+                    proxies = json.loads(conf.value)
                 
                 p_tip = f"正在使用代理{proxies}"
                 if not self.sub.use_proxy:
@@ -61,24 +57,24 @@ class UpdateSubscribeThread(BaseTask):
                 if resp.status_code != 200:
                     raise Exception(f"请求失败")
                 
-                self.sub.subscription_userinfo = resp.headers.get("subscription-userinfo", None)
+                self.sub.subscription_userinfo = resp.headers.get("subscription-userinfo", "")
                 sio = StringIO()
                 sio.write(resp.text)
                 sio.seek(0)
                 server_config = yaml.load(sio)
                 
                 if server_config is not None:
-                    res_server_config = {}
-                    res_server_config['proxies'] = server_config.get("proxies",[])
-                    
-                    out_ = StringIO()
-                    yaml.indent(sequence=4, offset=2)
-                    yaml.dump(res_server_config,out_)
-                    out_.seek(0)
-                    resp_text = out_.read()
-                    self.sub.content = resp_text
-                else:
                     raise Exception(f"{self.sub.name} 无内容")
+                
+                res_server_config = {}
+                res_server_config['proxies'] = server_config.get("proxies",[])
+                
+                out_ = StringIO()
+                yaml.indent(sequence=4, offset=2)
+                yaml.dump(res_server_config,out_)
+                out_.seek(0)
+                resp_text = out_.read()
+                self.sub.content = resp_text
                 
                 self.sub.save()
                 self.info("已更新")                

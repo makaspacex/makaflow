@@ -35,7 +35,13 @@ from apps.makaflow import tools
 from apps.makaflow.convert.converter import convertsV2Ray
 from apps.makaflow.tools.convert_api import xj_proxy_convert
 from apps.makaflow.tools.common import proxy_process
+from common.models import XJUser as User
+from common.models import get_sys_config
+from apps.makaflow.models import Subscribe
+from common.tools import model_tools
+from apps.makaflow.configs import yaml
 
+    
 # 处理xray多端口和转发
 def _generate_inbounds_for_xray(inbounds, server_url):
     """处理xray多端口和转发
@@ -239,48 +245,51 @@ def get_outbonds_for_singbox(inbounds, client_type, user, nodename, node_conf, s
     
     return outbounds_result
 
-def render_tp(user:dict, client_type=ClientApp.clash):
-    
-    env = configs.env
-    third_subs_profile = configs.third_subs_profile
+def render_tp(user:User, client_type=ClientApp.clash):
     
     share_link = False
     if client_type in ClientApp.sharelink_group:
         share_link = True
-
+    
+    env = configs.env
     nodes = env['slaver']['nodes']
-    config_dir = env['server_config_dir']
+    config_dir= get_sys_config('server_config_dir')
     
     # 用于存贮最终的结果
     outbounds_result = []
     # 1、找出第三方订阅的节点服务
     res_info = {"upload":0, "download":0, "total":0, "expire":0}
-    third_subs = env['third_sub']
-    for nodename, node_conf in third_subs.items():
+    
+    third_subs = Subscribe.objects.all()
+    
+    for subscrib in third_subs:
         
-        sub_enable = node_conf['sub_enable']
+        # node_conf = model_tools.get_json_model(subscrib)
+        nodename = subscrib.name
+        sub_enable = subscrib.sub_enable
         if not sub_enable:
             continue
         
-        u_groups = set(user.get("groups", [])) | set([0])  # 用户默认包括0号分组
-        sub_groups = set(node_conf.get('groups', [0])) # 默认分组为0
+        # TODO: 分组过滤
+        # u_groups = set(user.get("groups", [])) | set([0])  # 用户默认包括0号分组
+        # sub_groups = set(node_conf.get('groups', [0])) # 默认分组为0
 
-        if len(u_groups & sub_groups) == 0:
-            # 该订阅对用户组有要求，但是当前用户不在该订阅的组里面
-            continue
+        # if len(u_groups & sub_groups) == 0:
+        #     # 该订阅对用户组有要求，但是当前用户不在该订阅的组里面
+        #     continue
         
         server_config = None
-        
+
         # yaml数据订阅
-        server_config = third_subs_profile.get(nodename, None)
+        server_config = yaml.load(subscrib.content)
         if server_config is None:
             continue
         
         # 处理订阅信息头
-        sub_header_str = server_config.get('subscription_userinfo', None)
+        sub_header_str = subscrib.subscription_userinfo
         subinfo = None
         if sub_header_str:
-            subinfo = tools.get_sub_info(server_config['subscription_userinfo'])
+            subinfo = tools.get_sub_info(sub_header_str)
             # 查看是否过期
             now_secs = int(time.time())
             if now_secs > subinfo['expire']:
@@ -307,11 +316,10 @@ def render_tp(user:dict, client_type=ClientApp.clash):
             _remain = subinfo['total'] - subinfo['download'] - subinfo['upload']
             h_str = human_traffic(_remain)
             suffix = f"|{diff.days}D|{h_str}"
-            
         
         for proxy in proxies:
             # 处理节点的名字，mirr名称和过滤节点
-            proxy = proxy_process(node_name=nodename, node_conf=node_conf, proxy=proxy, suffix=suffix)
+            proxy = proxy_process(node_conf=subscrib, proxy=proxy, suffix=suffix)
             if proxy is None:
                 continue
             outbounds_result += [conv_yaml_obj_to_json(proxy)]
@@ -473,7 +481,7 @@ def render_tp(user:dict, client_type=ClientApp.clash):
         proxys = str(outbounds_result)
         
         # 替换托管token
-        surge_tp = surge_tp.replace('token=123456',f'token={user["token"]}')
+        surge_tp = surge_tp.replace('token=123456',f'token={user.token}')
         
         # 替换代理列表
         surge_tp = surge_tp.replace("#{PROXYLIST}#", proxys)

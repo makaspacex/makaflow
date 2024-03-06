@@ -14,9 +14,10 @@ from datetime import datetime,timezone
 
 class UpdateRepoThread(BaseTask):
     
-    def __init__(self, repo:Repo) -> None:
+    def __init__(self, repo:Repo, init_update=False) -> None:
         super().__init__(name=repo.name)
         self.repo = repo
+        self.init_update = init_update
     
     def run(self):
         self.info("已启动")
@@ -49,17 +50,21 @@ class UpdateRepoThread(BaseTask):
                 p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 p.wait()
                 console_out = p.communicate()[0].decode('utf8')
-                
                 self.info(f"控制台输出:\n{console_out}")
                 
+                if p.returncode != 0:
+                    raise Exception(f"命令执行发生错误{cmd}")
+                
                 # 获取提交的版本号
-                p = subprocess.Popen("git log | grep commit", shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                p = subprocess.Popen("git log | grep commit | head -n 2", shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 p.wait()
                 console_out = p.communicate()[0].decode('utf8')
+                self.info(console_out)
+                if p.returncode != 0:
+                    raise Exception(f"命令执行发生错误{cmd}")
                 version = console_out.split("\n")[0].split(" ")[-1][:8]
                 if self.repo.version != version:
                     self.repo.version = version
-                    
                     self.info(f"已更新到最新版 当前最新版本是{version}")
                 else:
                     self.info(f"无更新 当前最新版本是{version}")

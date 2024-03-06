@@ -3,8 +3,8 @@ from .update_subscribe_task import UpdateSubscribeThread
 from .update_repo_task import UpdateRepoThread
 from apps.makaflow.models import Repo
 from apps.makaflow.models import Subscribe
-from .load_file_init import load_all
 from apps.makaflow import configs
+from .load_file_init import load_all
 
 def start_update_repo_task():
     repos = Repo.objects.all()

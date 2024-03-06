@@ -17,6 +17,7 @@ from django.http.request import HttpRequest
 from django.http import JsonResponse
 from apps.makaflow.tools import geo
 from apps.makaflow.tools.convert_api import xj_rule_convert
+from common.models import XJUser as User
 
 
 def api_subscrib_old(request:HttpRequest):
@@ -68,20 +69,15 @@ def api_subscrib_v1(request:HttpRequest):
         if not token:
             raise Exception("miss token")
 
-        users = configs.users
-        token_dict = {ele["token"]: ele for ele in users}
-
-        if token not in token_dict.keys():
+        user = User.objects.filter(token=token).first()
+        if not user:
             raise Exception("user not found")
         
-        # 用户详细信息
-        user = token_dict[token]
-        
-        if user['level'] < 0:
-            raise Exception(f"id:{user['name']} nickname:{user['nickname']} is disabled")
+        if user.level < 0:
+            raise Exception(f"id:{user.username} nickname:{user.nickname} is disabled")
         
         # clashmeta_config = subscrib_xray.render_tp(username, client_type=client_type)
-        resp_txt, resp_headers = subscrib_xray.render_tp( user, client_type=client_type)
+        resp_txt, resp_headers = subscrib_xray.render_tp(user, client_type=client_type)
         resp = HttpResponse(resp_txt)
         for hname, hvalue in resp_headers.items():
             resp.headers[hname] = hvalue
@@ -92,6 +88,7 @@ def api_subscrib_v1(request:HttpRequest):
     except Exception as e:
         resp_data["code"] = 0
         resp_data["info"] = "Failed: " + str(e)
+        raise e
     return JsonResponse(resp_data)
 
 
