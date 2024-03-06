@@ -39,7 +39,6 @@ from common.models import XJUser as User
 from common.models import get_sys_config
 from apps.makaflow.models import Subscribe
 from common.tools import model_tools
-from apps.makaflow.configs import yaml
 
     
 # 处理xray多端口和转发
@@ -281,6 +280,7 @@ def render_tp(user:User, client_type=ClientApp.clash):
         server_config = None
 
         # yaml数据订阅
+        yaml = ruamel.yaml.YAML()
         server_config = yaml.load(subscrib.content)
         if server_config is None:
             continue
