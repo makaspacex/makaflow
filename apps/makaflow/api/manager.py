@@ -193,20 +193,21 @@ def api_rule(request:HttpRequest, client, code, suffix):
     return  JsonResponse(resp_data)
 
 from pathlib import Path
+from common.models import get_sys_config
+
 def api_mixrule(request:HttpRequest, path):
     resp_data = tools.get_default_resp_data()
     try:
         client_type = get_request_client(request=request)
         path = Path(path)
-        
-        rule_repo_dir = Path(configs.env['rule_repo_dir']) 
+        rule_repo_dir = Path(get_sys_config("rule_repo_dir", default="runtime/mixrule")) 
         finale_file_path = rule_repo_dir / path
         if not finale_file_path.exists():
             # 不存在则寻找同名文件
             from glob import glob
             flist = glob( str(finale_file_path.parent / finale_file_path.stem) + '.*' )
             if len(flist) == 0:
-                raise Exception(f"Not Found {path}")
+                raise Exception(f"Not Found {finale_file_path}")
             finale_file_path = flist[0]
         
         with open(finale_file_path, 'r') as f:
