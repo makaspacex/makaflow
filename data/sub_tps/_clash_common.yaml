@@ -5,43 +5,43 @@ proxy-groups:
   - name: 默认代理
     type: select
     proxies: ["HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Proxy.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Proxy.png
     url: http://cp.cloudflare.com/generate_204
   - name: AI服务
     type: select
     proxies: ["JP日本","US美国", "默认代理", "HK香港",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Bot.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Bot.png
     url: http://cp.cloudflare.com/generate_204
   - name: 国外流媒体
     type: select
     proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/YouTube.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/YouTube.png
     url: http://cp.cloudflare.com/generate_204
   - name: Google
     type: select
     proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Google.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Google.png
     url: http://cp.cloudflare.com/generate_204
   - name: 游戏加速
     type: select
     proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Game.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Game.png
     url: http://cp.cloudflare.com/generate_204
   - name: GitHub
     type: select
     proxies: ["默认代理", "US美国", "HK香港", "JP日本",  "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Lab.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Lab.png
     url: http://cp.cloudflare.com/generate_204
   - name: Apple国外
     type: select
     proxies: ["默认代理", "HK香港", "JP日本", "US美国", "Auto自动", "DIRECT"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Apple.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Apple.png
     url: http://cp.cloudflare.com/generate_204
   - name: HK香港
     type: url-test
     filter: "港|🇭🇰|HK|Hong"
     proxies: []
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Hong_Kong.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Hong_Kong.png
     interval: 300
     lazy: false
     tolerance: 30
@@ -50,7 +50,7 @@ proxy-groups:
     type: url-test
     proxies: []
     filter: "日|🇯🇵|东京|JP|Japan"
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Japan.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Japan.png
     interval: 300
     lazy: false
     tolerance: 30
@@ -59,7 +59,7 @@ proxy-groups:
     type: url-test
     proxies: []
     filter: "美|🇺🇲|US|States|American"
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/United_States.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/United_States.png
     interval: 300
     lazy: false
     tolerance: 30
@@ -67,7 +67,7 @@ proxy-groups:
   - name: Auto自动
     type: url-test
     proxies: []
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Auto.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Auto.png
     interval: 300
     lazy: false
     tolerance: 30
@@ -75,7 +75,7 @@ proxy-groups:
   - name: 兜底
     type: select
     proxies: ["默认代理", "DIRECT", "HK香港", "JP日本", "US美国", "Auto自动"]
-    icon: https://cat.makaflow.com/api/icon/Qure/IconSet/mini/Final.png
+    icon: https://cat.makafly.com/api/icon/Qure/IconSet/mini/Final.png
     url: http://cp.cloudflare.com/generate_204
 
 rule-providers:
@@ -83,146 +83,146 @@ rule-providers:
     type: http
     path: ./rule-set/Lan.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Lan/Lan.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Lan/Lan.yaml
     interval: 7200
   XJProxy:
     type: http
     path: ./rule-set/XJProxy.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/makaflyrule/XJProxy.yaml
+    url: https://cat.makafly.com/api/mixrule/makaflyrule/XJProxy.yaml
     interval: 7200
     
   XJDirect:
     type: http
     path: ./rule-set/XJDirect.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/makaflyrule/XJDirect.yaml
+    url: https://cat.makafly.com/api/mixrule/makaflyrule/XJDirect.yaml
     interval: 7200
   AIService:
     type: http
     path: ./rule-set/AIService.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/makaflyrule/AIService.yaml
+    url: https://cat.makafly.com/api/mixrule/makaflyrule/AIService.yaml
     interval: 7200
   Game:
     type: http
     path: ./rule-set/Game.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/makaflyrule/Game.yaml
+    url: https://cat.makafly.com/api/mixrule/makaflyrule/Game.yaml
     interval: 7200
   GooglePlay:
     type: http
     path: ./rule-set/GooglePlay.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/makaflyrule/GooglePlay.yaml
+    url: https://cat.makafly.com/api/mixrule/makaflyrule/GooglePlay.yaml
     interval: 7200
   Google:
     type: http
     path: ./rule-set/Google.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Google/Google.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Google/Google.yaml
     interval: 7200
   Netflix:
     type: http
     path: ./rule-set/Netflix.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Netflix/Netflix.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Netflix/Netflix.yaml
     interval: 7200
   GitHub:
     type: http
     path: ./rule-set/GitHub.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/GitHub/GitHub.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/GitHub/GitHub.yaml
     interval: 7200
   YouTube:
     type: http
     path: ./rule-set/YouTube.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/YouTube/YouTube.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/YouTube/YouTube.yaml
     interval: 7200
   Xiaomi:
     type: http
     path: ./rule-set/XiaoMi.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/XiaoMi/XiaoMi.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/XiaoMi/XiaoMi.yaml
     interval: 7200
   ProxyMedia:
     type: http
     path: ./rule-set/ProxyMedia.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ProxyTools/rules/ProxyMedia.yaml
+    url: https://cat.makafly.com/api/mixrule/ProxyTools/rules/ProxyMedia.yaml
     interval: 7200
   Microsoft:
     type: http
     path: ./rule-set/Microsoft.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Microsoft/Microsoft.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Microsoft/Microsoft.yaml
     interval: 7200
   Facebook:
     type: http
     path: ./rule-set/Facebook.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Facebook/Facebook.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Facebook/Facebook.yaml
     interval: 7200
   Telegram:
     type: http
     path: ./rule-set/Telegram.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Telegram/Telegram.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Telegram/Telegram.yaml
     interval: 7200
   Twitter:
     type: http
     path: ./rule-set/twitter.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Twitter/Twitter.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Twitter/Twitter.yaml
     interval: 7200
   GoogleVoice:
     type: http
     path: ./rule-set/GoogleVoice.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/GoogleVoice/GoogleVoice.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/GoogleVoice/GoogleVoice.yaml
     interval: 7200
   SteamCN:
     type: http
     path: ./rule-set/SteamCN.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/SteamCN/SteamCN.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/SteamCN/SteamCN.yaml
     interval: 7200
   Steam:
     type: http
     path: ./rule-set/Steam.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Steam/Steam.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Steam/Steam.yaml
     interval: 7200
   AppleProxy:
     type: http
     path: ./rule-set/AppleProxy.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/AppleProxy/AppleProxy.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/AppleProxy/AppleProxy.yaml
     interval: 7200
   Apple:
     type: http
     path: ./rule-set/Apple.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Apple/Apple.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Apple/Apple.yaml
     interval: 7200
   Jetbrains:
     type: http
     path: ./rule-set/Jetbrains.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/mixrule/ios_rule_script/rule/Clash/Jetbrains/Jetbrains.yaml
+    url: https://cat.makafly.com/api/mixrule/ios_rule_script/rule/Clash/Jetbrains/Jetbrains.yaml
     interval: 7200
   google-cn:
     type: http
     path: ./rule-set/google-cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/google-cn.yaml
+    url: https://cat.makafly.com/api/rule/geo/clash/google-cn.yaml
     interval: 7200
   apple-cn:
     type: http
     path: ./rule-set/apple-cn.yaml
     behavior: classical
-    url: https://cat.makaflow.com/api/rule/geo/clash/apple-cn.yaml
+    url: https://cat.makafly.com/api/rule/geo/clash/apple-cn.yaml
     interval: 7200
 
 # 原则：
