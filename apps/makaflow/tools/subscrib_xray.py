@@ -244,6 +244,11 @@ def get_outbonds_for_singbox(inbounds, client_type, user, nodename, node_conf, s
     
     return outbounds_result
 
+from common.tools import CostRecord
+from apps.makaflow.models import Subscribe
+from common.models import Config
+
+
 def render_tp(user:User, client_type=ClientApp.clash):
     
     share_link = False
@@ -259,10 +264,13 @@ def render_tp(user:User, client_type=ClientApp.clash):
     # 1、找出第三方订阅的节点服务
     res_info = {"upload":0, "download":0, "total":0, "expire":0}
     
-    third_subs = Subscribe.objects.all()
+    third_subs = Subscribe.objects.all().order_by("order")
+    yaml = ruamel.yaml.YAML()
+    common_excludes = Config.objects.filter(key="common_excludes").first()
+    if common_excludes:
+        common_excludes = json.loads( common_excludes.value)
     
     for subscrib in third_subs:
-        
         # node_conf = model_tools.get_json_model(subscrib)
         nodename = subscrib.name
         sub_enable = subscrib.sub_enable
@@ -279,8 +287,6 @@ def render_tp(user:User, client_type=ClientApp.clash):
         
         server_config = None
 
-        # yaml数据订阅
-        yaml = ruamel.yaml.YAML()
         server_config = yaml.load(subscrib.content)
         if server_config is None:
             continue
@@ -316,14 +322,13 @@ def render_tp(user:User, client_type=ClientApp.clash):
             _remain = subinfo['total'] - subinfo['download'] - subinfo['upload']
             h_str = human_traffic(_remain)
             suffix = f"|{diff.days}D|{h_str}"
-        
+
         for proxy in proxies:
             # 处理节点的名字，mirr名称和过滤节点
-            proxy = proxy_process(node_conf=subscrib, proxy=proxy, suffix=suffix)
+            proxy = proxy_process(node_conf=subscrib, proxy=proxy, suffix=suffix,common_excludes=common_excludes)
             if proxy is None:
                 continue
             outbounds_result += [conv_yaml_obj_to_json(proxy)]
-        
         # if client_type in ClientApp.clash_group or client_type in ClientApp.clashmeta_group:
         #     proxies = server_config['proxies']
         #     for proxy in proxies:
@@ -348,7 +353,6 @@ def render_tp(user:User, client_type=ClientApp.clash):
         #             print(line)
         #             print(e)
         #         outbounds_result += [line]
-
     # 2、找出singbox的节点服务
     for nodename, node_conf in nodes.items():
         enable = node_conf['sub_enable']
@@ -502,5 +506,5 @@ def render_tp(user:User, client_type=ClientApp.clash):
             if len(_out_tags) > 0:
                 surge_tp = surge_tp.replace(re_obj.group(0),_out_tags[:-1])
         resp_text = surge_tp
-        
+    
     return resp_text, resp_headers

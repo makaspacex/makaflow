@@ -116,13 +116,10 @@ from apps.makaflow.models import Subscribe
 from common.models import Config
 
 
-def proxy_process(node_conf:Subscribe, proxy:dict, suffix=None):
+def proxy_process(node_conf:Subscribe, proxy:dict, suffix=None,common_excludes=None):
     
     proxy = copy.deepcopy(proxy)
-    common_excludes = Config.objects.filter(key="common_excludes").first()
-    if common_excludes:
-        common_excludes = json.loads( common_excludes.value)
-    else:
+    if not common_excludes:
         common_excludes = []
     
     include_node = json.loads(node_conf.node_includes) if node_conf.node_includes else []

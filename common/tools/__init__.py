@@ -58,3 +58,14 @@ def init_django_env(settings:str):
     if not _DJANGO_SET_UP:
         django.setup()
         _DJANGO_SET_UP = True
+        
+class CostRecord():
+    
+    def __init__(self):
+        self.cur = time.time()
+        
+    def record(self, comment):
+        cur = time.time()
+        print(f"{comment} cost:{cur-self.cur}")
+        self.cur = cur     
+
