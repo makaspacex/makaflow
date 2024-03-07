@@ -56,9 +56,12 @@ def init_django_env(settings:str):
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
     
     if not _DJANGO_SET_UP:
-        django.setup()
-        _DJANGO_SET_UP = True
-        
+        try:
+            _DJANGO_SET_UP = True
+            django.setup()
+        except Exception as e:
+            _DJANGO_SET_UP = False
+
 class CostRecord():
     
     def __init__(self):

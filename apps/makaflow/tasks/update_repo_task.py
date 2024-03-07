@@ -10,7 +10,51 @@ from apps.makaflow.models import Repo
 from pathlib import Path
 from datetime import datetime,timezone
 
-
+class RepoTool():
+    def __init__(self, url, path, cwd="./") -> None:
+        self.url = url
+        self.cwd = Path(cwd)
+        self.path = Path(path)
+    
+    def _exec_cmd(self, cwd, cmd):
+        p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p.wait()
+        console_out = p.communicate()[0].decode('utf8')
+        if p.returncode != 0:
+            print(console_out)
+            raise Exception(f"命令执行发生错误{cmd}")
+        return console_out
+    
+    def pull(self):
+        path = self.path
+        if not path.exists():
+            raise Exception("仓库文件夹不存在")
+        cmd = f"git pull --allow-unrelated-histories"
+        console_out = self._exec_cmd(self.cwd, cmd)
+        return console_out
+    
+    def clone(self):
+        path = self.path
+        if not path.parent.exists():
+            os.makedirs(path.parent, exist_ok=True)
+        cmd = f"git clone {self.url} {self.path}"
+        console_out = self._exec_cmd(self.cwd, cmd)
+        return console_out
+    
+    def get_version(self):
+        if not self.path.exists():
+            return None
+        cmd = "git log | grep commit | head -n 2"
+        console_out = self._exec_cmd(self.cwd/self.path, cmd)
+        version = console_out.split("\n")[0].split(" ")[-1][:8]
+        return version
+    
+    def update(self):
+        path = self.path
+        if not path.exists():
+            self.clone()
+        else:
+            self.pull()
 
 class UpdateRepoThread(BaseTask):
     
@@ -19,23 +63,11 @@ class UpdateRepoThread(BaseTask):
         self.repo = repo
         self.init_update = init_update
     
-    def get_repo_version(self):
-        path = Path(self.repo.path)
-        if not path.exists():
-            return -127,"错误：文件夹不存在", None
-        
-        # 获取提交的版本号
-        cmd = "git log | grep commit | head -n 2"
-        p = subprocess.Popen(cmd, shell=True, cwd= self.repo.path,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.wait()
-        console_out = p.communicate()[0].decode('utf8')
-        version = None
-        if p.returncode == 0:
-            version = console_out.split("\n")[0].split(" ")[-1][:8]
-        return p.returncode,console_out,version
-        
     def run(self):
         self.info("已启动")
+        
+        repo_tool = RepoTool(url=self.repo.url, path=self.repo.path, cwd="./")
+        
         while not self._kill.is_set():
             try:
                 if not self.repo.autoupdate:
@@ -48,8 +80,8 @@ class UpdateRepoThread(BaseTask):
                 waittime = self.repo.interval
                 force_update = False
                 
-                returncode,console_out,version = self.get_repo_version()
-                if not path.exists() or returncode!=0 or self.repo.version != version:
+                version = repo_tool.get_version()
+                if not path.exists() or self.repo.version != version:
                     force_update = True
                 
                 last_update = self.repo.updated_at
@@ -59,28 +91,9 @@ class UpdateRepoThread(BaseTask):
                     waittime = self.repo.interval - diff_seconds
                     raise Exception(f"间隔时间过短，等待{waittime}后更新")
                 
-                cmd = "git pull --allow-unrelated-histories"
-                cwd = self.repo.path
-                
-                if not path.exists():
-                    # 克隆到目标文件夹
-                    os.makedirs(path.parent, exist_ok=True)
-                    cmd = f"git clone --depth=1 {self.repo.url} {self.repo.path}"
-                    cwd = "./"
-                
-                p = subprocess.Popen(cmd, shell=True, cwd=cwd,  stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                p.wait()
-                console_out = p.communicate()[0].decode('utf8')
-                self.info(f"控制台输出:\n{console_out}")
-                
-                if p.returncode != 0:
-                    raise Exception(f"命令执行发生错误{cmd}")
-                
+                repo_tool.update()
                 # 获取提交的版本号
-                returncode,console_out,version = self.get_repo_version()
-                self.info(console_out)
-                if p.returncode != 0:
-                    raise Exception(f"命令执行发生错误{cmd}")
+                version = repo_tool.get_version()
                 if self.repo.version != version:
                     self.repo.version = version
                     self.info(f"已更新到最新版 当前最新版本是{version}")
@@ -154,3 +167,25 @@ class UpdateQureRepoThread(BaseTask):
 
             # time.sleep(5)
             time.sleep(60 * 60 *24)
+
+if __name__ == "__main__":
+    
+    repos = Repo.objects.all()
+    repo = repos[1]
+    
+    thrd = UpdateRepoThread(repo=repo)
+    
+    thrd.start()
+    thrd.join()
+    
+    print("fff")
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
