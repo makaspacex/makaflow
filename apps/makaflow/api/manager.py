@@ -39,7 +39,7 @@ def api_subscrib_v1(request: HttpRequest):
         resp = HttpResponse(resp_txt)
         for hname, hvalue in resp_headers.items():
             resp.headers[hname] = hvalue
-        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
 
         return resp
 
@@ -218,7 +218,7 @@ def api_conf(request: HttpRequest, conf):
         subscribe_tp_dir = configs.env['subscribe_tp_dir']
         f_path = os.path.join(subscribe_tp_dir, conf)
         resp = HttpResponse()
-        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
         if not os.path.exists(f_path):
             resp.status_code = 404
             resp.content = f"404: {conf} not found"
@@ -249,7 +249,7 @@ def get_file_resp(f_path):
     if not os.path.exists(f_path):
         resp = HttpResponse()
         resp.status_code = 404
-        resp.headers["content-type"] = "text/yaml; charset=utf-8"
+        resp.headers["content-type"] = "text/plain; charset=utf-8"
         resp.content = f"404: not found"
         return resp
     b_name = os.path.basename(f_path)
