@@ -42,7 +42,6 @@ need_rpckey += [
 ]
 
 public += [
-    path('api/subscrib', api.manager.api_subscrib_old),
     path('api/v1/client/subscribe', api.manager.api_subscrib_v1),
     path('api/loadall', api.manager.api_loadall),
     path('api/rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
@@ -50,7 +49,6 @@ public += [
     path('api/conf/<conf>', api.manager.api_conf),
     re_path(r'api/resource/(?P<path>.*)', api.manager.api_resource_down),
     re_path(r'api/icon/(?P<path>.*)', api.manager.api_icon),
-    re_path(r'api/rule/bm7/(?P<path>.*)', api.manager.api_rule_bm7),
 ]
 
 urlpatterns = need_rpckey + public

@@ -26,7 +26,6 @@ class UpdateSubscribeThread(BaseTask):
                     break
                 
                 sub_url = self.sub.sub_url
-                self.info(f"suburl:{sub_url}")
                 # 判断是否是合法的订阅地址
                 if not sub_url or not sub_url.startswith("http"):
                     self.info("订阅地址不是在线资源，即将退出")
@@ -56,19 +55,16 @@ class UpdateSubscribeThread(BaseTask):
                     p_tip = f"正在不使用代理"
                 
                 self.info(f"{p_tip}请求{sub_url}")
-                resp = requests.get(sub_url, headers=headers, proxies=proxies)
+                resp = requests.get(sub_url, headers=headers, proxies=proxies,timeout=6)
                 if resp.status_code != 200:
                     raise Exception(f"请求失败")
-                
+                self.info("请求成功")
                 self.sub.subscription_userinfo = resp.headers.get("subscription-userinfo", "")
-                sio = StringIO()
-                sio.write(resp.text)
-                sio.seek(0)
-                server_config = yaml.load(sio)
+                server_config = yaml.load(resp.text)
                 
-                if server_config is not None:
-                    raise Exception(f"{self.sub.name} 无内容")
-                
+                if server_config is None:
+                    raise Exception(f"无内容")
+
                 res_server_config = {}
                 res_server_config['proxies'] = server_config.get("proxies",[])
                 
@@ -84,7 +80,7 @@ class UpdateSubscribeThread(BaseTask):
                 
             except Exception as e:
                 self.error(e)
-            
+
             self.sleep(waittime)
         
         self.info("已停止")
