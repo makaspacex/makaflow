@@ -18,34 +18,6 @@ def load_env(env_path="env.yaml"):
     configs.env = env_config
     return env_config
 
-
-def load_sub_tps():
-    tps = Template.objects.all()
-
-    clash_c = ""
-    for tp in tps:
-        if tp.name != "_clash_common":
-            continue
-        clash_c = tp.content
-        break
-    yaml = YAML()
-
-    for tp in tps:
-        if tp.name == "_clash_common":
-            continue
-
-        print(f"loading {tp.name} sub tp")
-        content = tp.content + "\n"
-
-        if tp.name in ["clash_tp", "clashmeta_tp", "stash_tp"]:
-            content += clash_c
-
-        if tp.type == 'yaml':
-            configs.sub_tps[tp.name] = yaml.load(content)
-        elif tp.type == 'conf':
-            configs.sub_tps[tp.name] = content
-
-
 def load_geo():
     geosite_file = configs.env['geosite_file']
     geoip_file = configs.env['geoip_file']
@@ -75,7 +47,6 @@ class LoadBigContentThread(BaseTask):
 
     def run(self):
         try:
-            load_sub_tps()
             load_geo()
         except Exception as e:
             self.error(e)
@@ -83,9 +54,7 @@ class LoadBigContentThread(BaseTask):
 
 
 def load_all():
-    # 家在env文件
+    # 加载env文件
     load_env()
-    # 加载订阅模板文件
-    load_sub_tps()
     # 加载geo文件
     load_geo()
