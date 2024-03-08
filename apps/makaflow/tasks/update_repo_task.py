@@ -12,15 +12,16 @@ from apps.makaflow.tasks.base import BaseTask
 
 
 class RepoTool():
-    def __init__(self, url, path, cwd="./") -> None:
+    def __init__(self, url, path, cwd="./", branch=None) -> None:
         self.url = url
         self.cwd = Path(cwd)
         self.path = Path(path)
+        self.branch = branch
 
-    def _exec_cmd(self, cwd, cmd):
+    def _exec_cmd(self, cwd, cmd, timeout=None):
         p = subprocess.Popen(cmd, shell=True, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.wait()
-        console_out = p.communicate()[0].decode('utf8')
+        p.wait(timeout=timeout)
+        console_out = p.communicate(timeout=timeout)[0].decode('utf8')
         if p.returncode != 0:
             print(console_out)
             raise Exception(f"命令执行发生错误{cmd}")
@@ -38,8 +39,11 @@ class RepoTool():
         path = self.path
         if not path.parent.exists():
             os.makedirs(path.parent, exist_ok=True)
-        cmd = f"git clone {self.url} {self.path}"
-        console_out = self._exec_cmd(self.cwd, cmd)
+        opts = ""
+        if self.branch:
+            opts += f"--branch={self.branch}"
+        cmd = f"git clone --depth=1 {opts} {self.url} {self.path}"
+        console_out = self._exec_cmd(self.cwd, cmd, timeout=600)
         return console_out
 
     def get_version(self):
@@ -67,9 +71,9 @@ class UpdateRepoThread(BaseTask):
 
     def run(self):
         self.info("已启动")
-        repo_tool = RepoTool(url=self.repo.url, path=self.repo.path, cwd="./")
         while not self._kill.is_set():
             try:
+                repo_tool = RepoTool(url=self.repo.url, path=self.repo.path, cwd="./", branch=self.repo.branch)
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break
@@ -100,9 +104,11 @@ class UpdateRepoThread(BaseTask):
                 else:
                     self.info(f"无更新 当前最新版本是{version}")
                 self.repo.save()
+
             except Exception as e:
                 self.error(e)
-
+            # 更新当前的对象
+            self.repo = Repo.objects.get(pk=self.repo.pk)
             self.sleep(waittime)
 
         self.info("已停止")
