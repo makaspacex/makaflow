@@ -50,6 +50,7 @@ class Repo(BaseModel):
     url = models.CharField('仓库地址', max_length=256)
     path = models.CharField('本地路径', max_length=256)
     interval = models.IntegerField('更新间隔',default=7200)
+    branch = models.CharField('分支', max_length=256,blank=True,default="")
     autoupdate = models.BooleanField('自动更新',default=True)
     version = models.CharField('当前版本', max_length=256, blank=True,null=True)
     
