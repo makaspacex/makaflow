@@ -46,7 +46,7 @@ public += [
     path('api/loadall', api.manager.api_loadall),
     path('api/rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
     re_path(r'api/mixrule/(?P<path>.*)', api.manager.api_mixrule),
-    path('api/conf/<conf>', api.manager.api_conf),
+    path('api/conf/<conf>', api.manager.api_loon_conf),
     re_path(r'api/resource/(?P<path>.*)', api.manager.api_resource_down),
     re_path(r'api/icon/(?P<path>.*)', api.manager.api_icon),
 ]

@@ -32,16 +32,19 @@ from django.contrib import messages
 
 @admin.register(Subscribe)
 class SubscribeAdmin(BaseAdmin):
-    list_display = ['id', 'name', 'order', 'sub_groups', 'sub_enable','use_proxy', 'prefix', 'sub_url','up_thred_status','autoupdate',"interval"]
-    fields = ['name','autoupdate',"interval", 'sub_enable','use_proxy','order', 'prefix', 'sub_url','subscription_userinfo', 'sub_groups', 'repl_names', 'node_includes',"node_excludes",'server_mirr', 'content']
+    list_display = ['id', 'name', 'order', 'sub_groups', 'sub_enable', 'use_proxy', 'prefix', 'sub_url',
+                    'up_thred_status', 'autoupdate', "interval"]
+    fields = ['name', 'autoupdate', "interval", 'sub_enable', 'use_proxy', 'order', 'prefix', 'sub_url',
+              'subscription_userinfo', 'sub_groups', 'repl_names', 'node_includes', "node_excludes", 'server_mirr',
+              'content']
     ordering = ('order',)
-    
+
     def start_update(self, request, queryset):
         try:
-            skips, success = [],[]
+            skips, success = [], []
             for sub in queryset:
                 if sub.id in configs._sub_thrd:
-                    _th:UpdateSubscribeThread = configs._sub_thrd[sub.id]
+                    _th: UpdateSubscribeThread = configs._sub_thrd[sub.id]
                     if _th.is_alive():
                         skips.append(sub.name)
                         continue
@@ -51,40 +54,52 @@ class SubscribeAdmin(BaseAdmin):
                 _th.start()
                 configs._sub_thrd[sub.id] = _th
                 success.append(sub.name)
-            s1 = ",".join(skips[:3])    
+            s1 = ",".join(skips[:3])
             s2 = ",".join(success[:3])
             messege = f"成功启动：{s2}等，已跳过:{s1}等"
-            self.message_user(request,f"操作成功{messege}", messages.SUCCESS)
+            self.message_user(request, f"操作成功{messege}", messages.SUCCESS)
         except Exception as e:
-            self.message_user(request,f"失败:{e}", messages.ERROR)
-        
+            self.message_user(request, f"失败:{e}", messages.ERROR)
+
     def stop_update(self, request, queryset):
         try:
             for repo in queryset:
                 if repo.id not in configs._sub_thrd:
                     continue
-                _th:UpdateSubscribeThread = configs._sub_thrd[repo.id]
+                _th: UpdateSubscribeThread = configs._sub_thrd[repo.id]
                 _th.kill()
                 del configs._sub_thrd[repo.id]
-                
-            self.message_user(request,"操作成功", messages.SUCCESS)
+
+            self.message_user(request, "操作成功", messages.SUCCESS)
         except Exception as e:
-            self.message_user(request,f"失败:{e}", messages.ERROR)
+            self.message_user(request, f"失败:{e}", messages.ERROR)
 
     start_update.short_description = "启动更新线程"
     stop_update.short_description = "停止更新线程"
     actions = [start_update, stop_update]
-    
+
+
+@admin.register(Template)
+class TemplateAdmin(BaseAdmin):
+    list_display = ['id', 'name', 'type', 'nickname']
+    fields = ['name', 'nickname', 'type', 'content']
+
+
+@admin.register(Files)
+class FilesAdmin(BaseAdmin):
+    list_display = ['id', 'name', 'url', 'path', 'interval', 'autoupdate']
+    fields = ['name', 'autoupdate', 'url', 'path', 'interval']
+
 
 @admin.register(Repo)
 class RepoAdmin(BaseAdmin):
-    
+
     def start_update(self, request, queryset):
         try:
-            skips, success = [],[]
+            skips, success = [], []
             for repo in queryset:
                 if repo.id in configs._repo_thrds:
-                    _th:UpdateRepoThread = configs._repo_thrds[repo.id]
+                    _th: UpdateRepoThread = configs._repo_thrds[repo.id]
                     if _th.is_alive():
                         skips.append(repo.name)
                         continue
@@ -94,35 +109,31 @@ class RepoAdmin(BaseAdmin):
                 _th.start()
                 configs._repo_thrds[repo.id] = _th
                 success.append(repo.name)
-            s1 = ",".join(skips[:3])    
+            s1 = ",".join(skips[:3])
             s2 = ",".join(success[:3])
-            
+
             messege = f"成功启动：{s2}等，已跳过:{s1}"
-            
-            self.message_user(request,"操作成功", messages.SUCCESS)
+
+            self.message_user(request, "操作成功", messages.SUCCESS)
         except Exception as e:
-            self.message_user(request,f"失败:{e}", messages.ERROR)
-        
+            self.message_user(request, f"失败:{e}", messages.ERROR)
+
     def stop_update(self, request, queryset):
         try:
             for repo in queryset:
                 if repo.id not in configs._repo_thrds:
                     continue
-                _th:UpdateRepoThread = configs._repo_thrds[repo.id]
+                _th: UpdateRepoThread = configs._repo_thrds[repo.id]
                 _th.kill()
                 del configs._repo_thrds[repo.id]
-                
-            self.message_user(request,"操作成功", messages.SUCCESS)
+
+            self.message_user(request, "操作成功", messages.SUCCESS)
         except Exception as e:
-            self.message_user(request,f"失败:{e}", messages.ERROR)
+            self.message_user(request, f"失败:{e}", messages.ERROR)
 
     start_update.short_description = "启动更新线程"
     stop_update.short_description = "停止更新线程"
     actions = [start_update, stop_update]
-    
-    
-    
-    list_display = ['id', 'name','url', 'path', 'interval', 'version','up_thred_status','autoupdate']
-    fields = ['name','autoupdate','url', 'path', 'interval', 'version' ]
-    
-    
+
+    list_display = ['id', 'name', 'url', 'path', 'interval', 'version', 'up_thred_status', 'autoupdate']
+    fields = ['name', 'autoupdate', 'url', 'path', 'interval', 'version']

@@ -9,6 +9,7 @@ from django.http.response import HttpResponse
 
 from apps.makaflow import configs
 from apps.makaflow import tools
+from apps.makaflow.models import Template
 from apps.makaflow.tools import geo
 from apps.makaflow.tools import subscrib_xray, get_request_client
 from apps.makaflow.tools.common import ClientApp
@@ -30,23 +31,19 @@ def api_subscrib_v1(request: HttpRequest):
         user = User.objects.filter(token=token).first()
         if not user:
             raise Exception("user not found")
-
         if user.level < 0:
             raise Exception(f"id:{user.username} nickname:{user.nickname} is disabled")
 
-        # clashmeta_config = subscrib_xray.render_tp(username, client_type=client_type)
         resp_txt, resp_headers = subscrib_xray.render_tp(user, client_type=client_type)
         resp = HttpResponse(resp_txt)
         for hname, hvalue in resp_headers.items():
             resp.headers[hname] = hvalue
         resp.headers["content-type"] = "text/plain; charset=utf-8"
-
         return resp
 
     except Exception as e:
         resp_data["code"] = 0
         resp_data["info"] = "Failed: " + str(e)
-        raise e
     return JsonResponse(resp_data)
 
 
@@ -203,7 +200,7 @@ def api_mixrule(request: HttpRequest, path):
     return JsonResponse(resp_data)
 
 
-def api_conf(request: HttpRequest, conf):
+def api_loon_conf(request: HttpRequest, conf):
     resp_data = tools.get_default_resp_data()
     try:
         token = request.GET.get("token", None)
@@ -215,18 +212,18 @@ def api_conf(request: HttpRequest, conf):
         if user.level < 0:
             raise Exception(f"id:{user.username} nickname:{user.nickname} is disabled")
 
-        subscribe_tp_dir = configs.env['subscribe_tp_dir']
-        f_path = os.path.join(subscribe_tp_dir, conf)
+        tp_name = "loon_tp"
+        tp = Template.objects.filter(name=tp_name).first()
+
         resp = HttpResponse()
         resp.headers["content-type"] = "text/plain; charset=utf-8"
-        if not os.path.exists(f_path):
+        if not tp:
             resp.status_code = 404
-            resp.content = f"404: {conf} not found"
+            resp.content = f"没有发现名称为{tp_name}的Loon配置模板"
             return resp
-        with open(f_path, 'r') as f:
-            content = f.read()
-            content = content.replace("api/v1/client/subscribe?token=123456", f"api/v1/client/subscribe?token={token}")
-            resp.content = content
+        content = tp.content
+        content = content.replace("api/v1/client/subscribe?token=123456", f"api/v1/client/subscribe?token={token}")
+        resp.content = content
         return resp
 
     except Exception as e:
