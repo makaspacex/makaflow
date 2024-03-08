@@ -19,15 +19,13 @@
 # ==============================================================================
 
 from django.contrib import admin
-from django.apps import apps as dj_apps
+from django.contrib import messages
 
-from .models import *
-from common.admin import BaseAdmin
 from apps.makaflow import configs
 from apps.makaflow.tasks import UpdateRepoThread
 from apps.makaflow.tasks import UpdateSubscribeThread
-import threading
-from django.contrib import messages
+from common.admin import BaseAdmin
+from .models import *
 
 
 @admin.register(Subscribe)
@@ -83,6 +81,19 @@ class SubscribeAdmin(BaseAdmin):
 class TemplateAdmin(BaseAdmin):
     list_display = ['id', 'name', 'type', 'nickname']
     fields = ['name', 'nickname', 'type', 'content']
+
+
+@admin.register(SubLog)
+class SubLogAdmin(BaseAdmin):
+    list_display = ['id', 'user', 'user_nickname', 'client', 'ip']
+    fields = ['user', 'client', 'ip']
+
+    def user_nickname(self, obj):
+        if obj.user:
+            return obj.user.nickname
+        return None
+
+    user_nickname.short_description = '昵称'
 
 
 @admin.register(Files)

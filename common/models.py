@@ -134,7 +134,25 @@ class Config(BaseModel):
     key = models.CharField('键名', max_length=256,unique=True)
     value = models.CharField('值', max_length=256)
     name = models.CharField('名称', max_length=256, blank=True)
-    
+
+    @classmethod
+    def get(cls, key, default=None):
+        try:
+            configuration = cls.objects.get(key=key, status=1)
+            return configuration.value
+        except Config.DoesNotExist:
+            return default
+
+    @classmethod
+    def set(cls, key, value, name=""):
+        try:
+            configuration = cls.objects.get(key=key)
+            configuration.value = value
+            configuration.save()
+        except Config.DoesNotExist:
+            configuration = cls(key=key, value=value, status=1,name=name)
+            configuration.save()
+
     class Meta:
         verbose_name = '配置'
         verbose_name_plural = '配置管理'

@@ -105,3 +105,14 @@ class Files(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class SubLog(BaseModel):
+    id = models.AutoField(primary_key=True)
+    user = models.ForeignKey('common.XJUser', on_delete=models.CASCADE, verbose_name="用户",blank=True,null=True)
+    client = models.CharField(max_length=256, verbose_name="客户端")
+    ip = models.GenericIPAddressField(verbose_name="ip")
+
+    class Meta:
+        verbose_name = '订阅日志'
+        verbose_name_plural = "订阅日志"
