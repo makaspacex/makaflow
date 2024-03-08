@@ -14,8 +14,8 @@ from apps.makaflow.tools import geo
 from apps.makaflow.tools import subscrib_xray, get_request_client
 from apps.makaflow.tools.common import ClientApp
 from apps.makaflow.tools.convert_api import xj_rule_convert
+from common.models import Config
 from common.models import XJUser as User
-from common.models import get_sys_config
 
 
 def api_subscrib_v1(request: HttpRequest):
@@ -157,7 +157,8 @@ def api_mixrule(request: HttpRequest, path):
     try:
         client_type = get_request_client(request=request)
         path = Path(path)
-        rule_repo_dir = Path(get_sys_config("rule_repo_dir", default="runtime/mixrule"))
+        rule_repo_dir = Path(Config.get("rule_repo_dir", default="runtime/mixrule"))
+
         finale_file_path = rule_repo_dir / path
         if not finale_file_path.exists():
             # 不存在则寻找同名文件

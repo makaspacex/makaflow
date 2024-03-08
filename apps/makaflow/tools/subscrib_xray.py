@@ -24,7 +24,6 @@ from apps.makaflow.tools.subscrib_common import conve_v2
 from apps.makaflow.tools.subscrib_common import get_ports
 from common.models import Config
 from common.models import XJUser as User
-from common.models import get_sys_config
 from common.tools import CostRecord
 from .common import ClientApp
 
@@ -235,7 +234,7 @@ def render_tp(user: User, client_type=ClientApp.clash):
 
     env = configs.env
     nodes = env['slaver']['nodes']
-    config_dir = get_sys_config('server_config_dir')
+    config_dir = Config.get("server_config_dir")
 
     # 用于存贮最终的结果
     outbounds_result = []

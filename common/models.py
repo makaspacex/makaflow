@@ -159,9 +159,3 @@ class Config(BaseModel):
     
     def __str__(self):
         return self.name
-
-def get_sys_config(key, default=None):
-    conf = Config.objects.filter(key=key).first()
-    if not conf:
-        return default
-    return conf.value
