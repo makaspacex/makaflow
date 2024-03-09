@@ -8,3 +8,4 @@ protobuf
 pytz
 python-dateutil
 psycopg2
+mysqlclient

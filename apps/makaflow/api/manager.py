@@ -16,6 +16,7 @@ from apps.makaflow.tools.common import ClientApp
 from apps.makaflow.tools.convert_api import xj_rule_convert
 from common.models import Config
 from common.models import XJUser as User
+import traceback
 
 
 def api_subscrib_v1(request: HttpRequest):
@@ -260,7 +261,8 @@ def get_file_resp(f_path):
 def api_resource_down(request: HttpRequest, path):
     resp_data = tools.get_default_resp_data()
     try:
-        resource_dir = configs.env['resource_dir']
+        resource_dir = Config.get("resource_dir","./runtime/resource")
+
         f_path = os.path.join(resource_dir, path)
         resp = get_file_resp(f_path=f_path)
         return resp
@@ -274,7 +276,7 @@ def api_resource_down(request: HttpRequest, path):
 def api_icon(request: HttpRequest, path):
     resp_data = tools.get_default_resp_data()
     try:
-        icon_repo_dir = configs.env['icon_repo_dir']
+        icon_repo_dir = Config.get("icon_repo_dir","./runtime/resource/iconrepos")
         f_path = os.path.join(icon_repo_dir, path)
         resp = get_file_resp(f_path=f_path)
         return resp
@@ -286,7 +288,6 @@ def api_icon(request: HttpRequest, path):
 
 
 from apps.makaflow.tasks import load_all
-
 
 def api_loadall(request: HttpRequest):
     resp_data = tools.get_default_resp_data()

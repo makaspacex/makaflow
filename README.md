@@ -38,3 +38,11 @@ bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release
 wget  https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202304062208/geoip.dat -O /usr/local/share/xray/geoip.dat
 wget https://github.com/Loyalsoldier/v2ray-rules-dat/releases/download/202304062208/geosite.dat -O /usr/local/share/xray/geosite.dat 
 ```
+
+
+```bash
+
+sudo apt-get install python3-dev default-libmysqlclient-dev build-essential
+pip install -r requirements.txt
+
+```
