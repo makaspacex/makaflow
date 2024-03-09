@@ -81,7 +81,7 @@ class Template(BaseModel):
     name = models.CharField('名字', max_length=256, unique=True, blank=False, null=False)
     nickname = models.CharField('说明', max_length=256, blank=True, null=True)
     content = models.TextField('内容', blank=True, default="")
-    type = models.CharField(choices=FileType.choices, default=FileType.yaml, verbose_name='类型')
+    type = models.CharField(choices=FileType.choices, default=FileType.yaml, verbose_name='类型', max_length=32)
 
     class Meta:
         verbose_name = '模板'

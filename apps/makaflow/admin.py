@@ -146,5 +146,5 @@ class RepoAdmin(BaseAdmin):
     stop_update.short_description = "停止更新线程"
     actions = [start_update, stop_update]
 
-    list_display = ['id', 'name', 'url', 'path', 'interval', 'version', 'up_thred_status', 'autoupdate']
-    fields = ['name', 'autoupdate', 'url', 'path', 'interval', 'version']
+    list_display = ['id', 'name','branch', 'url', 'path', 'interval', 'version', 'up_thred_status', 'autoupdate']
+    fields = ['name','branch', 'autoupdate', 'url', 'path', 'interval', 'version']
