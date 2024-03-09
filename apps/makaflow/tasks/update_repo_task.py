@@ -89,8 +89,8 @@ class UpdateRepoThread(BaseTask):
                     force_update = True
 
                 last_update = self.repo.updated_at
-                now = datetime.now(timezone.utc)
-                diff_seconds = (now - last_update).seconds
+                now = datetime.now(last_update.tzinfo)
+                diff_seconds = (now - last_update).total_seconds()
                 if not force_update and diff_seconds < self.repo.interval:
                     waittime = self.repo.interval - diff_seconds
                     raise Exception(f"间隔时间过短，等待{waittime}后更新")
