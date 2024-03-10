@@ -9,3 +9,4 @@ pytz
 python-dateutil
 psycopg2
 mysqlclient
+django-apscheduler

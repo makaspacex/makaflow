@@ -127,7 +127,7 @@ def proxy_process(node_conf:Subscribe, proxy:dict, suffix=None,common_excludes=N
     exclude_reps = common_excludes + exclude_node
 
     name_prefix_str = node_conf.prefix
-    repl_names = json.loads(node_conf.repl_names) if node_conf.repl_names else []
+    repl_names = json.loads(node_conf.repl_names.replace('\\', '\\\\')) if node_conf.repl_names else []
 
     server_mirrs =  json.loads(node_conf.server_mirr)  if node_conf.server_mirr else []
     server_mirr_dict = {ele['ori']:ele['mirr'] for ele in server_mirrs}

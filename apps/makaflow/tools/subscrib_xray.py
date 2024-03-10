@@ -242,7 +242,7 @@ def render_tp(user: User, client_type=ClientApp.clash):
     res_info = {"upload": 0, "download": 0, "total": 0, "expire": 0}
 
     third_subs = Subscribe.objects.all().order_by("order")
-    yaml = ruamel.yaml.YAML()
+
     common_excludes = Config.objects.filter(key="common_excludes").first()
     if common_excludes:
         common_excludes = json.loads(common_excludes.value)
@@ -263,7 +263,7 @@ def render_tp(user: User, client_type=ClientApp.clash):
         #     continue
 
         server_config = None
-
+        yaml = ruamel.yaml.YAML()
         server_config = yaml.load(subscrib.content)
         if server_config is None:
             continue

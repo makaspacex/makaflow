@@ -25,6 +25,8 @@ from apps.makaflow.tasks import UpdateRepoThread
 from apps.makaflow.tasks import UpdateSubscribeThread
 from common.admin import BaseAdmin
 from .models import *
+from django_apscheduler.jobstores import DjangoJobStore, register_job
+from apscheduler.schedulers.background import BackgroundScheduler
 
 
 @admin.register(Subscribe)
