@@ -173,9 +173,6 @@ def api_mix_file_download(request: HttpRequest, path):
         else:
             if not finale_file_path.exists():
                 return HttpResponseNotFound()
-        content_type, encoding = mimetypes.guess_type(finale_file_path)
-        if content_type and content_type.startswith("text/") and encoding is None:
-            content_type += "; charset=utf-8"
 
         if rule_mode:
             # 处理规则
@@ -195,9 +192,12 @@ def api_mix_file_download(request: HttpRequest, path):
                 raise Exception("未知的客户端类型")
 
             resp = HttpResponse(content)
-            resp.headers["content-type"] = content_type
+            resp.headers["content-type"] = "text/plain; charset=utf-8"
             return resp
         else:
+            content_type, encoding = mimetypes.guess_type(finale_file_path)
+            if content_type and content_type.startswith("text/") and encoding is None:
+                content_type += "; charset=utf-8"
             return FileResponse(open(finale_file_path, 'rb'), content_type=content_type)
 
     except Exception as e:
