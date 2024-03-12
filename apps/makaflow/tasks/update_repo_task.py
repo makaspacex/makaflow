@@ -9,6 +9,7 @@ from pathlib import Path
 from apps.makaflow import configs
 from apps.makaflow.models import Repo
 from apps.makaflow.tasks.base import BaseTask
+from common.models import Config
 
 
 class RepoTool():
@@ -73,7 +74,8 @@ class UpdateRepoThread(BaseTask):
         self.info("已启动")
         while not self._kill.is_set():
             try:
-                repo_tool = RepoTool(url=self.repo.url, path=self.repo.path, cwd="./", branch=self.repo.branch)
+                parent_path = Path(Config.get("resource_dir","runtime/resource"))
+                repo_tool = RepoTool(url=self.repo.url, path=parent_path/self.repo.path, branch=self.repo.branch)
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break

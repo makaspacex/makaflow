@@ -1,5 +1,6 @@
 import glob
 import os
+import time
 from pathlib import Path
 
 import requests
@@ -9,7 +10,7 @@ from apps.makaflow import configs
 from apps.makaflow.tasks.base import BaseTask
 from apps.makaflow.tools.geo import load_geoips, load_geosites
 from apps.makaflow.models import Template
-
+from common.models import Config
 
 def load_env(env_path="env.yaml"):
     yaml = YAML()
@@ -19,22 +20,8 @@ def load_env(env_path="env.yaml"):
     return env_config
 
 def load_geo():
-    geosite_file = configs.env['geosite_file']
-    geoip_file = configs.env['geoip_file']
-    if not Path(geosite_file).exists():
-        resp = requests.get(
-            "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat")
-        os.makedirs(Path(geosite_file).parent, exist_ok=True)
-        with open(geosite_file, "wb") as f:
-            f.write(resp.content)
-
-    if not Path(geoip_file).exists():
-        resp = requests.get(
-            "https://gh-proxy.com/https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip.dat")
-        os.makedirs(Path(geoip_file).parent, exist_ok=True)
-        with open(geoip_file, "wb") as f:
-            f.write(resp.content)
-
+    geosite_file = Config.get("geosite_file","runtime/resource/meta-rules-dat/geosite.dat")
+    geoip_file = Config.get("geoip_file","runtime/resource/meta-rules-dat/geoip.dat")
     print(f"loading geosites from {geosite_file}")
     configs.geosites = load_geosites(geosite_file)
     print(f"loading geoips from {geoip_file}")
@@ -49,9 +36,8 @@ class LoadBigContentThread(BaseTask):
         try:
             load_geo()
         except Exception as e:
-            self.error(e)
+            time.sleep(1)
         self.info("已停止")
-
 
 def load_all():
     # 加载env文件

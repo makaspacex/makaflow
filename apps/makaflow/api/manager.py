@@ -1,11 +1,13 @@
+import mimetypes
 import os
+from glob import glob
 from pathlib import Path
 
 import requests
 from django.http import JsonResponse
 from django.http import StreamingHttpResponse
 from django.http.request import HttpRequest
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, HttpResponseNotFound, FileResponse
 
 from apps.makaflow import configs
 from apps.makaflow import tools
@@ -16,7 +18,6 @@ from apps.makaflow.tools.common import ClientApp
 from apps.makaflow.tools.convert_api import xj_rule_convert
 from common.models import Config
 from common.models import XJUser as User
-import traceback
 
 
 def api_subscrib_v1(request: HttpRequest):
@@ -153,48 +154,49 @@ def api_rule(request: HttpRequest, client, code, suffix):
     return JsonResponse(resp_data)
 
 
-def api_mixrule(request: HttpRequest, path):
+def api_mix_file_download(request: HttpRequest, path):
     resp_data = tools.get_default_resp_data()
     try:
         client_type = get_request_client(request=request)
         path = Path(path)
-        rule_repo_dir = Path(Config.get("rule_repo_dir", default="runtime/mixrule"))
-
+        rule_repo_dir = Path(Config.get("resource_dir", default="runtime/mixrule"))
         finale_file_path = rule_repo_dir / path
-        if not finale_file_path.exists():
-            # 不存在则寻找同名文件
-            from glob import glob
-            flist = glob(str(finale_file_path.parent / finale_file_path.stem) + '.*')
-            if len(flist) == 0:
-                raise Exception(f"Not Found {finale_file_path}")
-            finale_file_path = flist[0]
 
-        with open(finale_file_path, 'r') as f:
-            f_content = f.read()
-
-        content = ""
-        # # 后缀名判断
-        # if path.suffix == '.yaml':
-        #     client_type = ClientApp.clash
-        # if path.suffix == '.list':
-        #     client_type = ClientApp.surge
-
-        # clienttype 强制覆盖
-        if client_type == ClientApp.surfboard:
-            client_type = ClientApp.surge
-        if client_type in ClientApp.clashmeta_group + ClientApp.clash_group:
-            client_type = ClientApp.clash
-
-        if client_type in [ClientApp.browser]:
-            content = f_content
-        elif client_type in ClientApp.sub_store_support:
-            content = xj_rule_convert(f_content, client_type)
+        rule_mode = False
+        if "mixrule" in request.path:
+            rule_mode = True
+            if not finale_file_path.exists():
+                flist = glob(str(finale_file_path.parent / finale_file_path.stem) + '.*')
+                if len(flist) == 0:
+                    return HttpResponseNotFound()
+                finale_file_path = flist[0]
         else:
-            raise Exception("未知的客户端类型")
+            if not finale_file_path.exists():
+                return HttpResponseNotFound()
+        content_type, _ = mimetypes.guess_type(finale_file_path)
 
-        resp = HttpResponse(content)
-        resp.headers["content-type"] = "text/plain; charset=utf-8"
-        return resp
+        if rule_mode:
+            # 处理规则
+            with open(finale_file_path, 'r') as f:
+                f_content = f.read()
+            # client_type 强制覆盖
+            if client_type == ClientApp.surfboard:
+                client_type = ClientApp.surge
+            if client_type in ClientApp.clashmeta_group + ClientApp.clash_group:
+                client_type = ClientApp.clash
+
+            if client_type in [ClientApp.browser]:
+                content = f_content
+            elif client_type in ClientApp.sub_store_support:
+                content = xj_rule_convert(f_content, client_type)
+            else:
+                raise Exception("未知的客户端类型")
+
+            resp = HttpResponse(content)
+            resp.headers["content-type"] = content_type
+            return resp
+        else:
+            return FileResponse(open(finale_file_path, 'rb'), content_type=content_type)
 
     except Exception as e:
         resp_data["code"] = 0
@@ -226,59 +228,6 @@ def api_loon_conf(request: HttpRequest, conf):
         content = tp.content
         content = content.replace("api/v1/client/subscribe?token=123456", f"api/v1/client/subscribe?token={token}")
         resp.content = content
-        return resp
-
-    except Exception as e:
-        resp_data["code"] = 0
-        resp_data["info"] = "Failed: " + str(e)
-    return JsonResponse(resp_data)
-
-
-def file_iterator(file_path, chunk_size=512):
-    with open(file_path, mode='rb') as f:
-        while True:
-            c = f.read(chunk_size)
-            if c:
-                yield c
-            else:
-                break
-
-
-def get_file_resp(f_path):
-    if not os.path.exists(f_path):
-        resp = HttpResponse()
-        resp.status_code = 404
-        resp.headers["content-type"] = "text/plain; charset=utf-8"
-        resp.content = f"404: not found"
-        return resp
-    b_name = os.path.basename(f_path)
-    response = StreamingHttpResponse(file_iterator(f_path))
-    response['Content-Type'] = 'application/octet-stream'
-    response['Content-Disposition'] = f'attachment;filename="{b_name}"'
-    return response
-
-
-def api_resource_down(request: HttpRequest, path):
-    resp_data = tools.get_default_resp_data()
-    try:
-        resource_dir = Config.get("resource_dir","./runtime/resource")
-
-        f_path = os.path.join(resource_dir, path)
-        resp = get_file_resp(f_path=f_path)
-        return resp
-
-    except Exception as e:
-        resp_data["code"] = 0
-        resp_data["info"] = "Failed: " + str(e)
-    return JsonResponse(resp_data)
-
-
-def api_icon(request: HttpRequest, path):
-    resp_data = tools.get_default_resp_data()
-    try:
-        icon_repo_dir = Config.get("icon_repo_dir","./runtime/resource/iconrepos")
-        f_path = os.path.join(icon_repo_dir, path)
-        resp = get_file_resp(f_path=f_path)
         return resp
 
     except Exception as e:

@@ -37,8 +37,3 @@ def start_all_tasks():
     start_update_repo_task()
     start_update_sub_task()
 
-
-    with Scheduler() as scheduler:
-        # Add schedules, configure tasks here
-        scheduler.start_in_background()
-
