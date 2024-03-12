@@ -173,7 +173,9 @@ def api_mix_file_download(request: HttpRequest, path):
         else:
             if not finale_file_path.exists():
                 return HttpResponseNotFound()
-        content_type, _ = mimetypes.guess_type(finale_file_path)
+        content_type, encoding = mimetypes.guess_type(finale_file_path)
+        if content_type.startswith("text/") and encoding is None:
+            content_type += "; charset=utf-8"
 
         if rule_mode:
             # 处理规则
