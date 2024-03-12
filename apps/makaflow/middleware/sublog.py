@@ -25,9 +25,9 @@ class SubscribeLogMiddleware(MiddlewareMixin):
             client_ip = IP.get_ip(request=request)
             client_type = get_request_client(request=request)
             token = request.GET.get("token",None)
-            user = None
-            if token:
-                user = User.objects.filter(token=token).first()
+            user = User.objects.filter(token=token).first()
+            if not user:
+                print(request.get_full_path())
             SubLog.objects.create(client=client_type,ip=client_ip,user=user)
 
         except Exception as e:
