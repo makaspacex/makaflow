@@ -18,6 +18,7 @@ from apps.makaflow.tools.common import ClientApp
 from apps.makaflow.tools.convert_api import xj_rule_convert
 from common.models import Config
 from common.models import XJUser as User
+import re
 
 
 def api_subscrib_v1(request: HttpRequest):
@@ -162,8 +163,9 @@ def api_mix_file_download(request: HttpRequest, path):
         rule_repo_dir = Path(Config.get("resource_dir", default="runtime/mixrule"))
         finale_file_path = rule_repo_dir / path
 
+
         rule_mode = False
-        if "mixrule" in request.path:
+        if "mixrule/" in request.path:
             rule_mode = True
             if not finale_file_path.exists():
                 flist = glob(str(finale_file_path.parent / finale_file_path.stem) + '.*')
@@ -194,6 +196,18 @@ def api_mix_file_download(request: HttpRequest, path):
             resp = HttpResponse(content)
             resp.headers["content-type"] = "text/plain; charset=utf-8"
             return resp
+        elif re.search(r"api/iconset/.*?.json",request.path,flags=re.IGNORECASE):
+            _r = re.search(r"api/iconset/.*?.json",request.path,flags=re.IGNORECASE)
+            with open(finale_file_path, 'r') as f:
+                f_content = f.read()
+            icon_base_url = Config.get("icon_base_url", "https://cat.makafly.com/api/icon")
+            re_p = re.compile(r'"https://raw.githubusercontent.com/.*?/(.*?)/.*?/(.*?)"')
+            repl_p = '"' + icon_base_url + r'/\1/\2"'
+            content = re_p.sub(repl_p, f_content)
+            resp = HttpResponse(content)
+            resp.headers["content-type"] = "text/json; charset=utf-8"
+            return resp
+
         else:
             content_type, encoding = mimetypes.guess_type(finale_file_path)
             if content_type and content_type.startswith("text/") and encoding is None:

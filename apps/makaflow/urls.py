@@ -47,6 +47,7 @@ public += [
     path('api/rule/geo/<client>/<code>.<suffix>', api.manager.api_rule),
     re_path(r'api/mixrule/(?P<path>.*)', api.manager.api_mix_file_download),
     re_path(r'api/resource/(?P<path>.*)', api.manager.api_mix_file_download),
+    re_path(r'api/iconset/(?P<path>.*)', api.manager.api_mix_file_download),
     re_path(r'api/icon/(?P<path>.*)', api.manager.api_mix_file_download),
     path('api/conf/<conf>', api.manager.api_loon_conf),
 ]
