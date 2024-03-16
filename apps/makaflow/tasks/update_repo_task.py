@@ -3,64 +3,14 @@ import json
 import os
 import subprocess
 import time
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
 from apps.makaflow import configs
 from apps.makaflow.models import Repo
 from apps.makaflow.tasks.base import BaseTask
+from apps.makaflow.tools.repo import RepoTool
 from common.models import Config
-
-
-class RepoTool():
-    def __init__(self, url, path, cwd="./", branch=None) -> None:
-        self.url = url
-        self.cwd = Path(cwd)
-        self.path = Path(path)
-        self.branch = branch
-
-    def _exec_cmd(self, cwd, cmd, timeout=None):
-        p = subprocess.Popen(cmd, shell=True, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        p.wait(timeout=timeout)
-        console_out = p.communicate(timeout=timeout)[0].decode('utf8')
-        if p.returncode != 0:
-            print(console_out)
-            raise Exception(f"命令执行发生错误{cmd}")
-        return console_out
-
-    def pull(self):
-        path = self.path
-        if not path.exists():
-            raise Exception("仓库文件夹不存在")
-        cmd = f"git pull --allow-unrelated-histories"
-        console_out = self._exec_cmd(self.path, cmd)
-        return console_out
-
-    def clone(self):
-        path = self.path
-        if not path.parent.exists():
-            os.makedirs(path.parent, exist_ok=True)
-        opts = ""
-        if self.branch:
-            opts += f"--branch={self.branch}"
-        cmd = f"git clone --depth=1 {opts} {self.url} {self.path}"
-        console_out = self._exec_cmd(self.cwd, cmd, timeout=600)
-        return console_out
-
-    def get_version(self):
-        if not self.path.exists():
-            return None
-        cmd = "git log | grep commit | head -n 2"
-        console_out = self._exec_cmd(self.cwd / self.path, cmd)
-        version = console_out.split("\n")[0].split(" ")[-1][:8]
-        return version
-
-    def update(self):
-        path = self.path
-        if not path.exists():
-            self.clone()
-        else:
-            self.pull()
 
 
 class UpdateRepoThread(BaseTask):
@@ -74,8 +24,8 @@ class UpdateRepoThread(BaseTask):
         self.info("已启动")
         while not self._kill.is_set():
             try:
-                parent_path = Path(Config.get("resource_dir","runtime/resource"))
-                repo_tool = RepoTool(url=self.repo.url, path=parent_path/self.repo.path, branch=self.repo.branch)
+                parent_path = Path(Config.get("resource_dir", "runtime/resource"))
+                repo_tool = RepoTool(url=self.repo.url, path=parent_path / self.repo.path, branch=self.repo.branch)
                 if not self.repo.autoupdate:
                     self.info("读取到设置为禁止自动更新，即将退出")
                     break
@@ -178,10 +128,17 @@ class UpdateQureRepoThread(BaseTask):
 
 
 if __name__ == "__main__":
-    repos = Repo.objects.all()
-    repo = repos[1]
-    thrd = UpdateRepoThread(repo=repo)
-    thrd.start()
-    thrd.join()
+    # from common.tools import init_django_env
+    # init_django_env("Makaflow.settings")
 
+    # repos = Repo.objects.all()
+    # repo = repos[1]
+    # thrd = UpdateRepoThread(repo=repo)
+    # thrd.start()
+    # thrd.join()
+    url = "https://gh-proxy.com/https://github.com/sub-store-org/Sub-Store.git "
+    path = "runtime/resource/Sub-Store"
+    repotool = RepoTool(url=url, path=path, branch="release")
+    brach = repotool.get_branch()
+    print(brach)
     print("fff")
