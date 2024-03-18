@@ -47,7 +47,7 @@ class RepoTool():
             break
         if not ret:
             raise Exception("未找到branch")
-        if ret != self.branch:
+        if self.branch and ret != self.branch:
             raise Exception("与规定的branch不一致")
         return ret
 
