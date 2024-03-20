@@ -16,9 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+
+from apps.makaflow.controler import views
 from . import get_local_app_urls
 
 urlpatterns = [
+    path('', views.index_page),
     path('admin/', admin.site.urls),
 ]
 
