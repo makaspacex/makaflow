@@ -29,6 +29,9 @@ yaml = ruamel.yaml.YAML()
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 PROJECT_NAME = os.path.split(BASE_DIR)[-1]
 
+# 所有的子线程
+_threads  = {}
+
 # github仓库更新线程
 _repo_thrds={}
 

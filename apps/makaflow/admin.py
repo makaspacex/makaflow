@@ -73,9 +73,15 @@ class SubscribeAdmin(BaseAdmin):
         except Exception as e:
             self.message_user(request, f"失败:{e}", messages.ERROR)
 
+    def restart_update(self, request, queryset):
+        self.stop_update(request, queryset)
+        self.start_update(request, queryset)
+    
     start_update.short_description = "启动更新线程"
     stop_update.short_description = "停止更新线程"
-    actions = [start_update, stop_update]
+    restart_update.short_description = "重启更新线程"
+    
+    actions = [start_update, stop_update, restart_update]
 
 
 @admin.register(Template)
@@ -143,9 +149,17 @@ class RepoAdmin(BaseAdmin):
         except Exception as e:
             self.message_user(request, f"失败:{e}", messages.ERROR)
 
+    def restart_update(self, request, queryset):
+        self.stop_update(request, queryset)
+        self.start_update(request, queryset)
+    
     start_update.short_description = "启动更新线程"
     stop_update.short_description = "停止更新线程"
-    actions = [start_update, stop_update]
+    restart_update.short_description = "重启更新线程"
+    
+    actions = [start_update, stop_update, restart_update]
+
+
 
     list_display = ['id', 'name', 'branch', 'url', 'path', 'interval', 'version', 'up_thred_status', 'autoupdate']
     fields = ['name', 'branch', 'autoupdate', 'url', 'path', 'interval', 'version']
