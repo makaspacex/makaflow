@@ -26,7 +26,7 @@ from common.models import Config
 from common.models import XJUser as User
 from common.tools import CostRecord
 from .common import ClientApp
-
+from common.tools import model_tools
 
 # 处理xray多端口和转发
 def _generate_inbounds_for_xray(inbounds, server_url):
@@ -247,20 +247,24 @@ def render_tp(user: User, client_type=ClientApp.clash):
     if common_excludes:
         common_excludes = json.loads(common_excludes.value)
 
+    
     for subscrib in third_subs:
-        # node_conf = model_tools.get_json_model(subscrib)
         nodename = subscrib.name
         sub_enable = subscrib.sub_enable
         if not sub_enable:
             continue
 
-        # TODO: 分组过滤
-        # u_groups = set(user.get("groups", [])) | set([0])  # 用户默认包括0号分组
-        # sub_groups = set(node_conf.get('groups', [0])) # 默认分组为0
+        u_groups = set(['0']) # 用户默认包括0号分组
+        if len(user.sub_groups.replace(" ",""))>0:
+            u_groups |= set(user.sub_groups.replace(" ","").split(","))
+        
+        sub_groups = set(['0']) # 如果没有指定分组，那就是0分组，最低登记的分组
+        if len(subscrib.sub_groups.replace(" ",""))>0:
+            sub_groups = set(subscrib.sub_groups.replace(" ","").split(","))
 
-        # if len(u_groups & sub_groups) == 0:
-        #     # 该订阅对用户组有要求，但是当前用户不在该订阅的组里面
-        #     continue
+        # 当前用户不在该订阅的组里面
+        if len(u_groups & sub_groups) == 0:
+            continue
 
         server_config = None
         yaml = ruamel.yaml.YAML()
@@ -486,7 +490,7 @@ def render_tp(user: User, client_type=ClientApp.clash):
         surge_tp = surge_tp.replace("#{PROXYLIST}#", proxys)
 
         # 替换策略组列表
-        re_p = re.compile(r'#\{filter: *"(.*?)"\}#', re.I)
+        re_p = re.compile(r',\s*#\{filter: *"(.*?)"\}#', re.I)
         while True:
             re_obj = re.search(re_p, surge_tp)
             if re_obj is None:
@@ -499,7 +503,9 @@ def render_tp(user: User, client_type=ClientApp.clash):
                 _out_tags += f"{proxy_name},"
 
             if len(_out_tags) > 0:
-                surge_tp = surge_tp.replace(re_obj.group(0), _out_tags[:-1])
+                _out_tags = "," + _out_tags
+            surge_tp = surge_tp.replace(re_obj.group(0), _out_tags[:-1])
+            
         resp_text = surge_tp
 
     return resp_text, resp_headers
