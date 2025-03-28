@@ -455,6 +455,17 @@ def render_tp(user: User, client_type=ClientApp.clash):
         resp_text = str(outbounds_result)
 
         resp_text = base64.b64encode(resp_text.encode()).decode()
+    
+    elif client_type == ClientApp.singbox:
+        target = ClientApp.singbox
+        if client_type in ClientApp.sub_store_support:
+            target = client_type
+        outbounds_result = xj_proxy_convert(outbounds_result, target)
+
+        resp_text = str(outbounds_result)
+
+        resp_text = base64.b64encode(resp_text.encode()).decode()
+        
     elif client_type in [ClientApp.surge, ClientApp.surfboard]:
         target = ClientApp.surge
         if client_type in ClientApp.sub_store_support:

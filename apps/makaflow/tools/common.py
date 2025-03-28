@@ -35,7 +35,7 @@ class ClientApp:
     # 它们只需要分享链接式的配置
     loon:str = "Loon"
     shadowrocket:str = "Shadowrocket"
-    singbox:str = "singbox" # singbox 内核的一切软件
+    singbox:str = "sing-box" # singbox 内核的一切软件
     xray:str = "xray" # xray 内核的一切软件
     browser:str = "browser"
     
@@ -51,11 +51,11 @@ class ClientApp:
     # Stash: Stash_Producer(),
     # ShadowRocket: ShadowRocket_Producer(),
     # sub_store_support = ["QX", "Surge", "Loon","Clash","URI","JSON","Stash"]
-    sub_store_support = [qx, surge, loon,clash, clashmeta, stash]
+    sub_store_support = [qx, surge, loon,clash, clashmeta, stash,singbox]
 
     clash_group = [clash,stash]
     clashmeta_group = [clashmeta]
-    sharelink_group= [loon, shadowrocket, singbox, xray, browser]
+    sharelink_group= [loon, shadowrocket, xray, browser]
 
 def get_request_client(request:HttpRequest):
     client_type = request.GET.get("client", None)
@@ -67,6 +67,8 @@ def get_request_client(request:HttpRequest):
         # clash meta内核
         elif "verge" in user_agent or "meta" in user_agent:
             client_type = ClientApp.clashmeta
+        elif "sing-box" in user_agent:
+            client_type = ClientApp.singbox
         elif "stash" in user_agent:
             client_type = ClientApp.stash
         # 含有clash关键字，托底的clash
